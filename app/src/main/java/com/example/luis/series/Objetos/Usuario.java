@@ -2,6 +2,7 @@ package com.example.luis.series.Objetos;
 
 
 public class Usuario {
+    int avatar;
     String nick;
     String correo;
     String telefono;
@@ -9,10 +10,11 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nick,String telefono,String correo) {
+    public Usuario(String nick,String telefono,String correo,int avatar) {
         this.correo = correo;
         this.telefono=telefono;
         this.nick=nick;
+        this.avatar=avatar;
     }
 
     public String getCorreo() {
@@ -21,6 +23,14 @@ public class Usuario {
 
     public String getNick() {
         return nick;
+    }
+
+    public int getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(int avatar) {
+        this.avatar = avatar;
     }
 
     public void setNick(String nick) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.luis.series.actividades.registroActivity"
     android:orientation="vertical"
-    android:paddingTop="80dp"
+    android:paddingTop="30dp"
     android:paddingHorizontal="30dp"
     android:background="#717171">
 
@@ -32,8 +32,27 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Selecciona un avatar"
+        android:onClick="seleccionarAvatar"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:id="@+id/avatarIcono"
+            android:layout_centerInParent="true"
+            android:layout_margin="15dp"
+            />
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="REGISTRO"
-        android:layout_marginVertical="40dp"
+        android:layout_marginVertical="30dp"
         android:background="@color/colorAccent"
         android:textColor="#f9f8f8"
         android:onClick="registro"

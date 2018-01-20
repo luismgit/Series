@@ -26,6 +26,7 @@
             android:name=".actividades.TabActivity"
             android:label="@string/title_activity_tab"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".actividades.ListaIconos"></activity>
     </application>
 
 </manifest>
