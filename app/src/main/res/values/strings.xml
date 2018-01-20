@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Series</string>
+    <string name="email">email</string>
+    <string name="pass">password</string>
+    <string name="sig_in">SIG IN</string>
+    <string name="register">REGISTER</string>
+</resources>

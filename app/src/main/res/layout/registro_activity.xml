@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.luis.series.registroActivity"
+    android:orientation="vertical"
+    android:paddingTop="80dp"
+    android:paddingHorizontal="30dp"
+    android:background="#717171">
+
+    <EditText
+        android:id="@+id/editTextNick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nick"
+        android:textColorHint="#cacaca"
+        android:inputType="textPersonName"
+        android:textColor="#cacaca"/>
+
+    <EditText
+        android:id="@+id/editTextCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginVertical="25dp"
+        android:textColorHint="#cacaca"
+        android:textColor="#cacaca"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REGISTRO"
+        android:layout_marginVertical="40dp"
+        android:background="@color/colorAccent"
+        android:textColor="#f9f8f8"
+        android:onClick="registro"
+        android:inputType=""/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewError"
+        android:textAlignment="center"
+        android:textColor="#fafafa"
+        android:textSize="18dp"/>
+
+</LinearLayout>
