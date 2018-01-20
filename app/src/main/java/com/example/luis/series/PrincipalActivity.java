@@ -41,7 +41,7 @@ public class PrincipalActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         contactosTelefono=new ArrayList<>();
         usuarios=new ArrayList<>();
-        //SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
         //SharedPreferences.Editor editor = sharedPref.edit();
        // editor.putBoolean("registroCerrado",false);
         //editor.commit();
