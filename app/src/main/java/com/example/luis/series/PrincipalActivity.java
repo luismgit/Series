@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.luis.series.Objetos.Adapter;
 import com.example.luis.series.Objetos.ComunicarCurrentUser;
@@ -42,9 +43,11 @@ public class PrincipalActivity extends AppCompatActivity {
         contactosTelefono=new ArrayList<>();
         usuarios=new ArrayList<>();
         SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
-        //SharedPreferences.Editor editor = sharedPref.edit();
-       // editor.putBoolean("registroCerrado",false);
-        //editor.commit();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("registroCerrado",false);
+        editor.commit();
+        Log.i("REGISTRO","Como hemos llegado a la principal ponemos registroCerrado a false");
+
         user= ComunicarCurrentUser.getUser();
         phoneNumberUser = user.getPhoneNumber();
         phoneNumberUser.replaceAll("\\s","");

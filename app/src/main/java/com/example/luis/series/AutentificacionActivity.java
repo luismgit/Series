@@ -61,7 +61,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     ProgressBar progressBarCircular;
     // Request code for READ_CONTACTS. It can be any number > 0.
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-
+    private boolean registroCerrado;
 
     @Override
     protected void onStart() {
@@ -83,9 +83,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         etxtPhoneCode.setOnEditorActionListener(this);
         progressBarCircular=findViewById(R.id.progressBarCircular);
         pedirPermisos();
-        //SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
-        //final boolean registroCerrado=sharedPref.getBoolean("registroCerrado",false);
-
+        SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
+        registroCerrado=sharedPref.getBoolean("registroCerrado",false);
+        Log.i("REGISTRO","el valor de registro en la autentificacion es -> " + registroCerrado);
         mAuth=FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -95,13 +95,15 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 if (user != null) {
                     Log.i("SESION", "Sesion iniciada con telefono " + user.getPhoneNumber());
                     ComunicarCurrentUser.setUser(user);
-                    /*if(registroCerrado){
+                    if(registroCerrado){
                         irARegistro(user.getPhoneNumber());
-                    }*/
-                    if(getFirstTimeRun(AutentificacionActivity.this)==1){
-                        irAPrincipal();
-                        finish();
+                    }else{
+                        if(getFirstTimeRun(AutentificacionActivity.this)==1){
+                            irAPrincipal();
+                            finish();
+                        }
                     }
+
                 } else {
                     Log.i("SESION", "Sesion cerrada");
 

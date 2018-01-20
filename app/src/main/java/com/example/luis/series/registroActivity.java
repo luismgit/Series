@@ -115,11 +115,12 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         return false;
     }
 
-   /* public void onBackPressed(){
+    public void onBackPressed(){
         SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("registroCerrado",true);
         editor.commit();
+        Log.i("REGISTRO","Hemos cerrado la pantalla de registro");
         super.onBackPressed();
-    }*/
+    }
 }
