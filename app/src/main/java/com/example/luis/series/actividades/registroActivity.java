@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
  EditText editTextNick,editTextEmail;
  TextView textViewError;
+ ProgressBar progressBar;
+ Button botonAvatar,botonRegistro;
     private ImageView avatarIcono;
     int iconoSeleccionado;
     String nick,correo,phoneNumber;
@@ -57,6 +61,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         avatarIcono=findViewById(R.id.avatarIcono);
         avatarIcono.setImageResource(iconos[0]);
         iconoSeleccionado=0;
+        botonAvatar=findViewById(R.id.botonAvatar);
+        botonRegistro=findViewById(R.id.botonRegistro);
+        progressBar=findViewById(R.id.progressBar);
         editTextNick=findViewById(R.id.editTextNick);
         editTextEmail=findViewById(R.id.editTextCorreo);
         editTextEmail.setOnEditorActionListener(this);
@@ -95,6 +102,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                      }
 
                      if(!error){
+                         progressBar.setVisibility(View.VISIBLE);
+                         botonAvatar.setClickable(false);
+                         botonRegistro.setClickable(false);
                          Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado);
                          DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                          ref.child(FirebaseReferences.USUARIOS_REFERENCE).push().setValue(usuario);

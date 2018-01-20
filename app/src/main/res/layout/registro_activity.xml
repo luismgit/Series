@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Selecciona un avatar"
         android:onClick="seleccionarAvatar"
+        android:id="@+id/botonAvatar"
         />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,11 +53,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="REGISTRO"
-        android:layout_marginVertical="30dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorAccent"
         android:textColor="#f9f8f8"
         android:onClick="registro"
-        android:inputType=""/>
+        android:inputType=""
+        android:id="@+id/botonRegistro"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -64,6 +66,17 @@
         android:id="@+id/textViewError"
         android:textAlignment="center"
         android:textColor="#fafafa"
-        android:textSize="18dp"/>
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"/>
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminate="false"
+        android:max="100"
+        android:layout_marginTop="10dp"
+        />
 
 </LinearLayout>

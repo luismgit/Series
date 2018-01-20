@@ -2,7 +2,9 @@ package com.example.luis.series.actividades;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.provider.SyncStateContract;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -62,6 +64,8 @@ AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionLis
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        tabLayout.setupWithViewPager(mViewPager);
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         Log.i("actividades","OnCreate TabActivity");
@@ -72,6 +76,9 @@ AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionLis
 
 
     }
+
+
+
 
 
     @Override
@@ -145,6 +152,7 @@ AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionLis
             View rootView = inflater.inflate(R.layout.fragment_tab, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
             return rootView;
         }
     }
@@ -177,9 +185,9 @@ AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionLis
             Log.i("actividades","public CharSequence getPageTitle(int position)");
             switch (position){
                 case 0:
-                    return "AMARILLO";
+                    return "CONTACTOS";
                 case 1:
-                    return "AZUL";
+                    return "SERIES";
                 case 2:
                     return "ROJO";
                 case 3:
