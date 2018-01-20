@@ -137,7 +137,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             Log.i("SESION", "Debe introducir el número de telefono");
             return;
         }
-        //new AsyncTask_load().execute();
+        //new AsyncTask_load().execute().;
         progressBarCircular.setVisibility(View.VISIBLE);
         botonSMS.setClickable(false);
         botonSIGIN.setClickable(false);
