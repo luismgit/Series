@@ -1,13 +1,11 @@
-package com.example.luis.series;
+package com.example.luis.series.actividades;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,10 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.luis.series.Objetos.ComunicarCurrentUser;
-import com.example.luis.series.Objetos.FirebaseReferences;
+import com.example.luis.series.BuildConfig;
+import com.example.luis.series.R;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
-import com.example.luis.series.Objetos.Utilitis;
+import com.example.luis.series.utilidades.Utilitis;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -40,7 +40,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 
@@ -125,7 +124,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
 
     private void irAPrincipal() {
-        Intent intent = new Intent(this, PrincipalActivity.class);
+        Intent intent = new Intent(this, TabActivity.class);
         startActivity(intent);
     }
 

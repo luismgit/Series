@@ -1,4 +1,4 @@
-package com.example.luis.series.Objetos;
+package com.example.luis.series.utilidades;
 
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;

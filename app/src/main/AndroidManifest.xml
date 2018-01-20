@@ -13,15 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".AutentificacionActivity">
+        <activity android:name=".actividades.AutentificacionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PrincipalActivity" />
-        <activity android:name=".registroActivity"></activity>
+        <activity android:name=".actividades.PrincipalActivity" />
+        <activity android:name=".actividades.registroActivity" />
+        <activity
+            android:name=".actividades.TabActivity"
+            android:label="@string/title_activity_tab"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

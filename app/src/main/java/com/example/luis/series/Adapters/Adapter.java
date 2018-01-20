@@ -1,4 +1,4 @@
-package com.example.luis.series.Objetos;
+package com.example.luis.series.Adapters;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 
 import java.util.List;

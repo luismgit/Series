@@ -1,4 +1,4 @@
-package com.example.luis.series.Objetos;
+package com.example.luis.series.utilidades;
 
 import com.google.firebase.auth.FirebaseUser;
 

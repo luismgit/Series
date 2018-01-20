@@ -1,4 +1,4 @@
-package com.example.luis.series;
+package com.example.luis.series.actividades;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.luis.series.Objetos.FirebaseReferences;
+import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

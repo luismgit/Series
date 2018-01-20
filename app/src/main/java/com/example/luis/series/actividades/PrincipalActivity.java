@@ -1,7 +1,8 @@
-package com.example.luis.series;
+package com.example.luis.series.actividades;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
@@ -11,9 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.example.luis.series.Objetos.Adapter;
-import com.example.luis.series.Objetos.ComunicarCurrentUser;
-import com.example.luis.series.Objetos.FirebaseReferences;
+import com.example.luis.series.Adapters.Adapter;
+import com.example.luis.series.R;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +42,8 @@ public class PrincipalActivity extends AppCompatActivity {
         rv=findViewById(R.id.recycler);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
+        //Intent intent = new Intent(this,TabActivity.class);
+        //startActivity(intent);
         contactosTelefono=new ArrayList<>();
         usuarios=new ArrayList<>();
         SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
