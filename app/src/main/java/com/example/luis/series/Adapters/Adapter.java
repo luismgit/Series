@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.luis.series.Objetos.Usuario;
@@ -15,7 +16,21 @@ import java.util.List;
 public class Adapter extends RecyclerView.Adapter<Adapter.UsuariosviewHolder>{
 
     List<Usuario> usuarios;
-
+    private int [] iconos = new int[]
+            {       R.drawable.breaking,
+                    R.drawable.thrones,
+                    R.drawable.theory,
+                    R.drawable.narcos,
+                    R.drawable.simpson,
+                    R.drawable.anarchy,
+                    R.drawable.stranger,
+                    R.drawable.vikins,
+                    R.drawable.mirror,
+                    R.drawable.walking,
+                    R.drawable.west,
+                    R.drawable.lost,
+                    R.drawable.cards,
+                    R.drawable.dexter};
     public Adapter(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
@@ -31,9 +46,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.UsuariosviewHolder>{
     public void onBindViewHolder(UsuariosviewHolder holder, int position) {
         Usuario usuario = usuarios.get(position);
 
-        holder.textViewCorreo.setText(usuario.getCorreo());
-        holder.textViewTelefono.setText(usuario.getTelefono());
+        //holder.textViewCorreo.setText(usuario.getCorreo());
+       // holder.textViewTelefono.setText(usuario.getTelefono());
         holder.textViewNick.setText(usuario.getNick());
+        holder.avatar.setImageResource(iconos[usuario.getAvatar()]);
+        
     }
 
     @Override
@@ -43,14 +60,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.UsuariosviewHolder>{
 
     public static  class UsuariosviewHolder extends RecyclerView.ViewHolder{
 
-        TextView textViewCorreo,textViewTelefono,textViewNick;
-
+        TextView textViewNick;
+        ImageView avatar;
 
         public UsuariosviewHolder(View itemView) {
             super(itemView);
-            textViewCorreo=itemView.findViewById(R.id.textview_correo);
-            textViewTelefono=itemView.findViewById(R.id.textview_telefono);
-            textViewNick=itemView.findViewById(R.id.textview_nick);
+            /*textViewCorreo=itemView.findViewById(R.id.textview_correo);
+            textViewTelefono=itemView.findViewById(R.id.textview_telefono);*/
+            textViewNick=itemView.findViewById(R.id.nombre);
+            avatar=itemView.findViewById(R.id.avatarImagen);
         }
     }
 }

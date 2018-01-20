@@ -10,7 +10,6 @@
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:id="@+id/iconoItem"
-        android:src="@drawable/icono0"
         android:layout_alignParentLeft="true"
 
         />

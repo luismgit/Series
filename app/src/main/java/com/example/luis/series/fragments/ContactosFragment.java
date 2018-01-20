@@ -49,6 +49,7 @@ public class ContactosFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
     RecyclerView rv;
     List<Usuario> usuarios;
     Adapter adapter;

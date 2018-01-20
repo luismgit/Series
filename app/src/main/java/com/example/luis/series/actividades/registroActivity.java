@@ -34,20 +34,20 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     int iconoSeleccionado;
     String nick,correo,phoneNumber;
     private int [] iconos = new int[]
-            {       R.drawable.icono0,
-                    R.drawable.icono5,
-                    R.drawable.icono6,
-                    R.drawable.icono7,
-                    R.drawable.icono8,
-                    R.drawable.icono9,
-                    R.drawable.icono10,
-                    R.drawable.icono11,
-                    R.drawable.icono12,
-                    R.drawable.icono13,
-                    R.drawable.icono14,
-                    R.drawable.icono15,
-                    R.drawable.icono16,
-                    R.drawable.icono17};
+            {       R.drawable.breaking,
+                    R.drawable.thrones,
+                    R.drawable.theory,
+                    R.drawable.narcos,
+                    R.drawable.simpson,
+                    R.drawable.anarchy,
+                    R.drawable.stranger,
+                    R.drawable.vikins,
+                    R.drawable.mirror,
+                    R.drawable.walking,
+                    R.drawable.west,
+                    R.drawable.lost,
+                    R.drawable.cards,
+                    R.drawable.dexter};
     private static final int LISTA_ICONOS=1;
     boolean error=false;
     @Override
@@ -115,7 +115,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     }
 
     private void irAPrincipal() {
-        Intent intent = new Intent(this, PrincipalActivity.class);
+        Intent intent = new Intent(this, TabActivity.class);
         startActivity(intent);
     }
 
@@ -135,7 +135,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
         if(i== EditorInfo.IME_ACTION_DONE){
-            //registro(null);
+            textViewError.setText("");
 
         }
         return false;
