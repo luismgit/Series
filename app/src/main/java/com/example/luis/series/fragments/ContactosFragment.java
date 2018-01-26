@@ -20,6 +20,7 @@ import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.utilidades.LoadPhoneNumbersFromContacts;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -100,6 +101,7 @@ public class ContactosFragment extends Fragment {
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
         rv=vista.findViewById(R.id.recycler);
         contactosTelefono=new ArrayList<>();
+        //contactosTelefono= LoadPhoneNumbersFromContacts.getListadoTelefonos();
         usuarios=new ArrayList<>();
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         user= ComunicarCurrentUser.getUser();
@@ -117,6 +119,7 @@ public class ContactosFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 usuarios.removeAll(usuarios);
+                Log.i("Carga","empieza la carga");
                 for (DataSnapshot snapshot:
                         dataSnapshot.getChildren() ){
                     Usuario usuario = snapshot.getValue(Usuario.class);
@@ -151,15 +154,21 @@ public class ContactosFragment extends Fragment {
         Cursor cursor=getContext().getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
         while(cursor.moveToNext()){
             String phoneNumber=cursor.getString(0);
-            phoneNumber=phoneNumber.replaceAll("\\s","");
-            if(phoneNumber.substring(0,3).equals("+34")){
-                phoneNumber=phoneNumber.substring(3,phoneNumber.length());
-                //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
+
+            if(phoneNumber.length()>=9){
+                phoneNumber=phoneNumber.replaceAll("\\s","");
+                if(phoneNumber.substring(0,3).equals("+34")){
+                    phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+                    //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
+
+                }
+                contactosTelefono.add(phoneNumber);
             }
+
             //Log.i("contactos","Identificador: " + cursor.getString(0));
             //Log.i("contactos","Nombre: " + cursor.getString(1));
             //Log.i("contactos","Numero: " + phoneNumber);
-            contactosTelefono.add(phoneNumber);
+
             //Log.i("contactos","Tipo: " + cursor.getString(3));
         }
         cursor.close();

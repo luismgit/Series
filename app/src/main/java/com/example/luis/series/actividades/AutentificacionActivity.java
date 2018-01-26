@@ -142,7 +142,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         botonSMS.setClickable(false);
         botonSIGIN.setClickable(false);
         Log.i("SESION", "1----");
-        phoneNumber="+34"+phoneNumber;
+        //phoneNumber="+34"+phoneNumber;
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             @Override
