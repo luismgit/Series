@@ -4,22 +4,35 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.luis.series.Adapters.AdaptadorSeries;
+import com.example.luis.series.Objetos.Series;
 import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AzulFragment.OnFragmentInteractionListener} interface
+ * {@link SeriesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AzulFragment#newInstance} factory method to
+ * Use the {@link SeriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AzulFragment extends Fragment {
+public class SeriesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,8 +43,11 @@ public class AzulFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    RecyclerView rv;
+    AdaptadorSeries adaptadorSeries;
+    List<Series> series;
 
-    public AzulFragment() {
+    public SeriesFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +57,11 @@ public class AzulFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AzulFragment.
+     * @return A new instance of fragment SeriesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AzulFragment newInstance(String param1, String param2) {
-        AzulFragment fragment = new AzulFragment();
+    public static SeriesFragment newInstance(String param1, String param2) {
+        SeriesFragment fragment = new SeriesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,7 +82,32 @@ public class AzulFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_azul, container, false);
+        View vista= inflater.inflate(R.layout.fragment_series, container, false);
+        rv=vista.findViewById(R.id.recyclerSeries);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        series=new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        adaptadorSeries=new AdaptadorSeries(series);
+        rv.setAdapter(adaptadorSeries);
+        database.getReference(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                series.removeAll(series);
+                for (DataSnapshot snapshot:
+                    dataSnapshot.getChildren()){
+                    Series serie = snapshot.getValue(Series.class);
+                    Log.i("Series_prueba", serie.getNombre() );
+                    series.add(serie);
+                }
+                adaptadorSeries.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return vista;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

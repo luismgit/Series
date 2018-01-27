@@ -2,9 +2,7 @@ package com.example.luis.series.actividades;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.provider.SyncStateContract;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,12 +23,12 @@ import android.widget.TextView;
 
 import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
-import com.example.luis.series.fragments.AzulFragment;
+import com.example.luis.series.fragments.SeriesFragment;
 import com.example.luis.series.fragments.GreenFragment;
 import com.example.luis.series.fragments.RojoFragment;
 
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
-AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionListener,GreenFragment.OnFragmentInteractionListener{
+SeriesFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionListener,GreenFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -134,7 +132,7 @@ AzulFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionLis
             switch (sectionNumber){
                 case 1:fragment=new ContactosFragment();
                 break;
-                case 2:fragment=new AzulFragment();
+                case 2:fragment=new SeriesFragment();
                     break;
                 case 3:fragment=new RojoFragment();
                     break;

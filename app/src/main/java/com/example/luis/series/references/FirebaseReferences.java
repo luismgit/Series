@@ -7,5 +7,5 @@ package com.example.luis.series.references;
 public class FirebaseReferences {
 
     final public static String USUARIOS_REFERENCE="usuarios";
-
+    final public static String SERIES_REFERENCE="Series";
 }

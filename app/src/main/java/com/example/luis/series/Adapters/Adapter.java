@@ -37,7 +37,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.UsuariosviewHolder>{
 
     @Override
     public UsuariosviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_contactos,parent,false);
         UsuariosviewHolder holder = new UsuariosviewHolder(v);
         return holder;
     }
