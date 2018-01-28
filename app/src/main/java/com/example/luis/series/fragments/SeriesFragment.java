@@ -87,7 +87,7 @@ public class SeriesFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         series=new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        adaptadorSeries=new AdaptadorSeries(series);
+        adaptadorSeries=new AdaptadorSeries(series,this.getContext());
         rv.setAdapter(adaptadorSeries);
         database.getReference(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,7 +96,6 @@ public class SeriesFragment extends Fragment {
                 for (DataSnapshot snapshot:
                     dataSnapshot.getChildren()){
                     Series serie = snapshot.getValue(Series.class);
-                    Log.i("Series_prueba", serie.getNombre() );
                     series.add(serie);
                 }
                 adaptadorSeries.notifyDataSetChanged();

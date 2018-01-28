@@ -13,4 +13,12 @@ public class ComunicarCurrentUser {
     public  static FirebaseUser getUser(){
         return usuario;
     }
+    public static String getPhoneNumberUser(){
+        String phoneNumber=usuario.getPhoneNumber();
+        phoneNumber.replaceAll("\\s","");
+        if(phoneNumber.substring(0,3).equals("+34")){
+            phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+        }
+        return phoneNumber;
+    }
 }

@@ -57,6 +57,7 @@ public class ContactosFragment extends Fragment {
     List<String> contactosTelefono;
     String phoneNumberUser;
     FirebaseUser user;
+
     public ContactosFragment() {
         // Required empty public constructor
         Log.i("actividades","public ContactosFragment()");

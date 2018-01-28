@@ -36,6 +36,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
  Button botonAvatar,botonRegistro;
     private ImageView avatarIcono;
     int iconoSeleccionado;
+    String claveUsuarioActual;
     String nick,correo,phoneNumber;
     private int [] iconos = new int[]
             {       R.drawable.breaking,
@@ -69,8 +70,10 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         editTextEmail.setOnEditorActionListener(this);
         textViewError=findViewById(R.id.textViewError);
         textViewError.setText("");
+
         Intent intent=getIntent();
         phoneNumber=intent.getStringExtra("phoneNumber");
+
     }
 
     public void registro(View view) {

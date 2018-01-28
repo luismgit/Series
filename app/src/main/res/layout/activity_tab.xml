@@ -19,7 +19,7 @@
             android:layout_height="270dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <!--si ponemos : app:layout_scrollFlags="scroll|exitUntilCollapsed  al hacer scroll la foto desaparece...">-->
 
             <ImageView

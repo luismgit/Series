@@ -26,6 +26,15 @@ import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.fragments.SeriesFragment;
 import com.example.luis.series.fragments.GreenFragment;
 import com.example.luis.series.fragments.RojoFragment;
+import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
 SeriesFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionListener,GreenFragment.OnFragmentInteractionListener{
@@ -71,7 +80,29 @@ SeriesFragment.OnFragmentInteractionListener,RojoFragment.OnFragmentInteractionL
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("registroCerrado",false);
         editor.commit();
+        FirebaseUser user = ComunicarCurrentUser.getUser();
+        String phoneNumber=user.getPhoneNumber();
+        phoneNumber.replaceAll("\\s","");
+        if(phoneNumber.substring(0,3).equals("+34")){
+            phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+        }
 
+        FirebaseDatabase data = FirebaseDatabase.getInstance();
+        DatabaseReference root = data.getReference();
+        root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild("telefono").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                    String claveUsuarioActual = childSnapshot.getKey();
+                    ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

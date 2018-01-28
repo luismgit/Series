@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="125dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:id="@+id/relativeLayout">
     
     <ImageView
         android:layout_width="100dp"
@@ -18,28 +18,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nombreSerie"
-        android:text="Breakin Bad"
+        android:text="Breaking Bad"
         android:layout_toRightOf="@id/imagenSerie"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:textStyle="bold"
         android:textSize="20sp"
         />
-   <com.like.LikeButton
-        app:icon_type="heart"
-        app:icon_size="25dp"
-        android:id="@+id/heart_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imagenSerie"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-      />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:background="#d4d4d4"
         />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp"
+        android:textSize="30dp"
+        android:text="&#8942;"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/textViewOptionsDigit"
+        />
+
 
 </RelativeLayout>
