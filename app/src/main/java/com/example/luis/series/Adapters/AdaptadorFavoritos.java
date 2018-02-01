@@ -2,6 +2,7 @@ package com.example.luis.series.Adapters;
 
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,7 +67,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         TextView textViewNombre;
         Context context;
         TextView menuFavoritos;
+        FloatingActionButton botonVoto;
         FirebaseDatabase database;
+        String claveSuscripcionActual;
 
         public FavoritosViewHolder(View itemView) {
             super(itemView);
@@ -74,10 +78,36 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             ratingBarFavoritos=itemView.findViewById(R.id.estrellasFav);
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
             menuFavoritos=itemView.findViewById(R.id.textViewMenuFavoritos);
+            botonVoto=itemView.findViewById(R.id.botonVoto);
+
         }
 
         public void setOnclickListener(){
             menuFavoritos.setOnClickListener(this);
+            botonVoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Float puntuacion = ratingBarFavoritos.getRating();
+                    FirebaseDatabase data = FirebaseDatabase.getInstance();
+                    final DatabaseReference root = data.getReference();
+                    root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())
+                                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                claveSuscripcionActual = childSnapshot.getKey();
+                                root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(puntuacion);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
         }
 
         @Override

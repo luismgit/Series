@@ -8,21 +8,31 @@ public class Suscripcion {
     Float estrellasUsuario;
     String telefono;
     int imagen;
+    String tlf_serie;
 
     public Suscripcion(){
 
     }
 
-    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,int imagen) {
+    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,int imagen,String tlf_serie) {
         this.idUsuario = idUsuario;
         this.serie = serie;
         this.estrellasUsuario = estrellasUsuario;
         this.telefono=telefono;
         this.imagen=imagen;
+        this.tlf_serie=tlf_serie;
     }
 
     public String getTelefono() {
         return telefono;
+    }
+
+    public String getTlf_serie() {
+        return tlf_serie;
+    }
+
+    public void setTlf_serie(String tlf_serie) {
+        this.tlf_serie = tlf_serie;
     }
 
     public void setTelefono(String telefono) {

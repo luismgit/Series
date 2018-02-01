@@ -193,7 +193,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                         Log.i("imagen","imagen -> " + serie.getImagen());
                                                         imagenSuscripcion=serie.getImagen();
                                                         DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                                        Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion);
+                                                        Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
+                                                                ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
                                                         //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
                                                         df.child("suscripciones").push().setValue(suscripcion);
                                                         suscripciones++;
