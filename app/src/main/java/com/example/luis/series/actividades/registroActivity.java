@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
+import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,35 +31,22 @@ import java.util.regex.Pattern;
 
 public class registroActivity extends AppCompatActivity  implements TextView.OnEditorActionListener{
 
- EditText editTextNick,editTextEmail;
- TextView textViewError;
- ProgressBar progressBar;
- Button botonAvatar,botonRegistro;
+ private EditText editTextNick,editTextEmail;
+ private TextView textViewError;
+ private ProgressBar progressBar;
+ private Button botonAvatar,botonRegistro;
     private ImageView avatarIcono;
-    int iconoSeleccionado;
-    String claveUsuarioActual;
-    String nick,correo,phoneNumber;
-    private int [] iconos = new int[]
-            {       R.drawable.breaking,
-                    R.drawable.thrones,
-                    R.drawable.theory,
-                    R.drawable.narcos,
-                    R.drawable.simpson,
-                    R.drawable.anarchy,
-                    R.drawable.stranger,
-                    R.drawable.vikins,
-                    R.drawable.mirror,
-                    R.drawable.walking,
-                    R.drawable.west,
-                    R.drawable.lost,
-                    R.drawable.cards,
-                    R.drawable.dexter};
+    private int iconoSeleccionado;
+    private String claveUsuarioActual;
+    private String nick,correo,phoneNumber;
+    private int [] iconos;
     private static final int LISTA_ICONOS=1;
-    boolean error=false;
+    private boolean error=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro_activity);
+        iconos= Imagenes.getAvataresUsuarios();
         avatarIcono=findViewById(R.id.avatarIcono);
         avatarIcono.setImageResource(iconos[0]);
         iconoSeleccionado=0;

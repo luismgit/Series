@@ -7,15 +7,17 @@ public class Series {
     int imagen;
     Long likes;
     String web;
+    Float estrellas;
 
     public Series(){
 
     }
-    public Series(String nombre,int imagen,Long likes,String web){
+    public Series(String nombre,int imagen,Long likes,String web,Float estrellas){
         this.nombre=nombre;
         this.imagen=imagen;
         this.likes=likes;
         this.web=web;
+        this.estrellas=estrellas;
     }
 
     public Long getLikes() {
@@ -24,6 +26,14 @@ public class Series {
 
     public String getWeb() {
         return web;
+    }
+
+    public Float getEstrellas() {
+        return estrellas;
+    }
+
+    public void setEstrellas(Float estrellas) {
+        this.estrellas = estrellas;
     }
 
     public void setWeb(String web) {

@@ -10,28 +10,16 @@ import android.widget.TextView;
 
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
+import com.example.luis.series.utilidades.Imagenes;
 
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.UsuariosviewHolder>{
+public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.UsuariosviewHolder>{
 
     List<Usuario> usuarios;
-    private int [] iconos = new int[]
-            {       R.drawable.breaking,
-                    R.drawable.thrones,
-                    R.drawable.theory,
-                    R.drawable.narcos,
-                    R.drawable.simpson,
-                    R.drawable.anarchy,
-                    R.drawable.stranger,
-                    R.drawable.vikins,
-                    R.drawable.mirror,
-                    R.drawable.walking,
-                    R.drawable.west,
-                    R.drawable.lost,
-                    R.drawable.cards,
-                    R.drawable.dexter};
-    public Adapter(List<Usuario> usuarios) {
+    private int [] iconos = Imagenes.getAvataresUsuarios();
+
+    public AdaptadorContactos(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
 

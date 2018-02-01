@@ -2,7 +2,6 @@ package com.example.luis.series.fragments;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,12 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.luis.series.Adapters.Adapter;
+import com.example.luis.series.Adapters.AdaptadorContactos;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
-import com.example.luis.series.utilidades.LoadPhoneNumbersFromContacts;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,7 +51,7 @@ public class ContactosFragment extends Fragment {
 
     RecyclerView rv;
     List<Usuario> usuarios;
-    Adapter adapter;
+    AdaptadorContactos adapter;
     List<String> contactosTelefono;
     String phoneNumberUser;
     FirebaseUser user;
@@ -113,7 +111,7 @@ public class ContactosFragment extends Fragment {
         }
         loadContactFromTlf();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        adapter=new Adapter(usuarios);
+        adapter=new AdaptadorContactos(usuarios);
         rv.setAdapter(adapter);
         database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addValueEventListener(new ValueEventListener() {
 

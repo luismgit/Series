@@ -6,7 +6,7 @@ import android.widget.EditText;
 
 
 
-public class Utilitis {
+public class Utilities {
     public static boolean REGISTRO_CERRADO;
     public static void esconderTeclado(EditText editText, Context contexto){
         EditText edit=editText;

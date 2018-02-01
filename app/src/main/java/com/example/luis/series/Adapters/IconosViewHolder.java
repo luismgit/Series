@@ -1,4 +1,4 @@
-package com.example.luis.series.actividades;
+package com.example.luis.series.Adapters;
 
 import android.view.View;
 import android.widget.ImageView;

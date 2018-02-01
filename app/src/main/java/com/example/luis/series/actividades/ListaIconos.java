@@ -9,30 +9,18 @@ import android.widget.ListView;
 
 import com.example.luis.series.Adapters.AdaptadorIconos;
 import com.example.luis.series.R;
+import com.example.luis.series.utilidades.Imagenes;
 
 public class ListaIconos extends AppCompatActivity {
 
-    private int [] iconos = new int[]
-            {       R.drawable.breaking,
-                    R.drawable.thrones,
-                    R.drawable.theory,
-                    R.drawable.narcos,
-                    R.drawable.simpson,
-                    R.drawable.anarchy,
-                    R.drawable.stranger,
-                    R.drawable.vikins,
-                    R.drawable.mirror,
-                    R.drawable.walking,
-                    R.drawable.west,
-                    R.drawable.lost,
-                    R.drawable.cards,
-                    R.drawable.dexter};
+    private int [] iconos;
     private ListView listaIconos;
     AdaptadorIconos adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_iconos);
+        iconos= Imagenes.getAvataresUsuarios();
         //COGEMOS NUESTRA LISTVIEW DEL XML Y LA GUARDAMOS
         listaIconos=findViewById(R.id.listaIconos);
         //NOS CREAMOS UN ADAPTADOR DE NUESTRA CLASE AdaptadorIconos Y LE PASAMOS EL LISTADO DE AVATARES A MOSTRAR EN CADA VISTA

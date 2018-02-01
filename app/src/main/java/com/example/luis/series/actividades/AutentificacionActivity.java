@@ -26,7 +26,7 @@ import com.example.luis.series.R;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
-import com.example.luis.series.utilidades.Utilitis;
+import com.example.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -251,7 +251,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
     public void signIn(View view) {
-        Utilitis.esconderTeclado((EditText) etxtPhoneCode,this);
+        Utilities.esconderTeclado((EditText) etxtPhoneCode,this);
         String code = etxtPhoneCode.getText().toString();
         if(TextUtils.isEmpty(code)) {
             Toast.makeText(AutentificacionActivity.this,"Debe introducir el código recibido pos SMS",Toast.LENGTH_LONG).show();
@@ -322,13 +322,13 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             Log.i("EDITORINFO","NEXT");
             requestCode(null);
             //esconderTeclado((EditText) textView);
-            //Utilitis.esconderTeclado((EditText) textView,this);
+            //Utilities.esconderTeclado((EditText) textView,this);
         }
         if(i== EditorInfo.IME_ACTION_DONE){
             Log.i("EDITORINFO","DONE");
             signIn(null);
             //esconderTeclado((EditText) textView);
-            //Utilitis.esconderTeclado((EditText) textView,this);
+            //Utilities.esconderTeclado((EditText) textView,this);
         }
        return false;
     }

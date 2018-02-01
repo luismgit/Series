@@ -12,16 +12,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luis.series.Objetos.Series;
+import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,21 +43,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     List<Series> series;
     private Context mContext;
-    private int [] iconos = new int[]
-            {       R.drawable.breaking,
-                    R.drawable.thrones,
-                    R.drawable.theory,
-                    R.drawable.narcos,
-                    R.drawable.simpson,
-                    R.drawable.anarchy,
-                    R.drawable.stranger,
-                    R.drawable.vikins,
-                    R.drawable.mirror,
-                    R.drawable.walking,
-                    R.drawable.west,
-                    R.drawable.lost,
-                    R.drawable.cards,
-                    R.drawable.dexter};
+    private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorSeries(List<Series> series,Context mContext) {
         this.series = series;
@@ -73,6 +62,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         Series serie = series.get(position);
         holder.textViewNombre.setText(serie.getNombre());
         holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
+        holder.ratingBar.setRating(serie.getEstrellas());
         holder.setOnclickListener();
 
     }
@@ -87,6 +77,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     public static class SeriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        RatingBar ratingBar;
         TextView textViewNombre;
         ImageView iconoSerie;
         TextView textViewOptions;
@@ -97,15 +88,17 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         RelativeLayout relativeLayout;
         FirebaseDatabase database;
         DatabaseReference rootRef;
+        int imagenSuscripcion;
+        long suscripciones;
 
         public SeriesViewHolder(View itemView) {
             super(itemView);
             context=itemView.getContext();
-            itemView.getContext();
             relativeLayout=itemView.findViewById(R.id.relativeLayout);
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
             iconoSerie=itemView.findViewById(R.id.imagenSerie);
             textViewOptions=itemView.findViewById(R.id.textViewOptionsDigit);
+            ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
         }
@@ -168,6 +161,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
         @Override
         public void onClick(View view) {
+
             Log.i("HOLDER", "pulsado " );
             PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
             popupMenu.inflate(R.menu.option_menu);
@@ -185,12 +179,36 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    long suscripciones = dataSnapshot.getValue(Long.class);
+                                    suscripciones = dataSnapshot.getValue(Long.class);
                                     Log.i("HOLDER","likes -> " + suscripciones);
-                                    DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                    df.child("suscripciones").child(claveUsuarioActual).child(textViewNombre.getText().toString()).setValue(phoneNumber);
-                                    suscripciones++;
-                                    refLikes.setValue(suscripciones);
+                                    FirebaseDatabase data = FirebaseDatabase.getInstance();
+                                    data.getReference(FirebaseReferences.SERIES_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                for(DataSnapshot snapshot:
+                                                        dataSnapshot.getChildren()){
+                                                    Series serie = snapshot.getValue(Series.class);
+                                                    if(serie.getNombre().equals(textViewNombre.getText())){
+                                                        Log.i("imagen","imagen -> " + serie.getNombre());
+                                                        Log.i("imagen","imagen -> " + serie.getImagen());
+                                                        imagenSuscripcion=serie.getImagen();
+                                                        DatabaseReference df = FirebaseDatabase.getInstance().getReference();
+                                                        Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion);
+                                                        //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
+                                                        df.child("suscripciones").push().setValue(suscripcion);
+                                                        suscripciones++;
+                                                        refLikes.setValue(suscripciones);
+                                                    }
+
+                                                }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
 
                                 }
 
@@ -236,6 +254,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
             context.startActivity(intent);
         }
+
+
     }
 
 

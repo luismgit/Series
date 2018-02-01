@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.example.luis.series.R;
-import com.example.luis.series.actividades.IconosViewHolder;
 
 public class AdaptadorIconos extends BaseAdapter {
 
