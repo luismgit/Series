@@ -70,6 +70,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         FloatingActionButton botonVoto;
         FirebaseDatabase database;
         String claveSuscripcionActual;
+        Float puntuacion;
 
         public FavoritosViewHolder(View itemView) {
             super(itemView);
@@ -87,7 +88,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final Float puntuacion = ratingBarFavoritos.getRating();
+                    puntuacion = ratingBarFavoritos.getRating();
                     FirebaseDatabase data = FirebaseDatabase.getInstance();
                     final DatabaseReference root = data.getReference();
                     root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())
@@ -99,6 +100,22 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(puntuacion);
 
                             }
+                            FirebaseDatabase fbd = FirebaseDatabase.getInstance();
+                            final DatabaseReference r = fbd.getReference();
+                            r.child("suscripciones").orderByChild("serie").equalTo(textViewNombre.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                        Long estrellas = (Long) childSnapshot.child("estrellasUsuario").getValue();
+                                        Log.i("susc","estrellas -> " + estrellas);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         }
 
                         @Override
@@ -106,8 +123,12 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
                         }
                     });
+
+
                 }
             });
+
+
         }
 
         @Override
