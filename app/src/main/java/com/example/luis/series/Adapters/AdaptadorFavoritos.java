@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
@@ -71,6 +72,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         FirebaseDatabase database;
         String claveSuscripcionActual;
         Float puntuacion;
+        int contador=0;
+        Double totalEstrellas=0.0;
+        Double estrellas=0.0;
 
         public FavoritosViewHolder(View itemView) {
             super(itemView);
@@ -98,17 +102,27 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                             for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                 claveSuscripcionActual = childSnapshot.getKey();
                                 root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(puntuacion);
+                                Toast.makeText(context,"Voto registrado",Toast.LENGTH_LONG).show();
 
                             }
                             FirebaseDatabase fbd = FirebaseDatabase.getInstance();
                             final DatabaseReference r = fbd.getReference();
+
                             r.child("suscripciones").orderByChild("serie").equalTo(textViewNombre.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                        Long estrellas = (Long) childSnapshot.child("estrellasUsuario").getValue();
-                                        Log.i("susc","estrellas -> " + estrellas);
+                                        Double estrellas =  childSnapshot.child("estrellasUsuario").getValue(Double.class);
+                                        contador++;
+                                        totalEstrellas+=estrellas;
                                     }
+                                    Log.i("Puntuacion","contador " + contador);
+                                    Log.i("Puntuacion","total estrellas " + totalEstrellas);
+                                    Double media = totalEstrellas/contador;
+                                    Log.i("Puntuacion","Media  " + media);
+                                    FirebaseDatabase f = FirebaseDatabase.getInstance();
+                                    DatabaseReference d = f.getReference();
+                                    d.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("estrellas").setValue(media);
                                 }
 
                                 @Override
