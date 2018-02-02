@@ -90,6 +90,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         DatabaseReference rootRef;
         int imagenSuscripcion;
         long suscripciones;
+        boolean repetidoFavorito;
 
         public SeriesViewHolder(View itemView) {
             super(itemView);
@@ -101,6 +102,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
+
         }
 
         public void setOnclickListener(){
@@ -163,6 +165,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         public void onClick(View view) {
 
             Log.i("HOLDER", "pulsado " );
+            repetidoFavorito=false;
             PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
             popupMenu.inflate(R.menu.option_menu);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -193,12 +196,35 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                         Log.i("imagen","imagen -> " + serie.getImagen());
                                                         imagenSuscripcion=serie.getImagen();
                                                         DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                                        Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
-                                                                ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
-                                                        //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
-                                                        df.child("suscripciones").push().setValue(suscripcion);
-                                                        suscripciones++;
-                                                        refLikes.setValue(suscripciones);
+                                                        df.child("suscripciones").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                for(DataSnapshot snapshot:
+                                                                        dataSnapshot.getChildren()){
+                                                                    Suscripcion s = snapshot.getValue(Suscripcion.class);
+                                                                    if(s.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
+                                                                        repetidoFavorito=true;
+                                                                        Toast.makeText(context,textViewNombre.getText().toString() + " ya la tienes en favoritos",Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                }
+                                                                if(!repetidoFavorito){
+                                                                    DatabaseReference dbr=FirebaseDatabase.getInstance().getReference();
+                                                                    Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
+                                                                            ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
+                                                                    //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
+                                                                    dbr.child("suscripciones").push().setValue(suscripcion);
+                                                                    suscripciones++;
+                                                                    refLikes.setValue(suscripciones);
+                                                                    Toast.makeText(context,textViewNombre.getText().toString() +" añadida a favoritos",Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
                                                     }
 
                                                 }
@@ -219,7 +245,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
                                 }
                             });
-                            Toast.makeText(context,"Añadido a favoritos",Toast.LENGTH_LONG).show();
+
                             break;
                         case (R.id.menu_item_filmaffinity):
                             database=FirebaseDatabase.getInstance();
