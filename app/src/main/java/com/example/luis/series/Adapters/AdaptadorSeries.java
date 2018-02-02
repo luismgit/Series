@@ -107,57 +107,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
         public void setOnclickListener(){
             textViewOptions.setOnClickListener(this);
-          /*  relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("HOLDER", "pulsado " );
-                    PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
-                    popupMenu.inflate(R.menu.option_menu);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
 
-                            switch (menuItem.getItemId()){
-                                case R.id.menu_item_favoritos:
-                                    Log.i("HOLDER", "pulsado favoritos" );
-                                    FirebaseDatabase database=FirebaseDatabase.getInstance();
-                                    DatabaseReference rootRef = database.getReference();
-                                    refLikes = rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("likes");
-                                    refLikes.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                            long suscripciones = dataSnapshot.getValue(Long.class);
-                                            Log.i("HOLDER","likes -> " + suscripciones);
-                                            DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                            df.child("suscripciones").child(claveUsuarioActual).child(textViewNombre.getText().toString()).setValue(phoneNumber);
-                                            suscripciones++;
-                                            refLikes.setValue(suscripciones);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-
-                                        }
-                                    });
-                                    Toast.makeText(context,"Añadido a favoritos",Toast.LENGTH_LONG).show();
-                                    break;
-                                case (R.id.menu_item_filmaffinity):
-
-
-                                    break;
-                                default:
-                                    break;
-
-                            }
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
-                }
-            });*/
         }
 
 

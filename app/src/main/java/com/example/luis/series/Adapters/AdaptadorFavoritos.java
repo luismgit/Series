@@ -52,7 +52,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         Suscripcion suscripcion = suscripciones.get(position);
         holder.textViewNombre.setText(suscripcion.getSerie());
         holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
-        //holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
+        holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.setOnclickListener();
     }
 
@@ -73,8 +73,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         String claveSuscripcionActual;
         Float puntuacion;
         int contador=0;
-        Double totalEstrellas=0.0;
-        Double estrellas=0.0;
+        Double totalEstrellas;
+        Double estrellas;
+        String nombreSerie;
 
         public FavoritosViewHolder(View itemView) {
             super(itemView);
@@ -92,10 +93,13 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    nombreSerie=textViewNombre.getText().toString();
+                    contador=0;
+                    totalEstrellas=0.0;
                     puntuacion = ratingBarFavoritos.getRating();
                     FirebaseDatabase data = FirebaseDatabase.getInstance();
                     final DatabaseReference root = data.getReference();
-                    root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())
+                    root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+nombreSerie)
                                                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -108,13 +112,15 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                             FirebaseDatabase fbd = FirebaseDatabase.getInstance();
                             final DatabaseReference r = fbd.getReference();
 
-                            r.child("suscripciones").orderByChild("serie").equalTo(textViewNombre.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            r.child("suscripciones").orderByChild("serie").equalTo(nombreSerie).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                         Double estrellas =  childSnapshot.child("estrellasUsuario").getValue(Double.class);
+                                        Log.i("Puntuacion","Estrellas -> " + estrellas);
                                         contador++;
                                         totalEstrellas+=estrellas;
+                                        Log.i("Puntuacion","totalEstrellas -> " + totalEstrellas);
                                     }
                                     Log.i("Puntuacion","contador " + contador);
                                     Log.i("Puntuacion","total estrellas " + totalEstrellas);
@@ -122,7 +128,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                     Log.i("Puntuacion","Media  " + media);
                                     FirebaseDatabase f = FirebaseDatabase.getInstance();
                                     DatabaseReference d = f.getReference();
-                                    d.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("estrellas").setValue(media);
+                                    Log.i("Puntuacion","serie -> " + nombreSerie);
+                                    d.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie).child("estrellas").setValue(media);
+
                                 }
 
                                 @Override
@@ -166,18 +174,19 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     long like = dataSnapshot.getValue(Long.class);
                                     final FirebaseDatabase database=FirebaseDatabase.getInstance();
-                                    database.getReference("suscripciones").addValueEventListener(new ValueEventListener() {
+                                    database.getReference("suscripciones").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             for(DataSnapshot snapshot:
                                                     dataSnapshot.getChildren()){
                                                 Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
-                                                String claveSerie = snapshot.getKey();
+
                                                // Log.i("Clave","clave Serie -> " + claveSerie);
                                                // Log.i("Clave","idUsu -> " + suscripcion.getIdUsuario());
                                                // Log.i("Clave","clave Usu -> " + ComunicarClaveUsuarioActual.getClave());
 
-                                                if(suscripcion.getSerie().equals(textViewNombre.getText().toString())){
+                                                if(suscripcion.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
+                                                    String claveSerie = snapshot.getKey();
                                                     Log.i("Clave","--------------------------------------------------");
                                                     Log.i("Clave","suscripcion.getSerie() -> " + suscripcion.getSerie());
                                                     Log.i("Clave","textViewNombre.getText() -> " + textViewNombre.getText());

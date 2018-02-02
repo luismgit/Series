@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class FavoritosFragment extends Fragment {
                         dataSnapshot.getChildren()){
                     Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
                     if(suscripcion.getIdUsuario().equals(ComunicarClaveUsuarioActual.getClave())){
+                        Log.i("suscripcion"," estrellas -> " + suscripcion.getEstrellasUsuario());
                         suscripciones.add(suscripcion);
                     }
 

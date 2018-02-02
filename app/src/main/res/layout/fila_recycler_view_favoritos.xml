@@ -49,6 +49,7 @@
         android:id="@+id/estrellasFav"
         android:layout_toRightOf="@id/imagenSerieFavoritos"
         android:layout_below="@id/nombreSerieFavoritos"
+        android:rating="0"
 
     />
 
