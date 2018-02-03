@@ -4,8 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.example.luis.series.Adapters.AdaptadorIconos;
 import com.example.luis.series.R;
@@ -16,6 +21,7 @@ public class ListaIconos extends AppCompatActivity {
     private int [] iconos;
     private ListView listaIconos;
     AdaptadorIconos adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +37,12 @@ public class ListaIconos extends AppCompatActivity {
         listaIconos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                devolverNumeroIcono(i);
+                ImageView icono = view.findViewById(R.id.iconoItem);
+                final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotator);
+                myRotation.setRepeatCount(0);
+                icono.startAnimation(myRotation);
+                    new HiloIcono(i).start();
+
             }
         });
     }
@@ -51,4 +62,22 @@ public class ListaIconos extends AppCompatActivity {
         devolverNumeroIcono(-1);
         super.onBackPressed();
     }
+
+    private class HiloIcono extends Thread{
+        int i;
+        public HiloIcono(int i){
+            this.i=i;
+        }
+        public void run(){
+            try {
+                sleep(1300);
+
+            } catch (InterruptedException e) {
+
+            }
+            devolverNumeroIcono(i);
+        }
+    }
+
+
 }

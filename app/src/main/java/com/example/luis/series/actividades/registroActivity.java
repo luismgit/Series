@@ -3,11 +3,16 @@ package com.example.luis.series.actividades;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,7 +70,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     }
 
     public void registro(View view) {
-        if(iconoSeleccionado == -1){
+
+       new HiloRegistro().execute();
+       /* if(iconoSeleccionado == -1){
             iconoSeleccionado=0;
         }
         textViewError.setText("");
@@ -110,7 +117,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
                  }
              });
-         }
+         }*/
 
 
     }
@@ -185,6 +192,40 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                 }
                 break;
         }
+    }
+    private class HiloRegistro extends AsyncTask<Void,Void,Void>{
+
+        Animation animation;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotator);
+            animation.setRepeatCount(0);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Hilo","entra!!!");
+                    Button boton = findViewById(R.id.botonRegistro);
+                    boton.startAnimation(animation);
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.i("Hilo","acabado!!!");
+
+        }
+
+
     }
 
 

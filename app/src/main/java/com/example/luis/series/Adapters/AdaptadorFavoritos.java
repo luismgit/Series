@@ -9,9 +9,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,6 +90,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
             menuFavoritos=itemView.findViewById(R.id.textViewMenuFavoritos);
             botonVoto=itemView.findViewById(R.id.botonVoto);
+            botonVoto.setTag(botonVoto.getParent());
 
         }
 
@@ -93,6 +99,19 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    RelativeLayout miVista = (RelativeLayout) botonVoto.getTag();
+                   /* ScaleAnimation animationSmall = new ScaleAnimation(1.0f, 0.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    animationSmall.setDuration(1000);
+                    animationSmall.setFillAfter(true);
+                    miVista.startAnimation(animationSmall);
+                    ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    animation.setDuration(1000);
+                    animation.setFillAfter(true);
+                    miVista.startAnimation(animation);*/
+                    final Animation myRotation = AnimationUtils.loadAnimation(context, R.anim.rotator);
+                    myRotation.setRepeatCount(0);
+                    miVista.startAnimation(myRotation);
                     nombreSerie=textViewNombre.getText().toString();
                     contador=0;
                     totalEstrellas=0.0;
