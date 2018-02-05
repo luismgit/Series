@@ -7,7 +7,9 @@
     android:layout_height="155dp"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
-    android:id="@+id/relativeLayoutFavoritos">
+    android:id="@+id/relativeLayoutFavoritos"
+    android:visibility="visible"
+    >
 
     <ImageView
         android:layout_width="100dp"
@@ -50,7 +52,7 @@
         android:layout_toRightOf="@id/imagenSerieFavoritos"
         android:layout_below="@id/nombreSerieFavoritos"
         android:rating="0"
-
+        android:progressTint="#efb810"
     />
 
     <TextView
@@ -74,6 +76,7 @@
         android:clickable="true"
         android:id="@+id/botonVoto"
         />
+
 
 
 

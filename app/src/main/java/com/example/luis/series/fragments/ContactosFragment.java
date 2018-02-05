@@ -18,14 +18,18 @@ import com.example.luis.series.Adapters.AdaptadorContactos;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -52,9 +56,12 @@ public class ContactosFragment extends Fragment {
     RecyclerView rv;
     List<Usuario> usuarios;
     AdaptadorContactos adapter;
-    List<String> contactosTelefono;
+    //List<String> contactosTelefono;
+    //List<String> nombreContactosTelefono;
+    Hashtable<String,String> contactos;
     String phoneNumberUser;
     FirebaseUser user;
+
 
     public ContactosFragment() {
         // Required empty public constructor
@@ -99,8 +106,9 @@ public class ContactosFragment extends Fragment {
                 "                             Bundle savedInstanceState) ");
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
         rv=vista.findViewById(R.id.recycler);
-        contactosTelefono=new ArrayList<>();
-        //contactosTelefono= LoadPhoneNumbersFromContacts.getListadoTelefonos();
+       // contactosTelefono=new ArrayList<>();
+        //nombreContactosTelefono=new ArrayList<>();
+        contactos = new Hashtable<String, String>();
         usuarios=new ArrayList<>();
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         user= ComunicarCurrentUser.getUser();
@@ -111,7 +119,7 @@ public class ContactosFragment extends Fragment {
         }
         loadContactFromTlf();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        adapter=new AdaptadorContactos(usuarios);
+        adapter=new AdaptadorContactos(usuarios,this.getContext());
         rv.setAdapter(adapter);
         database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addValueEventListener(new ValueEventListener() {
 
@@ -123,10 +131,12 @@ public class ContactosFragment extends Fragment {
                         dataSnapshot.getChildren() ){
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     String phoneNumber = usuario.getTelefono();
-                    if(contactosTelefono.contains(phoneNumber)){
+                    if(contactos.containsKey(phoneNumber)){
                         if(!phoneNumber.equals(phoneNumberUser)){
                             //Log.i("CONTACTOSS","user -> " + "phoneNumberUser" + phoneNumberUser);
                             //Log.i("CONTACTOSS","finales -> " + phoneNumber);
+                            Log.i("CONTACTOSS","finales -> " + contactos.get(phoneNumber));
+                            usuario.setNick(contactos.get(phoneNumber));
                             usuarios.add(usuario);
                         }
                     }
@@ -139,21 +149,71 @@ public class ContactosFragment extends Fragment {
 
             }
         });
+        FirebaseUser user = ComunicarCurrentUser.getUser();
+        String phoneNumber=user.getPhoneNumber();
+        phoneNumber.replaceAll("\\s","");
+        if(phoneNumber.substring(0,3).equals("+34")){
+            phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+        }
+
+        FirebaseDatabase data = FirebaseDatabase.getInstance();
+        DatabaseReference root = data.getReference();
+        root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild("telefono").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                    String claveUsuarioActual = childSnapshot.getKey();
+                    ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
+
+                }
+
+                final FirebaseDatabase dt = FirebaseDatabase.getInstance();
+                final  DatabaseReference myConnectionsRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child("conectado");
+                //final DatabaseReference lastOnlineRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child("ultimaconexion");
+                final DatabaseReference connectedRef = dt.getReference(".info/connected");
+                connectedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean connected = dataSnapshot.getValue(Boolean.class);
+                        if(connected){
+                            myConnectionsRef.setValue("online");
+                            DatabaseReference con = myConnectionsRef;
+                            con.onDisconnect().setValue("offline");
+                            //lastOnlineRef.onDisconnect().setValue(ServerValue.TIMESTAMP);
+                            //con.setValue(Boolean.TRUE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         return  vista;
     }
 
     private void loadContactFromTlf() {
         ContentResolver contentResolver=getContext().getContentResolver();
-        // String [] projeccion=new String[]{ContactsContract.Data._ID,ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.TYPE};
-        String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER};
+        String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
+        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
         String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
         //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
         Cursor cursor=getContext().getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
         while(cursor.moveToNext()){
-            String phoneNumber=cursor.getString(0);
-
+            String name=cursor.getString(0);
+            String phoneNumber=cursor.getString(1);
             if(phoneNumber.length()>=9){
                 phoneNumber=phoneNumber.replaceAll("\\s","");
                 if(phoneNumber.substring(0,3).equals("+34")){
@@ -161,12 +221,15 @@ public class ContactosFragment extends Fragment {
                     //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
 
                 }
-                contactosTelefono.add(phoneNumber);
+                //nombreContactosTelefono.add(name);
+               // contactosTelefono.add(phoneNumber);
+                Log.i("contactos","Nombre: " + name);
+                Log.i("contactos","Numero: " + phoneNumber);
+                contactos.put(phoneNumber,name);
             }
 
             //Log.i("contactos","Identificador: " + cursor.getString(0));
-            //Log.i("contactos","Nombre: " + cursor.getString(1));
-            //Log.i("contactos","Numero: " + phoneNumber);
+
 
             //Log.i("contactos","Tipo: " + cursor.getString(3));
         }

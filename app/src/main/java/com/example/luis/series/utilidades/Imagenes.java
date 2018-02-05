@@ -37,11 +37,31 @@ public class Imagenes {
                     R.drawable.avatar12,
                     R.drawable.avatar13};
 
+    private static int [] fondos =new int[]
+            {   R.drawable.black,
+                    R.drawable.big,
+                    R.drawable.breaking_bad,
+                    R.drawable.dexter_back,
+                    R.drawable.game_back,
+                    R.drawable.house_back1,
+                    R.drawable.lost_back,
+                    R.drawable.narcos_back,
+                    R.drawable.sons_back1,
+                    R.drawable.stranger_back,
+                    R.drawable.simpson_back,
+                    R.drawable.walking_back,
+                    R.drawable.vikings_back
+
+            };
+
 
     public static int [] getIconosSeries(){
         return iconos;
     }
     public static int [] getAvataresUsuarios(){
         return avatares;
+    }
+    public static int [] getFondosPantalla(){
+        return fondos;
     }
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -36,7 +37,8 @@ import java.util.List;
 
 public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.FavoritosViewHolder>{
 
-    private List<Suscripcion> suscripciones;
+    public List<Suscripcion> suscripciones;
+    boolean flag=false;
     private Context mContext;
     private int [] iconos = Imagenes.getIconosSeries();
 
@@ -44,6 +46,8 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         this.suscripciones=suscripciones;
         this.mContext=context;
     }
+
+
 
     @Override
     public FavoritosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,11 +58,13 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
     @Override
     public void onBindViewHolder(FavoritosViewHolder holder, int position) {
+
         Suscripcion suscripcion = suscripciones.get(position);
         holder.textViewNombre.setText(suscripcion.getSerie());
         holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.setOnclickListener();
+
     }
 
     @Override
@@ -76,11 +82,12 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         FloatingActionButton botonVoto;
         FirebaseDatabase database;
         String claveSuscripcionActual;
-        Float puntuacion;
         int contador=0;
         Double totalEstrellas;
         Double estrellas;
         String nombreSerie;
+        Animation myRotation;
+        RelativeLayout miVista;
 
         public FavoritosViewHolder(View itemView) {
             super(itemView);
@@ -90,32 +97,27 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
             menuFavoritos=itemView.findViewById(R.id.textViewMenuFavoritos);
             botonVoto=itemView.findViewById(R.id.botonVoto);
-            botonVoto.setTag(botonVoto.getParent());
-
         }
+
+
 
         public void setOnclickListener(){
             menuFavoritos.setOnClickListener(this);
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick( View view) {
 
-                    RelativeLayout miVista = (RelativeLayout) botonVoto.getTag();
-                   /* ScaleAnimation animationSmall = new ScaleAnimation(1.0f, 0.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                    animationSmall.setDuration(1000);
-                    animationSmall.setFillAfter(true);
-                    miVista.startAnimation(animationSmall);
-                    ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                    animation.setDuration(1000);
-                    animation.setFillAfter(true);
-                    miVista.startAnimation(animation);*/
-                    final Animation myRotation = AnimationUtils.loadAnimation(context, R.anim.rotator);
+
+                    miVista= (RelativeLayout) view.getParent();
+                    myRotation = AnimationUtils.loadAnimation(miVista.getContext(), R.anim.rotator);
                     myRotation.setRepeatCount(0);
                     miVista.startAnimation(myRotation);
+
+
                     nombreSerie=textViewNombre.getText().toString();
                     contador=0;
                     totalEstrellas=0.0;
-                    puntuacion = ratingBarFavoritos.getRating();
+
                     FirebaseDatabase data = FirebaseDatabase.getInstance();
                     final DatabaseReference root = data.getReference();
                     root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+nombreSerie)
@@ -124,7 +126,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                 claveSuscripcionActual = childSnapshot.getKey();
-                                root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(puntuacion);
+                                root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(ratingBarFavoritos.getRating());
                                 Toast.makeText(context,"Voto registrado",Toast.LENGTH_LONG).show();
 
                             }
@@ -135,7 +137,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                        Double estrellas =  childSnapshot.child("estrellasUsuario").getValue(Double.class);
+                                        double estrellas =  childSnapshot.child("estrellasUsuario").getValue(Double.class);
                                         Log.i("Puntuacion","Estrellas -> " + estrellas);
                                         contador++;
                                         totalEstrellas+=estrellas;

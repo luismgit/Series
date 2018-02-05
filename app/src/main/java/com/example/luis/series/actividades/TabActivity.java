@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.luis.series.R;
@@ -29,12 +30,15 @@ import com.example.luis.series.fragments.GreenFragment;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
 SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener,GreenFragment.OnFragmentInteractionListener{
@@ -53,7 +57,8 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
+    private int [] fondos;
+    ImageView fondo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +73,13 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        fondos= Imagenes.getFondosPantalla();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         tabLayout.setupWithViewPager(mViewPager);
-
+        fondo=findViewById(R.id.header);
+        int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
+        fondo.setImageResource(fondos[fondoAleatorio]);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         Log.i("actividades","OnCreate TabActivity");
@@ -80,6 +87,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("registroCerrado",false);
         editor.commit();
+
         FirebaseUser user = ComunicarCurrentUser.getUser();
         String phoneNumber=user.getPhoneNumber();
         phoneNumber.replaceAll("\\s","");

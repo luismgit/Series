@@ -53,6 +53,8 @@
         android:id="@+id/ratingBar"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_margin="10dp"
+        android:progressTint="#efb810"
+
         />
 
     <TextView

@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Thread.sleep;
+
 public class registroActivity extends AppCompatActivity  implements TextView.OnEditorActionListener{
 
  private EditText editTextNick,editTextEmail;
@@ -72,53 +74,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     public void registro(View view) {
 
        new HiloRegistro().execute();
-       /* if(iconoSeleccionado == -1){
-            iconoSeleccionado=0;
-        }
-        textViewError.setText("");
-         nick=editTextNick.getText().toString().trim();
-         correo=editTextEmail.getText().toString().trim();
-         if(nick.equals("") || correo.equals("")){
-             textViewError.setText("Debe rellenar todos los campos!!");
-         }else if(nick.length()>15) {
-             textViewError.setText("El nick no puede contener más de 15 caracteres");
-         }else if(!validateEmail(correo)) {
-             textViewError.setText("Formato Email incorrecto!!");
-         }else{
-             FirebaseDatabase database=FirebaseDatabase.getInstance();
-             database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
-                 @Override
-                 public void onDataChange(DataSnapshot dataSnapshot) {
-                     for(DataSnapshot snapshot :
-                             dataSnapshot.getChildren()){
-                         Usuario usuario = snapshot.getValue(Usuario.class);
-                         if(usuario.getNick().equals(nick)){
-                             textViewError.setText("El nick introducido ya está en uso!!");
-                             error=true;
-                         }
-
-                     }
-
-                     if(!error){
-                         progressBar.setVisibility(View.VISIBLE);
-                         botonAvatar.setClickable(false);
-                         botonRegistro.setClickable(false);
-                         Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado);
-                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                         ref.child(FirebaseReferences.USUARIOS_REFERENCE).push().setValue(usuario);
-                         Toast.makeText(registroActivity.this,"Usuario registrado",Toast.LENGTH_SHORT).show();
-                         irAPrincipal();
-                         finish();
-                     }
-                 }
-
-                 @Override
-                 public void onCancelled(DatabaseError databaseError) {
-
-                 }
-             });
-         }*/
-
 
     }
 
@@ -199,30 +154,78 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotator);
-            animation.setRepeatCount(0);
+            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
+            animation.setDuration(1000);
+
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("Hilo","entra!!!");
                     Button boton = findViewById(R.id.botonRegistro);
                     boton.startAnimation(animation);
                 }
             });
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.i("Hilo","acabado!!!");
+             if(iconoSeleccionado == -1){
+            iconoSeleccionado=0;
+        }
+        textViewError.setText("");
+         nick=editTextNick.getText().toString().trim();
+         correo=editTextEmail.getText().toString().trim();
+         if(nick.equals("") || correo.equals("")){
+             textViewError.setText("Debe rellenar todos los campos!!");
+         }else if(nick.length()>15) {
+             textViewError.setText("El nick no puede contener más de 15 caracteres");
+         }else if(!validateEmail(correo)) {
+             textViewError.setText("Formato Email incorrecto!!");
+         }else{
+             FirebaseDatabase database=FirebaseDatabase.getInstance();
+             database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot) {
+                     for(DataSnapshot snapshot :
+                             dataSnapshot.getChildren()){
+                         Usuario usuario = snapshot.getValue(Usuario.class);
+                         if(usuario.getNick().equals(nick)){
+                             textViewError.setText("El nick introducido ya está en uso!!");
+                             error=true;
+                         }
 
+                     }
+
+                     if(!error){
+                         progressBar.setVisibility(View.VISIBLE);
+                         botonAvatar.setClickable(false);
+                         botonRegistro.setClickable(false);
+                         Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado,"online");
+                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                         ref.child(FirebaseReferences.USUARIOS_REFERENCE).push().setValue(usuario);
+                         Toast.makeText(registroActivity.this,"Usuario registrado",Toast.LENGTH_SHORT).show();
+                         irAPrincipal();
+                         finish();
+                     }
+                 }
+
+                 @Override
+                 public void onCancelled(DatabaseError databaseError) {
+
+                 }
+             });
+         }
         }
 
 

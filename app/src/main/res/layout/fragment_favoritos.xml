@@ -9,7 +9,8 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerSeriesFavoritos">
+        android:id="@+id/recyclerSeriesFavoritos"
+       >
 
     </android.support.v7.widget.RecyclerView>
 
