@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.luis.series.Objetos.Suscripcion;
@@ -34,6 +35,9 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         Suscripcion suscripcion = suscripcionesContactos.get(position);
         holder.nombreSerie.setText(suscripcion.getSerie());
         holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
+        String nota=String.valueOf(suscripcion.getEstrellasUsuario());
+        holder.textViewNota.setText(nota);
+        holder.barNota.setProgress(Math.round(suscripcion.getEstrellasUsuario()));
     }
 
     @Override
@@ -45,11 +49,15 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
 
         ImageView avatarSerie;
         TextView nombreSerie;
+        ProgressBar barNota;
+        TextView textViewNota;
 
         public ContactosViewHolder(View itemView) {
             super(itemView);
             avatarSerie=itemView.findViewById(R.id.imagenSerieContactosInfo);
             nombreSerie=itemView.findViewById(R.id.nombreSerieFavoritos);
+            barNota=itemView.findViewById(R.id.progressBarNota);
+            textViewNota=itemView.findViewById(R.id.textViewNota);
         }
     }
 }
