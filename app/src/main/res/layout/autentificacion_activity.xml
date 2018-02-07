@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.luis.series.actividades.AutentificacionActivity"
     android:orientation="vertical"
+    android:background="@drawable/degradado_autentificacion"
     >
 
     <LinearLayout
@@ -13,19 +14,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="8dp"
-        android:background=" #008080"
+
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Verifica tu número de teléfono"
-            android:textSize="18dp"
-            android:textColor="#ffffff"
+            android:textSize="23dp"
+            android:textColor="#0b0b0b"
             android:textStyle="bold"
-            android:shadowColor="#8a6603"
-            android:shadowDx="3"
-            android:shadowDy="2"
-            android:shadowRadius="1.8"
             android:paddingBottom="7dp"
             />
 
@@ -35,18 +32,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:textColor="#6b6969"
+        android:textColor="#050505"
         android:textSize="17dp"
-        android:text="Series enviará un único mensaje SMS para verificar tu número de telefono."/>
+        android:text="Series enviará un único mensaje SMS para verificar tu número de telefono."
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="40dp"
         android:paddingBottom="10dp"
-        android:textColor="#6b6969"
+        android:textColor="#050505"
         android:textSize="17dp"
         android:text="Introduzca su número de teléfono y pulse OK."
+        android:textStyle="bold"
         />
 
     <LinearLayout
@@ -61,14 +60,21 @@
             android:layout_height="wrap_content"
             android:hint="número de teléfono"
             android:inputType="phone"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textColor="#050505"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OK"
             android:onClick="requestCode"
             android:id="@+id/botonSMS"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp"
+            android:background="@drawable/degradado_boton"
+            android:layout_marginLeft="10dp"
+            android:textColor="#bab7b7"
+            android:textSize="17sp"
+            />
 
     </LinearLayout>
 
@@ -76,11 +82,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#6b6969"
+        android:textColor="#050505"
         android:textSize="17dp"
         android:paddingHorizontal="20dp"
         android:text="En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR"
-        android:paddingVertical="7dp"/>
+        android:paddingVertical="7dp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,6 +101,8 @@
         android:hint="código recibido"
         android:inputType="number"
         android:id="@+id/etxtPhoneCode"
+        android:textStyle="bold"
+        android:textColor="#050505"
         />
 
     <Button
@@ -102,8 +111,10 @@
         android:text="SIGIN"
         android:onClick="signIn"
         android:id="@+id/botonSIGIN"
-        android:layout_marginLeft="7dp"
-
+        android:layout_marginLeft="35dp"
+        android:background="@drawable/degradado_boton"
+        android:textColor="#bab7b7"
+        android:textSize="17sp"
         />
     </LinearLayout>
 
@@ -120,9 +131,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="En caso de problemas en el registro pulse aquí"
-        android:textColor="#6b6969"
+        android:textColor="#000000"
         android:textSize="17dp"
         android:paddingHorizontal="16dp"
+
         />
 
 

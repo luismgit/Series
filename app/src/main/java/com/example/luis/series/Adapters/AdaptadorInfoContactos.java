@@ -35,7 +35,11 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         Suscripcion suscripcion = suscripcionesContactos.get(position);
         holder.nombreSerie.setText(suscripcion.getSerie());
         holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
-        String nota=String.valueOf(suscripcion.getEstrellasUsuario());
+        float notaSobreDiez=(suscripcion.getEstrellasUsuario()*10)/5;
+        String nota=String.valueOf(notaSobreDiez);
+        if(nota.equals("10.0")){
+            nota=nota.substring(0,2);
+        }
         holder.textViewNota.setText(nota);
         holder.barNota.setProgress(Math.round(suscripcion.getEstrellasUsuario()));
     }

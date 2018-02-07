@@ -34,13 +34,12 @@
             android:textSize="22dp"
             android:layout_marginTop="5dp"
             />
-        <TextView
+
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="30dp"
             android:layout_below="@id/avatarContacto"
-            android:background="#979393"
-            android:layout_marginTop="8dp"
-            />
+            android:src="@drawable/separador"/>
 
     </RelativeLayout>
 
