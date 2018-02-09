@@ -39,7 +39,17 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_below="@id/avatarContacto"
-            android:src="@drawable/separador"/>
+            android:src="@drawable/separador"
+            android:id="@+id/separador"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separador"
+            android:id="@+id/sinFavoritos"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

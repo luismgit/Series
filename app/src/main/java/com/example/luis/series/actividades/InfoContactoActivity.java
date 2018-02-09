@@ -29,6 +29,7 @@ private int [] avatares;
     private RecyclerView rv;
     private AdaptadorInfoContactos adaptadorInfoContactos;
     private String telefonoUsuarioSeleccionado;
+    private TextView sinFavoritos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ private int [] avatares;
         avatares= Imagenes.getAvataresUsuarios();
         nombreUsuario=findViewById(R.id.nombreContacto);
         avatarUsuario=findViewById(R.id.avatarContacto);
+        sinFavoritos=findViewById(R.id.sinFavoritos);
         nombreUsuario.setText(getIntent().getStringExtra("contacto")+ " Favoritos.");
         avatarUsuario.setImageResource(avatares[getIntent().getIntExtra("avatar",0)]);
         telefonoUsuarioSeleccionado=getIntent().getStringExtra("telefono");
@@ -58,6 +60,9 @@ private int [] avatares;
                         Log.i("susc","telefonoUsuarioSeleccionado -> " + telefonoUsuarioSeleccionado);
                         suscripciones.add(suscripcion);
                     }
+                }
+                if(suscripciones.size()==0){
+                    sinFavoritos.setText("Este usuario no tiene favoritos");
                 }
                 adaptadorInfoContactos.notifyDataSetChanged();
             }

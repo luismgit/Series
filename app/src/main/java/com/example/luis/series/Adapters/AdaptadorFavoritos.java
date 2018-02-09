@@ -63,6 +63,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         holder.textViewNombre.setText(suscripcion.getSerie());
         holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
+        holder.ratingBarFavoritos.setAnimation(holder.myRotation);
         holder.setOnclickListener();
 
     }
@@ -109,9 +110,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
 
                     miVista= (RelativeLayout) view.getParent();
-                    myRotation = AnimationUtils.loadAnimation(miVista.getContext(), R.anim.rotator);
+                    View vista = miVista.findViewById(R.id.estrellasFav);
+                    myRotation = AnimationUtils.loadAnimation(vista.getContext(), R.anim.rotator);
                     myRotation.setRepeatCount(0);
-                    miVista.startAnimation(myRotation);
+                    vista.startAnimation(myRotation);
 
 
                     nombreSerie=textViewNombre.getText().toString();
