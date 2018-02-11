@@ -12,10 +12,22 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_tab">Series</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="req_num_telef">Debe introducir el número de telefono</string>
+    <string name="error_verif">OnVerificationFailed</string>
+    <string name="time_out_code">OnCodeAutoRetrievalTimeOut :</string>
+    <string name="error_log">Fallo al loguearse</string>
+    <string name="introd_cod_sms">Debe introducir el código recibido pos SMS</string>
+    <string name="error_cod_verif">Código incorrecto</string>
+    <string name="perm_no_aceptados">Si no acepta los permisos la aplicacion no puede seguir</string>
+    <string name="text_verif_num_telef">Verifica tu número de teléfono</string>
+    <string name="text_msg_autent_aviso">Series enviará un único mensaje SMS para verificar tu número de telefono.</string>
+    <string name="text_msg_autent_num_tel">Introduzca su número de teléfono y pulse OK.</string>
+    <string name="hint_num_telef">número de teléfono</string>
+    <string name="btn_ok">OK</string>
+    <string name="text_msg_autent_aviso2">En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR</string>
+    <string name="hint_cod_rec">código recibido</string>
+    <string name="sigin">SIGIN</string>
+    <string name="text_enlace_ayuda">En caso de problemas en el registro pulse aquí</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

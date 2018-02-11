@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verifica tu número de teléfono"
+            android:text="@string/text_verif_num_telef"
             android:textSize="23dp"
             android:textColor="#0b0b0b"
             android:textStyle="bold"
@@ -34,7 +34,7 @@
         android:padding="20dp"
         android:textColor="#050505"
         android:textSize="17dp"
-        android:text="Series enviará un único mensaje SMS para verificar tu número de telefono."
+        android:text="@string/text_msg_autent_aviso"
         android:textStyle="bold"/>
 
     <TextView
@@ -44,7 +44,7 @@
         android:paddingBottom="10dp"
         android:textColor="#050505"
         android:textSize="17dp"
-        android:text="Introduzca su número de teléfono y pulse OK."
+        android:text="@string/text_msg_autent_num_tel"
         android:textStyle="bold"
         />
 
@@ -58,7 +58,7 @@
             android:id="@+id/etxtPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="número de teléfono"
+            android:hint="@string/hint_num_telef"
             android:inputType="phone"
             android:layout_margin="10dp"
             android:textStyle="bold"
@@ -66,7 +66,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OK"
+            android:text="@string/btn_ok"
             android:onClick="requestCode"
             android:id="@+id/botonSMS"
             android:layout_marginTop="5dp"
@@ -85,7 +85,7 @@
         android:textColor="#050505"
         android:textSize="17dp"
         android:paddingHorizontal="20dp"
-        android:text="En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR"
+        android:text="@string/text_msg_autent_aviso2"
         android:paddingVertical="7dp"
         android:textStyle="bold"/>
 
@@ -98,7 +98,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="código recibido"
+        android:hint="@string/hint_cod_rec"
         android:inputType="number"
         android:id="@+id/etxtPhoneCode"
         android:textStyle="bold"
@@ -108,7 +108,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SIGIN"
+        android:text="@string/sigin"
         android:onClick="signIn"
         android:id="@+id/botonSIGIN"
         android:layout_marginLeft="35dp"
@@ -130,7 +130,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="En caso de problemas en el registro pulse aquí"
+        android:text="@string/text_enlace_ayuda"
         android:textColor="#000000"
         android:textSize="17dp"
         android:paddingHorizontal="16dp"

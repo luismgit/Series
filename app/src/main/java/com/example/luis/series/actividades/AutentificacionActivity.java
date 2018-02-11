@@ -58,7 +58,6 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     boolean usuarioReg;
     String phoneNumber;
     ProgressBar progressBarCircular;
-    // Request code for READ_CONTACTS. It can be any number > 0.
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private boolean registroCerrado;
 
@@ -66,7 +65,6 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
 
     }
 
@@ -81,21 +79,30 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
         etxtPhoneCode.setOnEditorActionListener(this);
         progressBarCircular=findViewById(R.id.progressBarCircular);
+
+        //MÉTODO QUE COMPRUEBA LA VERSIÓN DEK SDK Y SI EL PÉRMISO ESTÁ YA DADO.
         pedirPermisos();
+
+        //LA VARIABLE PREFERENCIAS COMPRUEBA SI ALGUNA VEZ EL USUARIO HA PASADO POR LA VENTANA DE REGISTRO
         SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
         registroCerrado=sharedPref.getBoolean("registroCerrado",false);
-        Log.i("REGISTRO","el valor de registro en la autentificacion es -> " + registroCerrado);
+        Log.i("REGISTRO","El valor de registro en la autentificacion es -> " + registroCerrado);
+
+        //INSTANCIAMOS EL OBJETO DE TIPO FirebaseAuth QUE COMPRUEBA SI EL USUARIO ESTÁ REGISTRADO EN FIREBASE
         mAuth=FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
 
+                //SI EL USUARIO NUNCA SE HA REGISTRADO LO MANDAMOS A LA ACTIVITY DE REGISTRO SI NUNCA HA PASADO POR ELLA PASÁNDOLE SU NÚMERO DE TELÉFONO
                 if (user != null) {
                     Log.i("SESION", "Sesion iniciada con telefono " + user.getPhoneNumber());
                     ComunicarCurrentUser.setUser(user);
                     if(registroCerrado){
                         irARegistro(user.getPhoneNumber());
+
+                    //SI EL USUARIO YA ESTÁ EN FIREBASE COMPROBAMOS SI NO ES LA 1º VEZ QUE EJECUTA LA APP  PARA MANDARLO DIRECTAMENTE A LA PANTALLA PRINCIPAL
                     }else{
                         if(getFirstTimeRun(AutentificacionActivity.this)==1){
                             irAPrincipal();
@@ -115,6 +122,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
 
+    //MÉTODO QUE LANZA UN INTENT A LA PANTALLA DE REGISTRO
     private void irARegistro(String phoneNumber) {
         String num=phoneNumber;
         Intent intent = new Intent(this, registroActivity.class);
@@ -122,59 +130,59 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         startActivity(intent);
     }
 
-
+    //MÉTODO QUE LANZA UN INTENT A LA PANTALLA DE PRINCIPAL
     private void irAPrincipal() {
         Intent intent = new Intent(this, TabActivity.class);
         startActivity(intent);
     }
 
-
+    //MÉTODO QUE SE EJECUTA CUANDO SE PULSA EL BOTÓN DE REGISTRAR , COMPROBAMOS QUE EL USUARIO HAYA INTRODUCIDO UN NÚMERO DE TELÉFONO
     public void requestCode(View view) {
         esconderTeclado(etxtPhone);
         phoneNumber=etxtPhone.getText().toString();
         if(TextUtils.isEmpty(phoneNumber)){
-            Toast.makeText(AutentificacionActivity.this,"Debe introducir el número de telefono",Toast.LENGTH_LONG).show();
+            Toast.makeText(AutentificacionActivity.this, R.string.req_num_telef,Toast.LENGTH_LONG).show();
             Log.i("SESION", "Debe introducir el número de telefono");
             return;
         }
-        //new AsyncTask_load().execute().;
+        //HACEMOS EL PROGESSBAR VISIBLE Y EVITAMOS EL USUARIO PUEDA VOLVER A PULSAR LOS BOTONES DEL LAYOUT
         progressBarCircular.setVisibility(View.VISIBLE);
         botonSMS.setClickable(false);
         botonSIGIN.setClickable(false);
         Log.i("SESION", "1----");
-        //phoneNumber="+34"+phoneNumber;
+        //DAMOS 60 SEGUNDOS PARA QUE LLEGUE EL CÓDIGO DE SEGURIDAD
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
+            //ESTE MÉTODO SE EJECUTARÁ SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                //SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION
                 signInWithCredential(phoneAuthCredential);
                 Log.i("SESION", "SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION");
             }
 
+            //ESTE MÉTODO SE EJECUTARÁ SI EL TELÉFONO ES INCORRECTO, FALLA EL CÓDIGO DE VERIFICACIÓN O HAY UN ERROR EN EL EMULADOR
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                //telefono incorrecto,codigo de verificacion o emulador...
-                Toast.makeText(AutentificacionActivity.this,"onVerificationFailed" + e.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(AutentificacionActivity.this,getString(R.string.error_verif) + e.getMessage(),Toast.LENGTH_LONG).show();
                 Log.i("SESION", "telefono incorrecto,codigo de verificacion o emulador...");
                 progressBarCircular.setVisibility(View.INVISIBLE);
                 botonSMS.setClickable(true);
                 botonSIGIN.setClickable(true);
             }
 
+            //ESTE MÉTODO SE EJECUTARÁ CUANDO EL CÓDIGO HAYA SIDO ENVIADO , GUARDAMOS EL CÓDIGO EN mVerificationId
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                //el codigo ha sido enviado , guardamos el codigo de verificacion
                 super.onCodeSent(s, forceResendingToken);
                 mVerificationId=mVerificationId;
                 Log.i("SESION", "el codigo ha sido enviado , guardamos el codigo de verificacion");
             }
 
+            //ESTE MÉTODO SE EJECUTARÁ CUANDO SE HAYA AGOTADO EL TIEMPO Y EL CÓDIGO DE VERFICACIÓN NO SE HAYA ENVIADO
             @Override
             public void onCodeAutoRetrievalTimeOut(String s) {
-                //se ha acabado el tiempo y el codigo de verficacion no se ha enviado
                 super.onCodeAutoRetrievalTimeOut(s);
-                Toast.makeText(AutentificacionActivity.this,"onCodeAutoRetrievalTimeOut : " + mVerificationId,Toast.LENGTH_LONG).show();
+                Toast.makeText(AutentificacionActivity.this,getString(R.string.time_out_code) + mVerificationId,Toast.LENGTH_LONG).show();
                 Log.i("SESION", "se ha acabado el tiempo y el codigo de verficacion no se ha enviado");
                 progressBarCircular.setVisibility(View.INVISIBLE);
                 botonSMS.setClickable(true);
@@ -184,7 +192,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
 
-
+    //MÉTODO QUE SE EJECUTARÁ CUANDO LLEGUE EL CÓDIGO DE VERIFICACIÓN
     private void signInWithCredential(final PhoneAuthCredential phoneAuthCredential) {
         mAuth.signInWithCredential(phoneAuthCredential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -194,7 +202,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                             comprobarUsuarioYaRegistrado();
                             Log.i("SESION", "On complete() -> task.isSuccessful()");
                         }else{
-                            Toast.makeText(AutentificacionActivity.this,"Fallo al loguearse " + task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(AutentificacionActivity.this,getString(R.string.error_log) + task.getException().getMessage(),Toast.LENGTH_LONG).show();
                             Log.i("SESION", "On complete() -> task.isSuccessful() , fallo al loguearse");
                             progressBarCircular.setVisibility(View.INVISIBLE);
                             botonSMS.setClickable(true);
@@ -205,6 +213,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     }
 
+    //MÉTODO QUE COMPRUEBA SI EL USUARIO YA ESTÁ REGISTRADO EN LA BB.DD , SINO LO ESTÁ LE QUITAMOS LOS ESPACIOS Y EL +34 SI LOS TUVIERA Y LO MANDAMOS A LA ACTIVITY DE REGISTRO
+    //SI ESTUVIERA YA REGISTRADO EN LA BB.DD  LO MADAMOS DIRECTAMENTE A LA PANTALLA PRINCIPAL
     private boolean comprobarUsuarioYaRegistrado(){
 
         FirebaseDatabase database=FirebaseDatabase.getInstance();
@@ -222,8 +232,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                     }
                 }
                 if(!usuarioRegistrado){
-                    //Toast.makeText(AutentificacionActivity.this,"Usuario registrado",Toast.LENGTH_SHORT).show();
-                    //Log.i("SESION", "Usuario registrado");
+
                     String phoneNumber=user.getPhoneNumber();
                     phoneNumber.replaceAll("\\s","");
                     if(phoneNumber.substring(0,3).equals("+34")){
@@ -250,11 +259,12 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     }
 
+    //MÉTODO QUE SE EJECUTA CUANDO EL USUARIO INTRODUZCA EL CÓDIGO DE VERIFICACIÓN A MANO , EN NINGUNA PRUEBA DE LA APP HA SIDO NECESARIO INTRODUCIR EL CÓDIGO A MANO
     public void signIn(View view) {
         Utilities.esconderTeclado((EditText) etxtPhoneCode,this);
         String code = etxtPhoneCode.getText().toString();
         if(TextUtils.isEmpty(code)) {
-            Toast.makeText(AutentificacionActivity.this,"Debe introducir el código recibido pos SMS",Toast.LENGTH_LONG).show();
+            Toast.makeText(AutentificacionActivity.this, R.string.introd_cod_sms,Toast.LENGTH_LONG).show();
             Log.i("SESION", "Debe introducir el código recibido pos SMS");
             progressBarCircular.setVisibility(View.INVISIBLE);
             botonSMS.setClickable(true);
@@ -265,7 +275,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             signInWithCredential(PhoneAuthProvider.getCredential(mVerificationId,code));
         }catch(Exception e){
             Log.i("SESION", "Codigo incorrecto");
-            Toast.makeText(AutentificacionActivity.this,"Código incorrecto",Toast.LENGTH_LONG).show();
+            Toast.makeText(AutentificacionActivity.this, R.string.error_cod_verif,Toast.LENGTH_LONG).show();
             progressBarCircular.setVisibility(View.INVISIBLE);
             botonSMS.setClickable(true);
             botonSIGIN.setClickable(true);
@@ -285,21 +295,22 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
 
     private void pedirPermisos() {
-        // Check the SDK version and whether the permission is already granted or not.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
         }
     }
 
+    //MÉTODO QUE RECOGE CUANDO EL USUARIO ACEPTA O NO LOS PERMISOS DE LA APP
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
+
                 pedirPermisos();
             } else {
-                Toast.makeText(this, "Si no acepta los permisos la aplicacion no puede seguir", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.perm_no_aceptados, Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -316,19 +327,17 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
 
+    //MÉTODO QUE SE EJECUTA CUANDO EL USUARIO PULSA EL BOTÓN DE NEXT O HECHO DEL TECLADO
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         if(i== EditorInfo.IME_ACTION_NEXT){
             Log.i("EDITORINFO","NEXT");
             requestCode(null);
-            //esconderTeclado((EditText) textView);
-            //Utilities.esconderTeclado((EditText) textView,this);
         }
         if(i== EditorInfo.IME_ACTION_DONE){
             Log.i("EDITORINFO","DONE");
             signIn(null);
-            //esconderTeclado((EditText) textView);
-            //Utilities.esconderTeclado((EditText) textView,this);
+
         }
        return false;
     }
@@ -339,72 +348,6 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         teclado.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
-
-   /* public class AsyncTask_load extends AsyncTask<Void, Integer, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i("SESION", "onPreExecute()");
-            progressBarCircular.setVisibility(View.VISIBLE);
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Log.i("SESION", "doInBackground()");
-            Log.i("SESION", "1----");
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, AutentificacionActivity.this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-                @Override
-                public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                    //SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION
-                    signInWithCredential(phoneAuthCredential);
-                    Log.i("SESION", "SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION");
-                }
-
-                @Override
-                public void onVerificationFailed(FirebaseException e) {
-                    //telefono incorrecto,codigo de verificacion o emulador...
-                    Toast.makeText(AutentificacionActivity.this,"onVerificationFailed" + e.getMessage(),Toast.LENGTH_LONG).show();
-                    Log.i("SESION", "telefono incorrecto,codigo de verificacion o emulador...");
-                }
-
-                @Override
-                public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                    //el codigo ha sido enviado , guardamos el codigo de verificacion
-                    super.onCodeSent(s, forceResendingToken);
-                    mVerificationId=mVerificationId;
-                    Log.i("SESION", "el codigo ha sido enviado , guardamos el codigo de verificacion");
-                }
-
-                @Override
-                public void onCodeAutoRetrievalTimeOut(String s) {
-                    //se ha acabado el tiempo y el codigo de verficacion no se ha enviado
-                    super.onCodeAutoRetrievalTimeOut(s);
-                    Toast.makeText(AutentificacionActivity.this,"onCodeAutoRetrievalTimeOut : " + mVerificationId,Toast.LENGTH_LONG).show();
-                    Log.i("SESION", "se ha acabado el tiempo y el codigo de verficacion no se ha enviado");
-                }
-            });
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-             super.onProgressUpdate(values);
-            Log.i("SESION", "onProgressUpdate()");
-            progressBarCircular.setProgress(values[0]);
-        }
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Log.i("SESION", "onPostExecute()");
-
-        }
-
-
-
-
-    }*/
 
 
 

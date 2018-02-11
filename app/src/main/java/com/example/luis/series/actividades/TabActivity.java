@@ -26,7 +26,6 @@ import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.fragments.FavoritosFragment;
 import com.example.luis.series.fragments.SeriesFragment;
-import com.example.luis.series.fragments.GreenFragment;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
@@ -38,10 +37,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
-SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener,GreenFragment.OnFragmentInteractionListener{
+SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
