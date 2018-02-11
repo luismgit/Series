@@ -70,21 +70,27 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        //CARGAMOS EN EL ARRAY DE FONDOS TODOS LOS FONDOS DE PANTALLA DE DRAWABLE
         fondos= Imagenes.getFondosPantalla();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         fondo=findViewById(R.id.header);
+
+        //SELECCIONAMOS UN FONDO DE PANTALLA ALEATORIO Y LO APLICAMOS
         int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
         fondo.setImageResource(fondos[fondoAleatorio]);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         Log.i("actividades","OnCreate TabActivity");
+
+        //GUARDAMOS EN PREFERENCIAS QUE EL USUARIO HA LLEGADO A ESTA ACTIVITY.
         SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("registroCerrado",false);
         editor.commit();
 
+        //CARGAMOS EN LA VARIABLE user EL NÚMERO DE TELÉFONO DEL USUARIO Y LE QUITAMOS SI TUVIERA ESPACIOS Y EL +34
         FirebaseUser user = ComunicarCurrentUser.getUser();
         String phoneNumber=user.getPhoneNumber();
         phoneNumber.replaceAll("\\s","");
@@ -92,6 +98,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             phoneNumber=phoneNumber.substring(3,phoneNumber.length());
         }
 
+        //LISTENER QUE GUARDA EN NUESTRA CLASE ComunicarClaveUsuarioActual EL TELÉFONO DEL USUARIO ACTUAL PARA ACCEDER A ÉL EN LAS DEMÁS ACTIVIDADES
         FirebaseDatabase data = FirebaseDatabase.getInstance();
         DatabaseReference root = data.getReference();
         root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild("telefono").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -158,10 +165,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             Log.i("actividades","PlaceholderFragment()");
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
+        //DEVUELVE UNA INSTANCIA DEL FRAGMENT
         public static Fragment newInstance(int sectionNumber) {
             Log.i("actividades","public static Fragment newInstance");
             Fragment fragment=null;

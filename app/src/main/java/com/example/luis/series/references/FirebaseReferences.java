@@ -8,4 +8,9 @@ public class FirebaseReferences {
 
     final public static String USUARIOS_REFERENCE="usuarios";
     final public static String SERIES_REFERENCE="Series";
+    final public static String PHONE_REFERENCE="telefono";
+    final public static String CONECTADO="conectado";
+    final public static String INFO_CONNECTED=".info/connected";
+    final public static String ONLINE="online";
+    final public static String OFFLINE="offline";
 }
