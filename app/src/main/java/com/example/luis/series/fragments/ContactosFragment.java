@@ -56,8 +56,6 @@ public class ContactosFragment extends Fragment {
     RecyclerView rv;
     List<Usuario> usuarios;
     AdaptadorContactos adapter;
-    //List<String> contactosTelefono;
-    //List<String> nombreContactosTelefono;
     Hashtable<String,String> contactos;
     String phoneNumberUser;
     FirebaseUser user;

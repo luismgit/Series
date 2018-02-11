@@ -13,4 +13,5 @@ public class FirebaseReferences {
     final public static String INFO_CONNECTED=".info/connected";
     final public static String ONLINE="online";
     final public static String OFFLINE="offline";
+    final public static String SUSCRIPCIONES="suscripciones";
 }

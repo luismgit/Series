@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.luis.series.BuildConfig;
 import com.example.luis.series.R;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
@@ -84,8 +85,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         pedirPermisos();
 
         //LA VARIABLE PREFERENCIAS COMPRUEBA SI ALGUNA VEZ EL USUARIO HA PASADO POR LA VENTANA DE REGISTRO
-        SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
-        registroCerrado=sharedPref.getBoolean("registroCerrado",false);
+        SharedPreferences sharedPref = getSharedPreferences(Common.PREFERENCIAS,Context.MODE_PRIVATE);
+        registroCerrado=sharedPref.getBoolean(Common.REGISTRO_CERRADO,false);
         Log.i("REGISTRO","El valor de registro en la autentificacion es -> " + registroCerrado);
 
         //INSTANCIAMOS EL OBJETO DE TIPO FirebaseAuth QUE COMPRUEBA SI EL USUARIO ESTÁ REGISTRADO EN FIREBASE
@@ -126,7 +127,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     private void irARegistro(String phoneNumber) {
         String num=phoneNumber;
         Intent intent = new Intent(this, registroActivity.class);
-        intent.putExtra("phoneNumber",num);
+        intent.putExtra(Common.PHONE_NUMB,num);
         startActivity(intent);
     }
 
@@ -317,12 +318,12 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
     public static int getFirstTimeRun(Context contexto) {
-        SharedPreferences sp = contexto.getSharedPreferences("MYAPP", 0);
+        SharedPreferences sp = contexto.getSharedPreferences(Common.MYAPP, 0);
         int result, currentVersionCode = BuildConfig.VERSION_CODE;
-        int lastVersionCode = sp.getInt("FIRSTTIMERUN", -1);
+        int lastVersionCode = sp.getInt(Common.FIRSTTIMERUN, -1);
         if (lastVersionCode == -1) result = 0; else
             result = (lastVersionCode == currentVersionCode) ? 1 : 2;
-        sp.edit().putInt("FIRSTTIMERUN", currentVersionCode).apply();
+        sp.edit().putInt(Common.FIRSTTIMERUN, currentVersionCode).apply();
         return result;
     }
 

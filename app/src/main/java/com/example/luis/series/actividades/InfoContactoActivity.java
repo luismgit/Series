@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.luis.series.Adapters.AdaptadorInfoContactos;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +27,7 @@ public class InfoContactoActivity extends AppCompatActivity {
 private TextView nombreUsuario;
 private ImageView avatarUsuario;
 private int [] avatares;
+
     private List<Suscripcion> suscripciones;
     private RecyclerView rv;
     private AdaptadorInfoContactos adaptadorInfoContactos;
@@ -39,16 +42,24 @@ private int [] avatares;
         nombreUsuario=findViewById(R.id.nombreContacto);
         avatarUsuario=findViewById(R.id.avatarContacto);
         sinFavoritos=findViewById(R.id.sinFavoritos);
-        nombreUsuario.setText(getIntent().getStringExtra("contacto")+ " Favoritos.");
-        avatarUsuario.setImageResource(avatares[getIntent().getIntExtra("avatar",0)]);
-        telefonoUsuarioSeleccionado=getIntent().getStringExtra("telefono");
+
+        //RECOGEMOS EL NOMBRE DEL CONTACTO QUE QUEREMOS VISUALIZAR
+        nombreUsuario.setText(getIntent().getStringExtra(Common.CONTACTO)+ getString(R.string.favoritos));
+
+        //LE ASIGNAMOS SU AVATAR
+        avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);
+
+        //RECOGEMOS EL TELÉFONO DEL USUARIO SELECCIONADO
+        telefonoUsuarioSeleccionado=getIntent().getStringExtra(Common.TELEFONO);
         rv=findViewById(R.id.recyclerInfoContacto);
         rv.setLayoutManager(new LinearLayoutManager(this));
         suscripciones=new ArrayList<>();
         adaptadorInfoContactos=new AdaptadorInfoContactos(suscripciones);
         rv.setAdapter(adaptadorInfoContactos);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference("suscripciones").addValueEventListener(new ValueEventListener() {
+
+        //CONSEGUIMOS DE TODAS LAS SUSCRIPCIONES SOLO LAS DEL USUARIO SELECCIONADO Y LAS AÑADIMOS AL ARRAYLIST SUSCRIPCIONES
+        database.getReference(FirebaseReferences.SUSCRIPCIONES).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 suscripciones.removeAll(suscripciones);
@@ -61,8 +72,9 @@ private int [] avatares;
                         suscripciones.add(suscripcion);
                     }
                 }
+                //SI NO TIENE SUSCRIPCIONES MOSTRAMOS EL MENSAJE
                 if(suscripciones.size()==0){
-                    sinFavoritos.setText("Este usuario no tiene favoritos");
+                    sinFavoritos.setText(R.string.usu_sin_fav);
                 }
                 adaptadorInfoContactos.notifyDataSetChanged();
             }

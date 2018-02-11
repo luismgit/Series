@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.example.luis.series.Adapters.AdaptadorIconos;
 import com.example.luis.series.R;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 
 public class ListaIconos extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class ListaIconos extends AppCompatActivity {
      */
     private void devolverNumeroIcono(int numeroIcono){
         Intent intent = new Intent();
-        intent.putExtra("ICONOSELECCIONADO",numeroIcono);
+        intent.putExtra(Common.ICONOSELECCIONADO,numeroIcono);
         setResult(RESULT_OK,intent);
         finish();
     }

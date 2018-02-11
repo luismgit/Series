@@ -37,6 +37,8 @@
     <string name="hint_mail">Email</string>
     <string name="btn_avatar">Selecciona un avatar</string>
     <string name="btn_registro">REGISTRO</string>
+    <string name="usu_sin_fav">Este usuario no tiene favoritos</string>
+    <string name="favoritos">Favoritos.</string>
 
 
 </resources>

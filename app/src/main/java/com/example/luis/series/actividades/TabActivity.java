@@ -27,6 +27,7 @@ import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.fragments.FavoritosFragment;
 import com.example.luis.series.fragments.SeriesFragment;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
@@ -85,9 +86,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         Log.i("actividades","OnCreate TabActivity");
 
         //GUARDAMOS EN PREFERENCIAS QUE EL USUARIO HA LLEGADO A ESTA ACTIVITY.
-        SharedPreferences sharedPref = getSharedPreferences("Preferencias", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(Common.PREFERENCIAS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("registroCerrado",false);
+        editor.putBoolean(Common.REGISTRO_CERRADO,false);
         editor.commit();
 
         //CARGAMOS EN LA VARIABLE user EL NÚMERO DE TELÉFONO DEL USUARIO Y LE QUITAMOS SI TUVIERA ESPACIOS Y EL +34
@@ -101,7 +102,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         //LISTENER QUE GUARDA EN NUESTRA CLASE ComunicarClaveUsuarioActual EL TELÉFONO DEL USUARIO ACTUAL PARA ACCEDER A ÉL EN LAS DEMÁS ACTIVIDADES
         FirebaseDatabase data = FirebaseDatabase.getInstance();
         DatabaseReference root = data.getReference();
-        root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild("telefono").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+        root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild(FirebaseReferences.PHONE_REFERENCE).equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
@@ -221,11 +222,11 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             Log.i("actividades","public CharSequence getPageTitle(int position)");
             switch (position){
                 case 0:
-                    return "CONTACTOS";
+                    return Common.CONTACTOS;
                 case 1:
-                    return "SERIES";
+                    return Common.SERIES;
                 case 2:
-                    return "FAVORITOS";
+                    return Common.FAVORITOS;
 
             }
             return null;

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,7 +70,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         Intent intent=getIntent();
 
         //GUARDAMOS EN LA VARIABLE phoneNumber EL NÚMERO DE TELÉFONO DEL USUARIO QUE NOS HA LLEGADO EN EL INTENT
-        phoneNumber=intent.getStringExtra("phoneNumber");
+        phoneNumber=intent.getStringExtra(Common.PHONE_NUMB);
 
     }
 
@@ -110,9 +111,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
     //MÉTODO QUE SE EJECUTA CUANDO EL USUARIO PULSE ATRÁS , LO GUARDAMOS EN UNA PREFERENCIA PARA QUE LA PRÓXIMA VEZ QUE ENTRE EN LA APP VAYA DIRECTAMENTE A ESTA PANTALLA
     public void onBackPressed(){
-        SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(Common.PREFERENCIAS,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("registroCerrado",true);
+        editor.putBoolean(Common.REGISTRO_CERRADO,true);
         editor.commit();
         Log.i("REGISTRO","Hemos cerrado la pantalla de registro");
         super.onBackPressed();
@@ -138,7 +139,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                     Log.i("OnActivityResult","Numero de icono -> " + data.getIntExtra("ICONOSELECCIONADO",-1));
 
                     //GUARDAMOS EN numIcono EL NºDE AVATAR(VISTA) SELECCIONADA
-                    int numIcono = data.getIntExtra("ICONOSELECCIONADO",-1);
+                    int numIcono = data.getIntExtra(Common.ICONOSELECCIONADO,-1);
                     if(numIcono==-1){
                         //SI NO HA SELECCIONADO NINGÚN AVATAR PONEMOS EN PANTALLA EL AVATAR SELECCIONADO EN UNA HIPOTÉTICA ANTERIOR VEZ
                         avatarIcono.setImageResource(iconos[iconoSeleccionado]);
@@ -233,7 +234,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                          botonAvatar.setClickable(false);
                          botonRegistro.setClickable(false);
                          //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-                         Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado,"online");
+                         Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado,FirebaseReferences.ONLINE);
                          //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
                          DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                          //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)
