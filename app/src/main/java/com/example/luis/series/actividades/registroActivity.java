@@ -67,10 +67,13 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         textViewError.setText("");
 
         Intent intent=getIntent();
+
+        //GUARDAMOS EN LA VARIABLE phoneNumber EL NÚMERO DE TELÉFONO DEL USUARIO QUE NOS HA LLEGADO EN EL INTENT
         phoneNumber=intent.getStringExtra("phoneNumber");
 
     }
 
+    //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL BOTÓN DE REGISTRO E INICIARÁ UNA ASYNTASK PARA PODER REALIZAR LA ANIMACIÓN DEL BOTÓN REGISTRO
     public void registro(View view) {
 
        new HiloRegistro().execute();
@@ -82,7 +85,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         startActivity(intent);
     }
 
-
+//MÉTODO QUE COMPRUEBA SI EL EMAIL INTRODUCIDO ES UN PATRÓN VÁLIDO DE EMAIL
     public boolean validateEmail(String email) {
 
         Pattern pattern;
@@ -94,6 +97,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
     }
 
+    //MÉTODO PARA QUE CUANDO EL USUARIO PULSE EL BOTÓN HECHO EN EL TECLADO SE REESTABLEZCAN A VACÍO EL CAMPO DE ERROR
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
@@ -104,6 +108,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         return false;
     }
 
+    //MÉTODO QUE SE EJECUTA CUANDO EL USUARIO PULSE ATRÁS , LO GUARDAMOS EN UNA PREFERENCIA PARA QUE LA PRÓXIMA VEZ QUE ENTRE EN LA APP VAYA DIRECTAMENTE A ESTA PANTALLA
     public void onBackPressed(){
         SharedPreferences sharedPref = getSharedPreferences("Preferencias",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -113,8 +118,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         super.onBackPressed();
     }
 
+    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
     public void seleccionarAvatar(View view) {
-        //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
+
         Intent intent = new Intent(this,ListaIconos.class);
         startActivityForResult(intent,LISTA_ICONOS);
     }
@@ -127,7 +133,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
             //COMPROBAMOS QUE VIENE DE ListaIconos
             case LISTA_ICONOS:
 
-                //SI LOS DATOS NO SON NULOS Y SE HA HECHO UNA MODIFICACIÓN DEL PASSWORD DEL ADIMISTRADOR
+                //SI LOS DATOS NO SON NULOS
                 if(data != null && resultCode == RESULT_OK){
                     Log.i("OnActivityResult","Numero de icono -> " + data.getIntExtra("ICONOSELECCIONADO",-1));
 
@@ -151,6 +157,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     private class HiloRegistro extends AsyncTask<Void,Void,Void>{
 
         Animation animation;
+
+        //PREPARAMOS A ANIMACIÓN
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -159,6 +167,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
         }
 
+        //INICIAMOS LA ANIMACIÓN DEL BOTÓN Y LE DAMOS UNA PAUSA DE 1 SEG PARA QUE SE PRODUZCA LA ANIMACIÓN ANTES DE QUE VAYA A LA SIGUIENTE ACTIVITY
         @Override
         protected Void doInBackground(Void... voids) {
 
@@ -177,44 +186,60 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
             return null;
         }
 
+        //MÉTODO QUE COMPRUEBA TODO LO REFERENTE AL REGISTRO
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            //SI EL USUARIO NO SELECCIONA NINGUN ICONO SELECCIONAMOS EL DE POR DEFECTO
              if(iconoSeleccionado == -1){
             iconoSeleccionado=0;
         }
+
+        //HACEMOS TODAS LAS COMPROBACIONES DE NICK Y EMAIL Y LES QUITAMOS POSIBLES ESPACIOS
         textViewError.setText("");
          nick=editTextNick.getText().toString().trim();
          correo=editTextEmail.getText().toString().trim();
          if(nick.equals("") || correo.equals("")){
-             textViewError.setText("Debe rellenar todos los campos!!");
+             textViewError.setText(R.string.error_registro_campos_vacios);
          }else if(nick.length()>15) {
-             textViewError.setText("El nick no puede contener más de 15 caracteres");
+             textViewError.setText(R.string.error_registro_nick);
          }else if(!validateEmail(correo)) {
-             textViewError.setText("Formato Email incorrecto!!");
+             textViewError.setText(R.string.error_email_format);
          }else{
+
              FirebaseDatabase database=FirebaseDatabase.getInstance();
+
+             //CREAMOS UNA REFERENCIA AL NODO USUARIOS DE FIREBASE E INICIAMOS SU LISTENER
              database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
                      for(DataSnapshot snapshot :
                              dataSnapshot.getChildren()){
+
+                         //POR CADA VUELTA DEL FOR CONSEGUIMOS UN USUARIO DE LA BB.DD
                          Usuario usuario = snapshot.getValue(Usuario.class);
+
+
                          if(usuario.getNick().equals(nick)){
-                             textViewError.setText("El nick introducido ya está en uso!!");
+                             textViewError.setText(R.string.msg_registro_uso_email);
                              error=true;
                          }
 
                      }
 
+                     //SI NO HAY ERRORES EN EL REGISTRO PASAMOS A DAR DE ALTA AL USUARIO EN LA BB.DD
                      if(!error){
                          progressBar.setVisibility(View.VISIBLE);
                          botonAvatar.setClickable(false);
                          botonRegistro.setClickable(false);
+                         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
                          Usuario usuario = new Usuario(nick,phoneNumber,correo,iconoSeleccionado,"online");
+                         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
                          DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)
                          ref.child(FirebaseReferences.USUARIOS_REFERENCE).push().setValue(usuario);
-                         Toast.makeText(registroActivity.this,"Usuario registrado",Toast.LENGTH_SHORT).show();
+                         Toast.makeText(registroActivity.this, R.string.toast_usu_reg,Toast.LENGTH_SHORT).show();
+                         //VAMOS A LA PANTALLA PRINCIPAL
                          irAPrincipal();
                          finish();
                      }

@@ -14,7 +14,7 @@
         android:id="@+id/editTextNick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nick"
+        android:hint="@string/hint_nick"
         android:textColorHint="#cacaca"
         android:inputType="textPersonName"
         android:textColor="#cacaca"/>
@@ -23,7 +23,7 @@
         android:id="@+id/editTextCorreo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/hint_mail"
         android:inputType="textEmailAddress"
         android:layout_marginVertical="25dp"
         android:textColorHint="#cacaca"
@@ -32,7 +32,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Selecciona un avatar"
+        android:text="@string/btn_avatar"
         android:onClick="seleccionarAvatar"
         android:id="@+id/botonAvatar"
         android:textColor="#bab7b7"
@@ -55,7 +55,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="REGISTRO"
+        android:text="@string/btn_registro"
         android:layout_marginTop="20dp"
         android:background="@drawable/degradado_boton"
         android:onClick="registro"
