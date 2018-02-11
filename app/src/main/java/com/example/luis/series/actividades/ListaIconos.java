@@ -40,14 +40,16 @@ public class ListaIconos extends AppCompatActivity {
                 ImageView icono = view.findViewById(R.id.iconoItem);
                 final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotator);
                 myRotation.setRepeatCount(0);
+                //INICIAMOS LA ANIMACIÓN DEL ICONO
                 icono.startAnimation(myRotation);
+                //EJECUTAMOS UN HILO DE 1SEG PARA QUE LE DE TIEMPO A LA ANIMACIÓN A VERSE
                     new HiloIcono(i).start();
 
             }
         });
     }
 
-    /*MÉTODO PARA DEVOLVER A LA CLASE ADMINISTRACIÓN EL AVATAR SELECCIONADO POR EL USUARIO A TRAVÉS DE UN INTENT, DESPUES CERRAMOS LA VENTANA
+    /*MÉTODO PARA DEVOLVER A LA CLASE REGISTRO EL AVATAR SELECCIONADO POR EL USUARIO A TRAVÉS DE UN INTENT, DESPUES CERRAMOS LA VENTANA
      , TAMBIÉN SE EJECUTARÁ SI EL USUARIO CIERRA LA VENTANA SIN SELECCIONAR NINGÚN AVATAR EN EL onBackPressed()
      */
     private void devolverNumeroIcono(int numeroIcono){
