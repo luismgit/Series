@@ -16,6 +16,8 @@ import com.example.luis.series.Adapters.AdaptadorSeries;
 import com.example.luis.series.Objetos.Series;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,7 +85,8 @@ public class FavoritosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        //INFLA EL LAYOUT PARA ESTE FRAGMENT
         View vista = inflater.inflate(R.layout.fragment_favoritos, container, false);
         rv=vista.findViewById(R.id.recyclerSeriesFavoritos);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -91,7 +94,10 @@ public class FavoritosFragment extends Fragment {
         adaptadorFavoritos=new AdaptadorFavoritos(suscripciones,this.getContext());
         rv.setAdapter(adaptadorFavoritos);
         FirebaseDatabase database=FirebaseDatabase.getInstance();
-        database.getReference("suscripciones").addValueEventListener(new ValueEventListener() {
+
+        //CREAMOS UN LISTENER AL NODO SUSCRIPCIONES DE LA BB.DD PARA QUE CUANDO HAYA ALGÚN CAMBIO EN LA BB.DD CAMBIE NUESTRA VISTA , SOLO SE AÑADEN LAS
+        //SUSCRIPCIONES CUYO USUARIO COINCIDE CON EL USUARIO ACTUAL
+        database.getReference(FirebaseReferences.SUSCRIPCIONES).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 suscripciones.removeAll(suscripciones);

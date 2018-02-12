@@ -104,11 +104,13 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
         public void setOnclickListener(){
             menuFavoritos.setOnClickListener(this);
+
+            //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL BOTÓN DE VOTAR DE CADA VISTA
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick( View view) {
 
-
+                    //COGEMOS EL ELEMENTO RATINBAR Y LE APLICAMOS UNA ANIMACIÓN
                     miVista= (RelativeLayout) view.getParent();
                     View vista = miVista.findViewById(R.id.estrellasFav);
                     myRotation = AnimationUtils.loadAnimation(vista.getContext(), R.anim.rotator);
@@ -120,26 +122,28 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                     contador=0;
                     totalEstrellas=0.0;
 
+                    //COGEMOS EL NODO DE SUSCRIPCIONES QUE COINCIDE CON EL USUARIO Y LA SERIE ELEGIDA Y LE AÑADIMOS EL VALOR DE LA VOTACIÓN
                     FirebaseDatabase data = FirebaseDatabase.getInstance();
                     final DatabaseReference root = data.getReference();
-                    root.child("suscripciones").orderByChild("tlf_serie").equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+nombreSerie)
+                    root.child(FirebaseReferences.SUSCRIPCIONES).orderByChild(FirebaseReferences.TLF_SERIE).equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+nombreSerie)
                                                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                 claveSuscripcionActual = childSnapshot.getKey();
-                                root.child("suscripciones").child(claveSuscripcionActual).child("estrellasUsuario").setValue(ratingBarFavoritos.getRating());
-                                Toast.makeText(context,"Voto registrado",Toast.LENGTH_LONG).show();
+                                root.child(FirebaseReferences.SUSCRIPCIONES).child(claveSuscripcionActual).child(FirebaseReferences.ESTRELLAS_USUARIO).setValue(ratingBarFavoritos.getRating());
+                                Toast.makeText(context, R.string.voto_registrado,Toast.LENGTH_SHORT).show();
 
                             }
                             FirebaseDatabase fbd = FirebaseDatabase.getInstance();
                             final DatabaseReference r = fbd.getReference();
 
-                            r.child("suscripciones").orderByChild("serie").equalTo(nombreSerie).addListenerForSingleValueEvent(new ValueEventListener() {
+                            //TAMBIÉN ACTUALIZAMOS EN EL NODO SERIE SU SPUNTUACIÓN DE TODOS LOS USUARIOS HACIENDO UNA MEDIA DE TODAS LAS VOTACIONES QUE TIENE
+                            r.child(FirebaseReferences.SUSCRIPCIONES).orderByChild(FirebaseReferences.SERIE_SUSCRIPCIONES).equalTo(nombreSerie).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                        double estrellas =  childSnapshot.child("estrellasUsuario").getValue(Double.class);
+                                        double estrellas =  childSnapshot.child(FirebaseReferences.ESTRELLAS_USUARIO).getValue(Double.class);
                                         Log.i("Puntuacion","Estrellas -> " + estrellas);
                                         contador++;
                                         totalEstrellas+=estrellas;
@@ -152,7 +156,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                     FirebaseDatabase f = FirebaseDatabase.getInstance();
                                     DatabaseReference d = f.getReference();
                                     Log.i("Puntuacion","serie -> " + nombreSerie);
-                                    d.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie).child("estrellas").setValue(media);
+                                    d.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie).child(FirebaseReferences.ESTRELLAS_SERIE).setValue(media);
 
                                 }
 
@@ -176,9 +180,11 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
         }
 
+        //ESTE MÉTODO SE EJECURÁ CUANDO SE PULSE EL MENÚ DE CADA VISTA
         @Override
         public void onClick(View view) {
 
+            //CREA UN POPMENU , LO INFLA(LO PASA DE XML A JAVA) Y LE AÑADIMOS UN LISTENER PARA VER QUE ITEM SE PULSA
             PopupMenu popupMenu = new PopupMenu(context,menuFavoritos);
             popupMenu.inflate(R.menu.option_menu_favoritos);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -187,8 +193,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
                     switch (menuItem.getItemId()){
 
+                        //EN CASO DE QUE ESCOJA ELIMINAR UN FAVORITO
                         case R.id.menu_item_borrar_favoritos:
 
+                            //ELIMINAMOS LA SUSCRIPCIÓN DE ESE USUARIO Y LE QUITAMOS UN LIKE A LA SERIE
                             FirebaseDatabase fd =FirebaseDatabase.getInstance();
                             DatabaseReference root = fd.getReference();
                             final DatabaseReference refLikes = root.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("likes");
@@ -197,16 +205,13 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     long like = dataSnapshot.getValue(Long.class);
                                     final FirebaseDatabase database=FirebaseDatabase.getInstance();
-                                    database.getReference("suscripciones").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    database.getReference(FirebaseReferences.SUSCRIPCIONES).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             for(DataSnapshot snapshot:
                                                     dataSnapshot.getChildren()){
                                                 Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
 
-                                               // Log.i("Clave","clave Serie -> " + claveSerie);
-                                               // Log.i("Clave","idUsu -> " + suscripcion.getIdUsuario());
-                                               // Log.i("Clave","clave Usu -> " + ComunicarClaveUsuarioActual.getClave());
 
                                                 if(suscripcion.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
                                                     String claveSerie = snapshot.getKey();
@@ -215,7 +220,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                                     Log.i("Clave","textViewNombre.getText() -> " + textViewNombre.getText());
                                                     Log.i("Clave","clave Serie -> " + claveSerie);
                                                     Log.i("Clave","--------------------------------------------------");
-                                                    database.getReference("suscripciones").child(claveSerie).removeValue();
+                                                    database.getReference(FirebaseReferences.SUSCRIPCIONES).child(claveSerie).removeValue();
                                                 }
 
                                             }
@@ -245,6 +250,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                 }
 
             });
+            //MUESTRA EL POPMENÚ
             popupMenu.show();
         }
     }

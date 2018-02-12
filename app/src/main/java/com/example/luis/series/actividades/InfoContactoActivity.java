@@ -44,7 +44,12 @@ private int [] avatares;
         sinFavoritos=findViewById(R.id.sinFavoritos);
 
         //RECOGEMOS EL NOMBRE DEL CONTACTO QUE QUEREMOS VISUALIZAR
-        nombreUsuario.setText(getIntent().getStringExtra(Common.CONTACTO)+ getString(R.string.favoritos));
+        /*String contact=getIntent().getStringExtra(Common.CONTACTO);
+        if(contact.length()>10){
+            contact=contact.substring(0,10);
+            contact=contact+"...";
+        }*/
+        nombreUsuario.setText(getIntent().getStringExtra(Common.CONTACTO));
 
         //LE ASIGNAMOS SU AVATAR
         avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);

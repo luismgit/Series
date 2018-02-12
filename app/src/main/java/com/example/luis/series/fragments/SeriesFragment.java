@@ -81,7 +81,8 @@ public class SeriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        //INFLA EL LAYOUT PARA ESTE FRAGMENT
         View vista= inflater.inflate(R.layout.fragment_series, container, false);
         rv=vista.findViewById(R.id.recyclerSeries);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,6 +90,8 @@ public class SeriesFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         adaptadorSeries=new AdaptadorSeries(series,this.getContext());
         rv.setAdapter(adaptadorSeries);
+
+        //COGEMOS LA REFERENCIA DEL NODO SERIES A LO AÑADIMOS AL ARRAYLIST SERIES , CUANDO HAYA UN CAMBIO SE NOTIFICA AL AL ADAPTADOR PARA QUE CAMBIE LAS VISTAS
         database.getReference(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

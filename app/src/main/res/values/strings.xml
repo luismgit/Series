@@ -39,6 +39,8 @@
     <string name="btn_registro">REGISTRO</string>
     <string name="usu_sin_fav">Este usuario no tiene favoritos</string>
     <string name="favoritos">Favoritos.</string>
+    <string name="voto_registrado">Voto registrado</string>
+    <string name="usu_ya_registrado">Usuario ya registrado en la BB.DD</string>
 
 
 </resources>

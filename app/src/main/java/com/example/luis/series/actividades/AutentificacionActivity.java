@@ -242,7 +242,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                     irARegistro(phoneNumber);
                     finish();
                 }else{
-                    Toast.makeText(AutentificacionActivity.this,"Usuario ya registrado en la BB.DD",Toast.LENGTH_LONG).show();
+                    Toast.makeText(AutentificacionActivity.this, R.string.usu_ya_registrado,Toast.LENGTH_LONG).show();
                     Log.i("SESION", "Usuario ya registrado en la BB.DD");
                     irAPrincipal();
                     finish();

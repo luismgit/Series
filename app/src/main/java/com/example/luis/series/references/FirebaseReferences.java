@@ -14,4 +14,10 @@ public class FirebaseReferences {
     final public static String ONLINE="online";
     final public static String OFFLINE="offline";
     final public static String SUSCRIPCIONES="suscripciones";
+    final public static String TLF_SERIE="tlf_serie";
+    final public static String ESTRELLAS_USUARIO="estrellasUsuario";
+    final public static String SERIE_SUSCRIPCIONES="serie";
+    final public static String ESTRELLAS_SERIE="estrellas";
+    final public static String LIKES_SERIE="likes";
+    final public static String WEB_SERIE="web";
 }

@@ -111,6 +111,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         }
 
 
+        //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL MENÚ DE CADA VISTA
         @Override
         public void onClick(View view) {
 
@@ -123,11 +124,14 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 public boolean onMenuItemClick(MenuItem menuItem) {
 
                     switch (menuItem.getItemId()){
+                        //EN EL CASO DE QUE SE PULSE AÑADIR A FAVORITOS
                         case R.id.menu_item_favoritos:
                             Log.i("HOLDER", "pulsado favoritos" );
                             database=FirebaseDatabase.getInstance();
                             rootRef = database.getReference();
-                            refLikes = rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("likes");
+
+                            //CREAMOS UNA REFERENCIA AL NODO LIKES DE LA SERIE DE LA VISTA SELECCIONADA
+                            refLikes = rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.LIKES_SERIE);
                             refLikes.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,6 +139,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                     suscripciones = dataSnapshot.getValue(Long.class);
                                     Log.i("HOLDER","likes -> " + suscripciones);
                                     FirebaseDatabase data = FirebaseDatabase.getInstance();
+
+                                    //CONSEGUIMOS LA IMAGEN DE AVATAR DE LA SERIE Y COMPROBAMOS QUE ESA SERIE NO LA TENGA YA EL USUARIO EN SUS SUSCRIPCIONES CON repetidoFavorito
                                     data.getReference(FirebaseReferences.SERIES_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -146,7 +152,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                         Log.i("imagen","imagen -> " + serie.getImagen());
                                                         imagenSuscripcion=serie.getImagen();
                                                         DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                                        df.child("suscripciones").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        df.child(FirebaseReferences.SUSCRIPCIONES).addListenerForSingleValueEvent(new ValueEventListener() {
                                                             @Override
                                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                                 for(DataSnapshot snapshot:
@@ -157,12 +163,13 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                         Toast.makeText(context,textViewNombre.getText().toString() + " ya la tienes en favoritos",Toast.LENGTH_LONG).show();
                                                                     }
                                                                 }
+                                                                //SI NO LA TIENE YA EN FAVORITOS AÑADIMOS LA SERIE A LAS SUSCRIPCIONES DEL USUSARIO ACTUAL Y  +1 AL CONTADOR DE SUSCRIPCIONES QUE TIENE LA SERIE
                                                                 if(!repetidoFavorito){
                                                                     DatabaseReference dbr=FirebaseDatabase.getInstance().getReference();
                                                                     Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
                                                                             ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
                                                                     //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
-                                                                    dbr.child("suscripciones").push().setValue(suscripcion);
+                                                                    dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
                                                                     Toast.makeText(context,textViewNombre.getText().toString() +" añadida a favoritos",Toast.LENGTH_LONG).show();
@@ -197,10 +204,12 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                             });
 
                             break;
+
+                        //EN EL CASO DE QUE SE PULSE VER EN FILMAFFINITY ACCEDEMOS AL NODO QUE GUARDA EL ENLACE DE CADA SERIE E INCIAMOS UN INTENT HACIA ESA WEB
                         case (R.id.menu_item_filmaffinity):
                             database=FirebaseDatabase.getInstance();
                              rootRef = database.getReference();
-                             rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child("web").addListenerForSingleValueEvent(new ValueEventListener() {
+                             rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.WEB_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
                                  @Override
                                  public void onDataChange(DataSnapshot dataSnapshot) {
                                      String web = (String) dataSnapshot.getValue();

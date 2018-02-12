@@ -13,20 +13,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".actividades.AutentificacionActivity">
+        <activity android:name=".actividades.AutentificacionActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".actividades.registroActivity" />
+        <activity android:name=".actividades.registroActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".actividades.TabActivity"
             android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".actividades.ListaIconos" />
-        <activity android:name=".actividades.InfoContactoActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".actividades.ListaIconos"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".actividades.InfoContactoActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

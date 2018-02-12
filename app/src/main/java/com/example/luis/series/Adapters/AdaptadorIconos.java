@@ -56,12 +56,7 @@ public class AdaptadorIconos extends BaseAdapter {
         //A TRAVÉS DE NUESTRO VIEWHOLDER APLICAMOS EL AVATAR QUE TOQUE PARA ESA VISTA Y DEVOLVEMOS LA VISTA
         viewHolder.icono.setImageResource(iconos[i]);
         return layout;
-        /*ImageView icono;
-        inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView=inflater.inflate(R.layout.itemicono,viewGroup,false);*/
-        //icono = itemView.findViewById(R.id.iconoItem);
-        //ImageView icono = layout.findViewById(R.id.iconoItem);
-       // icono.setImageResource(iconos[i]);
+
 
     }
 }
