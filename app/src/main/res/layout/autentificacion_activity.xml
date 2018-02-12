@@ -127,15 +127,27 @@
         android:indeterminate="false"
         android:max="100"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_enlace_ayuda"
-        android:textColor="#000000"
-        android:textSize="17dp"
-        android:paddingHorizontal="16dp"
 
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En caso de problemas en el registro pulse"
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:paddingHorizontal="16dp"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:textColor="#10036c"
+            android:gravity="center"
+            android:clickable="true"
+            android:onClick="ayuda"
+            android:shadowColor="#000000"
+            android:id="@+id/ayudaTexto"
+            />
 
 
 

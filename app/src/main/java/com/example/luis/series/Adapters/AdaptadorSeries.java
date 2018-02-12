@@ -62,6 +62,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         Series serie = series.get(position);
         holder.textViewNombre.setText(serie.getNombre());
         holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
+        holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
         holder.setOnclickListener();
 
@@ -80,6 +81,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         RatingBar ratingBar;
         TextView textViewNombre;
         ImageView iconoSerie;
+        TextView numLikes;
         TextView textViewOptions;
         String claveUsuarioActual;
         String phoneNumber;
@@ -97,6 +99,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             context=itemView.getContext();
             relativeLayout=itemView.findViewById(R.id.relativeLayout);
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
+            numLikes=itemView.findViewById(R.id.numLikes);
             iconoSerie=itemView.findViewById(R.id.imagenSerie);
             textViewOptions=itemView.findViewById(R.id.textViewOptionsDigit);
             ratingBar=itemView.findViewById(R.id.ratingBar);

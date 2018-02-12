@@ -9,7 +9,10 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,6 +64,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     ProgressBar progressBarCircular;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private boolean registroCerrado;
+    TextView ayudaTexto;
 
     @Override
     protected void onStart() {
@@ -74,6 +78,11 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.autentificacion_activity);
         botonSMS=findViewById(R.id.botonSMS);
+        ayudaTexto=findViewById(R.id.ayudaTexto);
+        String mystring=new String("Aquí");
+        SpannableString content = new SpannableString(mystring);
+        content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
+        ayudaTexto.setText(content);
         botonSIGIN=findViewById(R.id.botonSIGIN);
         etxtPhone=findViewById(R.id.etxtPhone);
         etxtPhone.setOnEditorActionListener(this);
@@ -351,5 +360,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
 
-
+    public void ayuda(View view) {
+        Toast.makeText(this,"Ayuda",Toast.LENGTH_SHORT).show();
+    }
 }

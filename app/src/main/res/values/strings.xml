@@ -27,7 +27,6 @@
     <string name="text_msg_autent_aviso2">En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR</string>
     <string name="hint_cod_rec">código recibido</string>
     <string name="sigin">SIGIN</string>
-    <string name="text_enlace_ayuda">En caso de problemas en el registro pulse aquí</string>
     <string name="toast_usu_reg">Usuario registrado</string>
     <string name="msg_registro_uso_email">El nick introducido ya está en uso!!</string>
     <string name="error_registro_campos_vacios">Debe rellenar todos los campos!!</string>
@@ -41,6 +40,7 @@
     <string name="favoritos">Favoritos.</string>
     <string name="voto_registrado">Voto registrado</string>
     <string name="usu_ya_registrado">Usuario ya registrado en la BB.DD</string>
+    <string name="likes">Likes:</string>
 
 
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="125dp"
+    android:layout_height="130dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
@@ -52,10 +52,33 @@
         android:focusable="false"
         android:id="@+id/ratingBar"
         style="?android:attr/ratingBarStyleIndicator"
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="4dp"
         android:progressTint="#efb810"
 
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ratingBar"
+        android:layout_toRightOf="@id/imagenSerie"
+        android:text="@string/likes"
+        android:layout_marginLeft="16dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/likesText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ratingBar"
+        android:layout_toRightOf="@id/likesText"
+        android:text="8"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/numLikes"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -63,6 +86,7 @@
         android:layout_alignParentBottom="true"
         android:background="#d4d4d4"
         />
+
 
 
 
