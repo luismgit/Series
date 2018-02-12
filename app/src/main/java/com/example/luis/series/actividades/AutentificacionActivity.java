@@ -1,12 +1,18 @@
 package com.example.luis.series.actividades;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaCas;
 import android.os.Build;
+import android.os.Message;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -44,8 +50,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import javax.mail.Authenticator;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 public class AutentificacionActivity extends AppCompatActivity  implements TextView.OnEditorActionListener{
@@ -65,7 +79,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private boolean registroCerrado;
     TextView ayudaTexto;
-
+    String emailAyuda;
+    String passwordAyuda;
+    Session session;
     @Override
     protected void onStart() {
         super.onStart();
@@ -89,6 +105,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
         etxtPhoneCode.setOnEditorActionListener(this);
         progressBarCircular=findViewById(R.id.progressBarCircular);
+        emailAyuda="seriesprojectluis@gamil.com";
+        passwordAyuda="androidproject";
+
 
         //MÉTODO QUE COMPRUEBA LA VERSIÓN DEK SDK Y SI EL PÉRMISO ESTÁ YA DADO.
         pedirPermisos();
@@ -362,5 +381,55 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     public void ayuda(View view) {
         Toast.makeText(this,"Ayuda",Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ayuda");
+        builder.setMessage("Detalle a continuación su problema y el equipo de desarrolladores lo intentará resolver lo antes posible ");
+        builder.setView(R.layout.dialogo_view);
+
+        builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                Properties properties=new Properties();
+                properties.put("mail.smtp.host","smtp.googlemail.com");
+                properties.put("mail.smtp.socketFactory,port","465");
+                properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+                properties.put("mail.smtp.auth","true");
+                properties.put("mail.smtp.port","465");
+
+                try{
+
+                    session=Session.getDefaultInstance(properties, new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(emailAyuda,passwordAyuda);
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                if(session!=null){
+                    javax.mail.Message message = new MimeMessage(session);
+                    try {
+                        message.setFrom(new InternetAddress(emailAyuda));
+                        message.setSubject("Asunto");
+                        message.setRecipients(javax.mail.Message.RecipientType.TO,InternetAddress.parse("luismunozcastro1@gmail.com"));
+                        message.setContent("mensaje","text/html;charset=utf-8");
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Toast.makeText(AutentificacionActivity.this,"Enviado",Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("cancelar",null);
+        Dialog dialog =builder.create();
+        dialog.show();
+
+        //Intent intent = new Intent(this, Ayuda.class);
+        //startActivity(intent);
     }
 }
