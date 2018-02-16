@@ -37,7 +37,6 @@
         <activity
             android:name=".actividades.InfoContactoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".actividades.Ayuda"></activity>
     </application>
 
 </manifest>

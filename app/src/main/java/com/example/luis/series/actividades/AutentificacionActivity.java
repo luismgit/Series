@@ -105,7 +105,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
         etxtPhoneCode.setOnEditorActionListener(this);
         progressBarCircular=findViewById(R.id.progressBarCircular);
-        emailAyuda="seriesprojectluis@gamil.com";
+        emailAyuda="seriesprojectluis@gmail.com";
         passwordAyuda="androidproject";
 
 
@@ -392,7 +392,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
                 Properties properties=new Properties();
-                properties.put("mail.smtp.host","smtp.googlemail.com");
+                properties.put("mail.smtp.host","smtp.gmail.com");
                 properties.put("mail.smtp.socketFactory,port","465");
                 properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
                 properties.put("mail.smtp.auth","true");
