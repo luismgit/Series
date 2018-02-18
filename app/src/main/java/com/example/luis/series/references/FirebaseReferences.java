@@ -20,4 +20,8 @@ public class FirebaseReferences {
     final public static String ESTRELLAS_SERIE="estrellas";
     final public static String LIKES_SERIE="likes";
     final public static String WEB_SERIE="web";
+    final public static String EMAIL_AYUDA="emailAyuda";
+    final public static String PASSWORD_AYUDA="passwordAyuda";
+    final public static String COMMON="common";
+    final public static String AVATAR="avatar";
 }

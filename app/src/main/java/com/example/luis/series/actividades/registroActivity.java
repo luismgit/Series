@@ -87,17 +87,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         startActivity(intent);
     }
 
-//MÉTODO QUE COMPRUEBA SI EL EMAIL INTRODUCIDO ES UN PATRÓN VÁLIDO DE EMAIL
- /*   public boolean validateEmail(String email) {
 
-        Pattern pattern;
-        Matcher matcher;
-        String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(email);
-        return matcher.matches();
-
-    }*/
 
     //MÉTODO PARA QUE CUANDO EL USUARIO PULSE EL BOTÓN HECHO EN EL TECLADO SE REESTABLEZCAN A VACÍO EL CAMPO DE ERROR
     @Override

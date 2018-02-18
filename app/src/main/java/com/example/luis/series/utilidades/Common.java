@@ -17,6 +17,7 @@ public class Common {
     final public static String MYAPP="MYAPP";
     final public static String FIRSTTIMERUN="FIRSTTIMERUN";
     final public static String ICONOSELECCIONADO="ICONOSELECCIONADO";
+    final public static String FONDO_SELECCIONADO="FONDOSELECCIONADO";
 
 
 

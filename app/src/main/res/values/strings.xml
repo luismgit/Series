@@ -48,6 +48,9 @@
     <string name="btn_enviar_ayuda">Enviar</string>
     <string name="msg_enviado_ayuda">Mensaje enviado</string>
     <string name="btn_cancelar_ayuda">cancelar</string>
+    <string name="contacto_settings">Contacto</string>
+    <string name="cambiar_fondo_de_pantalla">Cambiar fondo de pantalla</string>
+    <string name="cambiar_avatar_usuario">Cambiar avatar usuario</string>
 
 
 </resources>

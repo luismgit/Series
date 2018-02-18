@@ -35,6 +35,9 @@
             android:name=".actividades.ListaIconos"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".actividades.ListaFondos"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".actividades.InfoContactoActivity"
             android:screenOrientation="portrait" />
     </application>

@@ -1,9 +1,13 @@
 package com.example.luis.series.actividades;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,8 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
@@ -31,12 +37,23 @@ import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
+import com.example.luis.series.utilidades.Utilities;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
 SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener{
@@ -57,6 +74,13 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     private ViewPager mViewPager;
     private int [] fondos;
     ImageView fondo;
+    Session session;
+    EditText editTextMensajeAyuda;
+    EditText correoUsuAyuda;
+    String emailAyuda;
+    String passwordAyuda;
+    private static final int LISTA_ICONOS=1;
+    private static final int LISTA_FONDOS=2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +141,34 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
+        //SACAMOS DE LA BB.DD EL EMAIL Y PASSWORD DE LA CUENTA DE CORREO PARA ENVIAR UN CORREO SI EL USUARIO PULSA EN EL MENÚ DE CONTACTO
+        FirebaseDatabase fdb=FirebaseDatabase.getInstance();
+        DatabaseReference dr=fdb.getReference();
+        dr.child(FirebaseReferences.COMMON).child(FirebaseReferences.EMAIL_AYUDA).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                emailAyuda= (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        FirebaseDatabase f=FirebaseDatabase.getInstance();
+        DatabaseReference r=f.getReference();
+        r.child(FirebaseReferences.COMMON).child(FirebaseReferences.PASSWORD_AYUDA).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                passwordAyuda= (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 
@@ -134,18 +186,157 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i("actividades","onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //SI EL USUARIO PULSA EL EL MENÚ DE CONTACTO
+        if (id == R.id.contacto) {
+            Log.i("onOptionsItemSelected","correo ->" + emailAyuda);
+            Log.i("onOptionsItemSelected","password ->" + passwordAyuda);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.ayuda);
+            builder.setMessage(R.string.msg_ayuda);
+
+            //CONSEGUIMOS LAS VISTAS DE NUESTRO layout dialogo_view INFLÁNDOLO Y SE LO APLICAMOS AL BUILDER
+            LayoutInflater inflater = getLayoutInflater();
+            View miVista = inflater.inflate(R.layout.dialogo_view,null);
+            builder.setView(miVista);
+            editTextMensajeAyuda=miVista.findViewById(R.id.editTextAyuda);
+            correoUsuAyuda=miVista.findViewById(R.id.userEmail);
+
+
+            builder.setPositiveButton(R.string.btn_enviar_ayuda, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                }
+            });
+
+            builder.setNegativeButton(R.string.btn_cancelar_ayuda,null);
+            builder.setCancelable(false);
+            final AlertDialog dialog =builder.create();
+            dialog.show();
+
+            //IMPLEMENTA UN LISTENER SOBRE EL BOTON DE ACEPTAR QUE EN CASO DE QUE EL CORREO INTRODUCIDO POR EL USUARIO SEA VALIDO ENVIA UN MENSAJE A UNA CUENTA DE CORREO
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!Utilities.validateEmail(correoUsuAyuda.getText().toString())){
+                        Toast.makeText(TabActivity.this,R.string.error_email_format,Toast.LENGTH_SHORT).show();
+                    }else{
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
+                        Properties properties=new Properties();
+                        properties.put("mail.smtp.host","smtp.gmail.com");
+                        properties.put("mail.smtp.socketFactory,port","465");
+                        properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+                        properties.put("mail.smtp.auth","true");
+                        properties.put("mail.smtp.port","465");
+
+                        try{
+
+                            session= Session.getDefaultInstance(properties, new Authenticator() {
+                                @Override
+                                protected PasswordAuthentication getPasswordAuthentication() {
+                                    return new PasswordAuthentication(emailAyuda,passwordAyuda);
+                                }
+                            });
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        if(session!=null){
+                            javax.mail.Message message = new MimeMessage(session);
+                            try {
+                                message.setFrom(new InternetAddress(emailAyuda));
+
+                                //COMO ASUNTO DEL CORREO PONEMOS SU EMAIL,NÚMERO DE TLF Y CLAVE DE SU USUARIO DE FIREBASE
+                                message.setSubject(correoUsuAyuda.getText().toString()+"/ Phone number -> "+ComunicarCurrentUser.getPhoneNumberUser()+" /Clave Firebase -> "+ComunicarClaveUsuarioActual.getClave());
+                                message.setRecipients(javax.mail.Message.RecipientType.TO,InternetAddress.parse(emailAyuda));
+                                message.setContent(editTextMensajeAyuda.getText().toString(),"text/html;charset=utf-8");
+                                Transport.send(message);
+                            } catch (MessagingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Toast.makeText(TabActivity.this, R.string.msg_enviado_ayuda,Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+            });
+           // return true;
         }
+
+        //SI EL USUARIO PULSA EL EL MENÚ DE CAMBIAR FONDO PANTALLA
+        if(id==R.id.item_cambiar_fondo){
+            seleccionarFondo();
+        }
+
+        //SI EL USUARIO PULSA EL EL MENÚ DE CAMBIAR AVATAR
+        if(id==R.id.item_cambiar_avatar){
+            seleccionarAvatar();
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
+    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE FONDOS DE ListaFondos ESPERANDO UN RESULTADO
+    public void seleccionarFondo() {
+
+        Intent intent = new Intent(this,ListaFondos.class);
+        startActivityForResult(intent,LISTA_FONDOS);
+    }
+
+
+    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
+    public void seleccionarAvatar() {
+
+        Intent intent = new Intent(this,ListaIconos.class);
+        startActivityForResult(intent,LISTA_ICONOS);
+    }
+
+    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA ListaIconos o de ListaFondos
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+            //SI VIENE DE LISTA ICONOS
+            case LISTA_ICONOS:
+
+                //SI LOS DATOS NO SON NULOS
+                if(data != null && resultCode == RESULT_OK){
+
+                    //GUARDAMOS EN numIcono EL NºDE AVATAR(VISTA) SELECCIONADA
+                    int numIcono = data.getIntExtra(Common.ICONOSELECCIONADO,-1);
+                    if(numIcono == -1){
+                        //SI NO HA SELECCIONADO NINGÚN AVATAR ,NADA
+                    }else{
+                        //ACTUALIZAMOS LA REFERENCIA AVATAR DE FIREBASE DEL USUARIO ACTUAL
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference rootRef = firebaseDatabase.getReference();
+                        rootRef.child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.AVATAR).setValue(numIcono);
+                    }
+
+                }
+                break;
+
+            //SI VIENE DE LISTA FONDOS CAMBIAMOS LA IMAGEN DE FONDO QUE NOS VIENE DEVUELTA.
+            case LISTA_FONDOS:
+                if(data != null && resultCode == RESULT_OK){
+                    int numFondo = data.getIntExtra(Common.FONDO_SELECCIONADO,-1);
+                    Log.i("OnActivityResult","Numero de icono -> " + numFondo);
+                    if(numFondo != -1){
+                        fondo.setImageResource(fondos[numFondo]);
+                    }
+
+                }
+                break;
+
+        }
+    }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

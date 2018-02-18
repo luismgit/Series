@@ -48,6 +48,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -108,8 +109,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
         etxtPhoneCode.setOnEditorActionListener(this);
         progressBarCircular=findViewById(R.id.progressBarCircular);
-        emailAyuda="seriesprojectluis@gmail.com";
-        passwordAyuda="androidproject";
+
 
 
 
@@ -149,6 +149,34 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 }
             }
         };
+
+        //SACAMOS DE LA BB.DD EL EMAIL Y PASSWORD DE LA CUENTA DE CORREO PARA ENVIAR UN CORREO SI EL USUARIO PULSA EN EL MENÚ DE CONTACTO
+        FirebaseDatabase fdb=FirebaseDatabase.getInstance();
+        DatabaseReference dr=fdb.getReference();
+        dr.child(FirebaseReferences.COMMON).child(FirebaseReferences.EMAIL_AYUDA).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                emailAyuda= (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        FirebaseDatabase f=FirebaseDatabase.getInstance();
+        DatabaseReference r=f.getReference();
+        r.child(FirebaseReferences.COMMON).child(FirebaseReferences.PASSWORD_AYUDA).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                passwordAyuda= (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -382,12 +410,14 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         teclado.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
 
-
+    //MÉTODO QUE CREA UN DIÁLOGO DE AYUDA POR SI NO LE LLEGA EL CÓDIGO DE VERFICACIÓN
     public void ayuda(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.ayuda);
         builder.setMessage(R.string.msg_ayuda);
+
+        //CONSEGUIMOS LAS VISTAS DE NUESTRO layout dialogo_view INFLÁNDOLO Y SE LO APLICAMOS AL BUILDER
         LayoutInflater inflater = getLayoutInflater();
         View miVista = inflater.inflate(R.layout.dialogo_view,null);
         builder.setView(miVista);
@@ -408,6 +438,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         builder.setCancelable(false);
         final AlertDialog dialog =builder.create();
         dialog.show();
+
+        //IMPLEMENTA UN LISTENER SOBRE EL BOTON DE ACEPTAR QUE EN CASO DE QUE EL CORREO INTRODUCIDO POR EL USUARIO SEA VALIDO ENVIA UN MENSAJE A UNA CUENTA DE CORREO
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

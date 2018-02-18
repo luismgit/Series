@@ -3,8 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.luis.series.actividades.TabActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/contacto"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/contacto_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/item_cambiar_fondo"
+        android:orderInCategory="100"
+        android:title="@string/cambiar_fondo_de_pantalla"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item_cambiar_avatar"
+        android:orderInCategory="100"
+        android:title="@string/cambiar_avatar_usuario"
+        app:showAsAction="never" />
+
+
 </menu>
