@@ -163,7 +163,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     Suscripcion s = snapshot.getValue(Suscripcion.class);
                                                                     if(s.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
                                                                         repetidoFavorito=true;
-                                                                        Toast.makeText(context,textViewNombre.getText().toString() + " ya la tienes en favoritos",Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(context,textViewNombre.getText().toString() + context.getString(R.string.rep_favoritos),Toast.LENGTH_LONG).show();
                                                                     }
                                                                 }
                                                                 //SI NO LA TIENE YA EN FAVORITOS AÑADIMOS LA SERIE A LAS SUSCRIPCIONES DEL USUSARIO ACTUAL Y  +1 AL CONTADOR DE SUSCRIPCIONES QUE TIENE LA SERIE
@@ -175,7 +175,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
-                                                                    Toast.makeText(context,textViewNombre.getText().toString() +" añadida a favoritos",Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(context,textViewNombre.getText().toString() + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
                                                                 }
                                                             }
 

@@ -19,6 +19,7 @@ import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -104,7 +105,9 @@ public class FavoritosFragment extends Fragment {
                 for(DataSnapshot snapshot:
                         dataSnapshot.getChildren()){
                     Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
-                    if(suscripcion.getIdUsuario().equals(ComunicarClaveUsuarioActual.getClave())){
+                    Log.i("hoy","suscripcion.getIdUsuario() -> " + suscripcion.getIdUsuario());
+                    Log.i("hoy","ComunicarClaveUsuarioActual.getClave() -> " + ComunicarClaveUsuarioActual.getClave());
+                    if(suscripcion.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
                         Log.i("suscripcion"," estrellas -> " + suscripcion.getEstrellasUsuario());
                         suscripciones.add(suscripcion);
                     }

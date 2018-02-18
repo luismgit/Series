@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -82,6 +83,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     String emailAyuda;
     String passwordAyuda;
     Session session;
+    EditText editTextMensajeAyuda;
+    EditText correoUsuAyuda;
     @Override
     protected void onStart() {
         super.onStart();
@@ -107,6 +110,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         progressBarCircular=findViewById(R.id.progressBarCircular);
         emailAyuda="seriesprojectluis@gmail.com";
         passwordAyuda="androidproject";
+
 
 
         //MÉTODO QUE COMPRUEBA LA VERSIÓN DEK SDK Y SI EL PÉRMISO ESTÁ YA DADO.
@@ -380,56 +384,74 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
 
     public void ayuda(View view) {
-        Toast.makeText(this,"Ayuda",Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ayuda");
-        builder.setMessage("Detalle a continuación su problema y el equipo de desarrolladores lo intentará resolver lo antes posible ");
-        builder.setView(R.layout.dialogo_view);
 
-        builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.ayuda);
+        builder.setMessage(R.string.msg_ayuda);
+        LayoutInflater inflater = getLayoutInflater();
+        View miVista = inflater.inflate(R.layout.dialogo_view,null);
+        builder.setView(miVista);
+        editTextMensajeAyuda=miVista.findViewById(R.id.editTextAyuda);
+        correoUsuAyuda=miVista.findViewById(R.id.userEmail);
+
+
+        builder.setPositiveButton(R.string.btn_enviar_ayuda, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-                Properties properties=new Properties();
-                properties.put("mail.smtp.host","smtp.gmail.com");
-                properties.put("mail.smtp.socketFactory,port","465");
-                properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
-                properties.put("mail.smtp.auth","true");
-                properties.put("mail.smtp.port","465");
 
-                try{
 
-                    session=Session.getDefaultInstance(properties, new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(emailAyuda,passwordAyuda);
-                        }
-                    });
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
 
-                if(session!=null){
-                    javax.mail.Message message = new MimeMessage(session);
-                    try {
-                        message.setFrom(new InternetAddress(emailAyuda));
-                        message.setSubject("Asunto");
-                        message.setRecipients(javax.mail.Message.RecipientType.TO,InternetAddress.parse("luismunozcastro1@gmail.com"));
-                        message.setContent("mensaje","text/html;charset=utf-8");
-                        Transport.send(message);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Toast.makeText(AutentificacionActivity.this,"Enviado",Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton("cancelar",null);
-        Dialog dialog =builder.create();
-        dialog.show();
 
-        //Intent intent = new Intent(this, Ayuda.class);
-        //startActivity(intent);
+        builder.setNegativeButton(R.string.btn_cancelar_ayuda,null);
+        builder.setCancelable(false);
+        final AlertDialog dialog =builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Utilities.validateEmail(correoUsuAyuda.getText().toString())){
+                    Toast.makeText(AutentificacionActivity.this,R.string.error_email_format,Toast.LENGTH_SHORT).show();
+                }else{
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                    Properties properties=new Properties();
+                    properties.put("mail.smtp.host","smtp.gmail.com");
+                    properties.put("mail.smtp.socketFactory,port","465");
+                    properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+                    properties.put("mail.smtp.auth","true");
+                    properties.put("mail.smtp.port","465");
+
+                    try{
+
+                        session=Session.getDefaultInstance(properties, new Authenticator() {
+                            @Override
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(emailAyuda,passwordAyuda);
+                            }
+                        });
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    if(session!=null){
+                        javax.mail.Message message = new MimeMessage(session);
+                        try {
+                            message.setFrom(new InternetAddress(emailAyuda));
+                            message.setSubject(correoUsuAyuda.getText().toString());
+                            message.setRecipients(javax.mail.Message.RecipientType.TO,InternetAddress.parse(emailAyuda));
+                            message.setContent(editTextMensajeAyuda.getText().toString(),"text/html;charset=utf-8");
+                            Transport.send(message);
+                        } catch (MessagingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Toast.makeText(AutentificacionActivity.this, R.string.msg_enviado_ayuda,Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }
+        });
+
     }
 }

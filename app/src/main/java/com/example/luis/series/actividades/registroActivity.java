@@ -26,6 +26,7 @@ import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
+import com.example.luis.series.utilidades.Utilities;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,7 +88,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     }
 
 //MÉTODO QUE COMPRUEBA SI EL EMAIL INTRODUCIDO ES UN PATRÓN VÁLIDO DE EMAIL
-    public boolean validateEmail(String email) {
+ /*   public boolean validateEmail(String email) {
 
         Pattern pattern;
         Matcher matcher;
@@ -96,7 +97,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         matcher = pattern.matcher(email);
         return matcher.matches();
 
-    }
+    }*/
 
     //MÉTODO PARA QUE CUANDO EL USUARIO PULSE EL BOTÓN HECHO EN EL TECLADO SE REESTABLEZCAN A VACÍO EL CAMPO DE ERROR
     @Override
@@ -204,7 +205,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
              textViewError.setText(R.string.error_registro_campos_vacios);
          }else if(nick.length()>15) {
              textViewError.setText(R.string.error_registro_nick);
-         }else if(!validateEmail(correo)) {
+         }else if(!Utilities.validateEmail(correo)) {
              textViewError.setText(R.string.error_email_format);
          }else{
 
