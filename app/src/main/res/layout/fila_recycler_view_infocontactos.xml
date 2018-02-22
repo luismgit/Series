@@ -34,11 +34,10 @@
     <ProgressBar
         android:id="@+id/progressBarNota"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_above="@+id/textView"
-        android:layout_alignLeft="@+id/nombreSerieFavoritos"
-        android:layout_alignStart="@+id/nombreSerieFavoritos"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:layout_below="@+id/nombreSerieFavoritos"
+        android:layout_toRightOf="@id/imagenSerieContactosInfo"
         android:indeterminate="false"
         android:max="5"
         android:progressDrawable="@drawable/circular_progress_bar" />
@@ -54,12 +53,10 @@
         android:id="@+id/textViewNota"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imagenSerieContactosInfo"
-        android:layout_alignLeft="@+id/progressBarNota"
-        android:layout_alignStart="@+id/progressBarNota"
-        android:layout_marginBottom="33dp"
-        android:layout_marginLeft="39dp"
-        android:layout_marginStart="39dp"
+
+        android:layout_toRightOf="@id/imagenSerieContactosInfo"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="62dp"
         android:shadowColor="#d6d5d4"
         android:shadowDx="3"
         android:shadowDy="2"
@@ -73,21 +70,21 @@
         android:id="@+id/filmaffinityImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/film"
+        android:layout_marginTop="50dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        />
+        android:layout_marginRight="10dp"
+        android:src="@drawable/film" />
+
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ir a"
         android:layout_toLeftOf="@id/filmaffinityImage"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
+        android:layout_alignBaseline="@id/textViewNota"
+        android:layout_marginRight="10dp"
+        android:text="Ir a"
         android:textColor="#39517b"
         android:textSize="18sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
 </RelativeLayout>
