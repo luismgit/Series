@@ -1,6 +1,10 @@
 package com.example.luis.series.Adapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +14,13 @@ import android.widget.TextView;
 
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.Imagenes;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +29,17 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
 
     List<Suscripcion> suscripcionesContactos;
     private int [] iconos = Imagenes.getIconosSeries();
+    Context contexto;
 
-    public AdaptadorInfoContactos(List<Suscripcion> suscripcionesContactos){
+    public AdaptadorInfoContactos(List<Suscripcion> suscripcionesContactos,Context contexto){
         this.suscripcionesContactos=suscripcionesContactos;
+        this.contexto=contexto;
     }
     @Override
     public ContactosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_infocontactos,parent,false);
         ContactosViewHolder holder = new ContactosViewHolder(view);
+        holder.setOnclickListener();
         return holder;
     }
 
@@ -52,19 +65,52 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         return suscripcionesContactos.size();
     }
 
-    public static class ContactosViewHolder extends RecyclerView.ViewHolder{
+    public static class ContactosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView avatarSerie;
         TextView nombreSerie;
         ProgressBar barNota;
         TextView textViewNota;
+        ImageView filmaffinityLink;
+        Context context;
 
         public ContactosViewHolder(View itemView) {
             super(itemView);
+            context=itemView.getContext();
             avatarSerie=itemView.findViewById(R.id.imagenSerieContactosInfo);
             nombreSerie=itemView.findViewById(R.id.nombreSerieFavoritos);
             barNota=itemView.findViewById(R.id.progressBarNota);
             textViewNota=itemView.findViewById(R.id.textViewNota);
+            filmaffinityLink=itemView.findViewById(R.id.filmaffinityImage);
+        }
+
+        public void setOnclickListener(){
+            filmaffinityLink.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View view) {
+
+            FirebaseDatabase database= FirebaseDatabase.getInstance();
+            DatabaseReference rootRef = database.getReference();
+            rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie.getText().toString()).child(FirebaseReferences.WEB_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String web = (String) dataSnapshot.getValue();
+                    irAFilmAffinity(web);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+        }
+        public void irAFilmAffinity(String web){
+
+            Uri uri = Uri.parse(web);
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            context.startActivity(intent);
         }
     }
 }

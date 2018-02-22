@@ -86,8 +86,8 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -96,7 +96,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         //CARGAMOS EN EL ARRAY DE FONDOS TODOS LOS FONDOS DE PANTALLA DE DRAWABLE
-        fondos= Imagenes.getFondosPantalla();
+        fondos= Imagenes.getCambiaFondos();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -317,6 +317,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                         DatabaseReference rootRef = firebaseDatabase.getReference();
                         rootRef.child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.AVATAR).setValue(numIcono);
+                        Toast.makeText(this.getApplicationContext(), R.string.mod_avatar,Toast.LENGTH_SHORT).show();
                     }
 
                 }

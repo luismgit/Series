@@ -20,7 +20,8 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="exitUntilCollapsed">
-            <!--si ponemos : app:layout_scrollFlags="scroll|exitUntilCollapsed  al hacer scroll la foto desaparece...">-->
+            <!--si ponemos : app:layout_scrollFlags="scroll|exitUntilCollapsed  al hacer scroll la foto desaparece...
+             pero da problemas al cambiar de tabs">-->
 
             <ImageView
                 android:id="@+id/header"

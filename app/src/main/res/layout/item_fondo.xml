@@ -2,17 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:background="#222"
+    android:layout_height="wrap_content"
+    android:background="@drawable/degradado_registro"
+    android:orientation="vertical"
     >
 
     <ImageView
+        android:id="@+id/fondoImagenSerie"
+        android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fondoItem"
-        android:src="@drawable/west_back"
-        android:listSelector="@android:color/transparent"
-        android:layout_marginVertical="10dp"
-        />
+        android:src="@drawable/west_back" />
 
 </LinearLayout>

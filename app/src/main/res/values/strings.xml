@@ -41,8 +41,8 @@
     <string name="voto_registrado">Voto registrado</string>
     <string name="usu_ya_registrado">Usuario ya registrado en la BB.DD</string>
     <string name="likes">Likes:</string>
-    <string name="rep_favoritos">ya la tienes en favoritos</string>
-    <string name="anadida_fav">añadida a favoritos</string>
+    <string name="rep_favoritos"> ya la tienes en favoritos</string>
+    <string name="anadida_fav"> añadida a favoritos</string>
     <string name="ayuda">Ayuda</string>
     <string name="msg_ayuda">Ingrese su email y a continuación detalle su problema y el equipo de desarrolladores lo intentará resolver lo antes posible</string>
     <string name="btn_enviar_ayuda">Enviar</string>
@@ -51,6 +51,7 @@
     <string name="contacto_settings">Contacto</string>
     <string name="cambiar_fondo_de_pantalla">Cambiar fondo de pantalla</string>
     <string name="cambiar_avatar_usuario">Cambiar avatar usuario</string>
+    <string name="mod_avatar">Avatar modificado correctamente</string>
 
 
 </resources>

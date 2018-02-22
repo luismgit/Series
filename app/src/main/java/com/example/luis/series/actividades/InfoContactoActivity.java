@@ -59,7 +59,7 @@ private int [] avatares;
         rv=findViewById(R.id.recyclerInfoContacto);
         rv.setLayoutManager(new LinearLayoutManager(this));
         suscripciones=new ArrayList<>();
-        adaptadorInfoContactos=new AdaptadorInfoContactos(suscripciones);
+        adaptadorInfoContactos=new AdaptadorInfoContactos(suscripciones,this.getBaseContext());
         rv.setAdapter(adaptadorInfoContactos);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 

@@ -37,22 +37,26 @@ public class Imagenes {
                     R.drawable.avatar12,
                     R.drawable.avatar13};
 
-    private static int [] fondos =new int[]
-            {   R.drawable.black,
-                    R.drawable.big,
-                    R.drawable.breaking_bad,
-                    R.drawable.dexter_back,
-                    R.drawable.game_back,
-                    R.drawable.house_back1,
-                    R.drawable.lost_back,
-                    R.drawable.narcos_back,
-                    R.drawable.sons_back1,
-                    R.drawable.stranger_back,
-                    R.drawable.simpson_back,
-                    R.drawable.walking_back,
-                    R.drawable.vikings_back
 
+    private static int [] cambiaFondos =new int[]
+            {  R.drawable.black_mod,
+                    R.drawable.big,
+                    R.drawable.game_mod,
+                    R.drawable.dexter_mod,
+                    R.drawable.house_mod,
+                    R.drawable.lost_mod,
+                    R.drawable.narcos_mod,
+                    R.drawable.breaking_mod,
+                    R.drawable.sons_mod,
+                    R.drawable.walking_mod,
+                    R.drawable.simpson_mod,
+                    R.drawable.stranger_mod,
+                    R.drawable.vikings_mod,
+                    R.drawable.west_back
             };
+
+
+
 
 
     public static int [] getIconosSeries(){
@@ -61,7 +65,7 @@ public class Imagenes {
     public static int [] getAvataresUsuarios(){
         return avatares;
     }
-    public static int [] getFondosPantalla(){
-        return fondos;
+    public static int[] getCambiaFondos() {
+        return cambiaFondos;
     }
 }

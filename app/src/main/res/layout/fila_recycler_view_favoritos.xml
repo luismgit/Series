@@ -9,6 +9,7 @@
     android:paddingTop="10dp"
     android:id="@+id/relativeLayoutFavoritos"
     android:visibility="visible"
+
     >
 
     <ImageView
