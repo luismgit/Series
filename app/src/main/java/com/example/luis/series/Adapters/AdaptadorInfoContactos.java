@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
@@ -28,7 +29,7 @@ import java.util.List;
 public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoContactos.ContactosViewHolder>{
 
     List<Suscripcion> suscripcionesContactos;
-    private int [] iconos = Imagenes.getIconosSeries();
+    //private int [] iconos = Imagenes.getIconosSeries();
     Context contexto;
 
     public AdaptadorInfoContactos(List<Suscripcion> suscripcionesContactos,Context contexto){
@@ -47,7 +48,10 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     public void onBindViewHolder(ContactosViewHolder holder, int position) {
         Suscripcion suscripcion = suscripcionesContactos.get(position);
         holder.nombreSerie.setText(suscripcion.getSerie());
-        holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
+       // holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
+        Glide.with(contexto)
+                .load(suscripcion.getImagen())
+                .into(holder.avatarSerie);
         //AL TEXTVIEW NOTA LE APLICAMOS LA NOTA QUE EL USUARIO ELEGIDO LE HA PUESTO SOBRE 10
         float notaSobreDiez=(suscripcion.getEstrellasUsuario()*10)/5;
         String nota=String.valueOf(notaSobreDiez);

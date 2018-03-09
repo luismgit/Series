@@ -4,7 +4,7 @@ package com.example.luis.series.Objetos;
 public class Series {
 
     String nombre;
-    int imagen;
+    String imagen;
     Long likes;
     String web;
     Float estrellas;
@@ -12,7 +12,7 @@ public class Series {
     public Series(){
 
     }
-    public Series(String nombre,int imagen,Long likes,String web,Float estrellas){
+    public Series(String nombre,String imagen,Long likes,String web,Float estrellas){
         this.nombre=nombre;
         this.imagen=imagen;
         this.likes=likes;
@@ -44,11 +44,11 @@ public class Series {
         this.likes = likes;
     }
 
-    public int getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(int imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 

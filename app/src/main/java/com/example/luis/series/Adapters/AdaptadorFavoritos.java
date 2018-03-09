@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
@@ -40,7 +41,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     public List<Suscripcion> suscripciones;
     boolean flag=false;
     private Context mContext;
-    private int [] iconos = Imagenes.getIconosSeries();
+    //private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorFavoritos(List<Suscripcion> suscripciones,Context context){
         this.suscripciones=suscripciones;
@@ -61,7 +62,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
         Suscripcion suscripcion = suscripciones.get(position);
         holder.textViewNombre.setText(suscripcion.getSerie());
-        holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
+       // holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
+        Glide.with(mContext)
+                .load(suscripcion.getImagen())
+                .into(holder.imagenSerie);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.ratingBarFavoritos.setAnimation(holder.myRotation);
         holder.setOnclickListener();

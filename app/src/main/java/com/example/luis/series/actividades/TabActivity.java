@@ -115,7 +115,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         listaFondos=new ArrayList<>();
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
         FirebaseDatabase datab = FirebaseDatabase.getInstance();
-        datab.getReference(FirebaseReferences.COMMON).child("fondos_series").addListenerForSingleValueEvent(new ValueEventListener() {
+        datab.getReference(FirebaseReferences.COMMON).child(FirebaseReferences.FONDOS_SERIES).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot:

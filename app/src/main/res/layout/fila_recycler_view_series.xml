@@ -14,7 +14,7 @@
         android:layout_height="100dp" 
         android:layout_alignParentLeft="true"
         android:id="@+id/imagenSerie"
-        android:src="@drawable/breaking"
+
         />
     <TextView
         android:layout_width="wrap_content"

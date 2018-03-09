@@ -24,4 +24,5 @@ public class FirebaseReferences {
     final public static String PASSWORD_AYUDA="passwordAyuda";
     final public static String COMMON="common";
     final public static String AVATAR="avatar";
+    final public static String FONDOS_SERIES="fondos_series";
 }

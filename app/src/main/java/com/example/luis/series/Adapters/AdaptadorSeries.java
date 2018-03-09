@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Series;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.Objetos.Usuario;
@@ -43,7 +44,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     List<Series> series;
     private Context mContext;
-    private int [] iconos = Imagenes.getIconosSeries();
+    //private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorSeries(List<Series> series,Context mContext) {
         this.series = series;
@@ -61,7 +62,10 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
         Series serie = series.get(position);
         holder.textViewNombre.setText(serie.getNombre());
-        holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
+        Glide.with(mContext)
+                .load(serie.getImagen())
+                .into(holder.iconoSerie);
+       // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
         holder.setOnclickListener();
@@ -90,7 +94,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         RelativeLayout relativeLayout;
         FirebaseDatabase database;
         DatabaseReference rootRef;
-        int imagenSuscripcion;
+        String imagenSuscripcion;
         long suscripciones;
         boolean repetidoFavorito;
 

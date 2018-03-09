@@ -7,14 +7,14 @@ public class Suscripcion {
     String serie;
     Float estrellasUsuario;
     String telefono;
-    int imagen;
+    String imagen;
     String tlf_serie;
 
     public Suscripcion(){
 
     }
 
-    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,int imagen,String tlf_serie) {
+    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,String imagen,String tlf_serie) {
         this.idUsuario = idUsuario;
         this.serie = serie;
         this.estrellasUsuario = estrellasUsuario;
@@ -39,11 +39,11 @@ public class Suscripcion {
         this.telefono = telefono;
     }
 
-    public int getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(int imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
