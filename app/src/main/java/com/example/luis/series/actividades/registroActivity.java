@@ -1,9 +1,15 @@
 package com.example.luis.series.actividades;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,17 +27,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 import com.example.luis.series.utilidades.Utilities;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,10 +62,17 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     private int [] iconos;
     private static final int LISTA_ICONOS=1;
     private boolean error=false;
+    private StorageReference refStorage;
+    private static final int GALLERY_INTENT=1;
+    private static final int CAMERA_INTENT=2;
+    StorageReference filePath;
+    Uri uri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro_activity);
+        refStorage= FirebaseStorage.getInstance().getReference();
         iconos= Imagenes.getAvataresUsuarios();
         avatarIcono=findViewById(R.id.avatarIcono);
         avatarIcono.setImageResource(iconos[0]);
@@ -113,39 +131,60 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
     public void seleccionarAvatar(View view) {
 
-        Intent intent = new Intent(this,ListaIconos.class);
-        startActivityForResult(intent,LISTA_ICONOS);
+        final CharSequence[] items = {"Cámara","Galería","Cancelar"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(registroActivity.this);
+        builder.setTitle("Selecciona un avatar");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String opcion= (String) items[i];
+                switch (opcion){
+
+                    case "Cámara":
+                        Log.i("perfil","Selecciona camara");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent,CAMERA_INTENT);
+                        break;
+
+                    case "Galería":
+                        Log.i("perfil","Selecciona galeria");
+                        Intent intent1=new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent1.setType("image/*");
+                        startActivityForResult(intent1.createChooser(intent1,"Selecciona foto"),GALLERY_INTENT);
+                        break;
+
+                    case "Cancelar":
+                        dialogInterface.dismiss();
+                        break;
+                }
+
+            }
+        });
+        builder.show();
+
     }
 
-    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA ListaIconos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
-            //COMPROBAMOS QUE VIENE DE ListaIconos
-            case LISTA_ICONOS:
+        if(resultCode== Activity.RESULT_OK){
 
-                //SI LOS DATOS NO SON NULOS
-                if(data != null && resultCode == RESULT_OK){
-                    Log.i("OnActivityResult","Numero de icono -> " + data.getIntExtra("ICONOSELECCIONADO",-1));
+            if(requestCode==CAMERA_INTENT){
 
-                    //GUARDAMOS EN numIcono EL NºDE AVATAR(VISTA) SELECCIONADA
-                    int numIcono = data.getIntExtra(Common.ICONOSELECCIONADO,-1);
-                    if(numIcono==-1){
-                        //SI NO HA SELECCIONADO NINGÚN AVATAR PONEMOS EN PANTALLA EL AVATAR SELECCIONADO EN UNA HIPOTÉTICA ANTERIOR VEZ
-                        avatarIcono.setImageResource(iconos[iconoSeleccionado]);
-                    }else{
-                        //SI SE HA SELECCIONADO UN AVATAR, ACTUALIZA LA VARIABLE iconoSeleccionado Y LA PONEMOS EN PANTALLA
-                        iconoSeleccionado=numIcono;
-                        avatarIcono.setImageResource(iconos[iconoSeleccionado]);
-                    }
+                Bundle bundle = data.getExtras();
+                final Bitmap bmp = (Bitmap) bundle.get("data");
+                avatarIcono.setImageBitmap(bmp);
 
-                }else{
-                    avatarIcono.setImageResource(iconos[0]);
-                }
-                break;
+            }else if(requestCode==GALLERY_INTENT){
+                Log.i("perfil","requestCode==GALLERY_INTENT");
+                Uri imagenSeleccionada = data.getData();
+                Log.i("perfil","Uri -> " + imagenSeleccionada.toString());
+                avatarIcono.setImageURI(imagenSeleccionada);
+
+            }
         }
     }
+
     private class HiloRegistro extends AsyncTask<Void,Void,Void>{
 
         Animation animation;
@@ -183,9 +222,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             //SI EL USUARIO NO SELECCIONA NINGUN ICONO SELECCIONAMOS EL DE POR DEFECTO
-             if(iconoSeleccionado == -1){
+        /*     if(iconoSeleccionado == -1){
             iconoSeleccionado=0;
-        }
+        }*/
 
         //HACEMOS TODAS LAS COMPROBACIONES DE NICK Y EMAIL Y LES QUITAMOS POSIBLES ESPACIOS
         textViewError.setText("");

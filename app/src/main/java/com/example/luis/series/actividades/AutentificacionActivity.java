@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaCas;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,6 +71,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 
 public class AutentificacionActivity extends AppCompatActivity  implements TextView.OnEditorActionListener{
 
@@ -84,6 +92,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     String phoneNumber;
     ProgressBar progressBarCircular;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private static final int PERMISSIONS_REQUEST_WRITE = 200;
+    private static final int PERMISSIONS_REQUEST_READ = 400;
+    private static final int PERMISSIONS_REQUEST_CAMERA = 500;
     private boolean registroCerrado;
     TextView ayudaTexto;
     String emailAyuda;
@@ -366,25 +377,95 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     private void pedirPermisos() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+
+        //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+        //      requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+        // }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if ((checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED) &&
+                    (checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) &&
+                    (checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) &&
+                    (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)) {
+
+            }
+
+            if ((shouldShowRequestPermissionRationale(CAMERA)) ||
+                    (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) ||
+                    (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) ||
+                    (shouldShowRequestPermissionRationale(READ_CONTACTS))) {
+
+                cargarDialogoReacomendacion();
+            }else{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA,READ_EXTERNAL_STORAGE,READ_CONTACTS},100);
+                }
+            }
+
+
         }
     }
 
     //MÉTODO QUE RECOGE CUANDO EL USUARIO ACEPTA O NO LOS PERMISOS DE LA APP
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                pedirPermisos();
-            } else {
-                Toast.makeText(this, R.string.perm_no_aceptados, Toast.LENGTH_SHORT).show();
-                finish();
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode==100){
+            if(grantResults.length==4 && grantResults[0]==PackageManager.PERMISSION_GRANTED
+                    && grantResults[1]==PackageManager.PERMISSION_GRANTED
+                     && grantResults[2]==PackageManager.PERMISSION_GRANTED
+                    && grantResults[3]==PackageManager.PERMISSION_GRANTED){
+
+            }else{
+                solicitarPermisosManual();
             }
         }
     }
+
+    private void solicitarPermisosManual() {
+       final CharSequence[] opciones ={"si","no"};
+       final AlertDialog.Builder alertOpciones = new AlertDialog.Builder(AutentificacionActivity.this);
+       alertOpciones.setTitle("Desea configurar los permisos de forma manual?");
+       alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialogInterface, int i) {
+
+               if(opciones[i].equals("si")){
+                   Intent intent=new Intent();
+                   intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                   Uri uri = Uri.fromParts("package",getPackageName(),null);
+                   intent.setData(uri);
+                   startActivity(intent);
+               }else{
+                   Toast.makeText(getApplicationContext(),"La aplicación no puede seguir sin estos permisos",Toast.LENGTH_LONG).show();
+                   dialogInterface.dismiss();
+                   finish();
+               }
+           }
+       });
+       alertOpciones.show();
+    }
+
+    private void cargarDialogoReacomendacion() {
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(AutentificacionActivity.this);
+        dialogo.setTitle("Permisos desactivados");
+        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la aplicación");
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA,READ_EXTERNAL_STORAGE,READ_CONTACTS},100);
+                }
+            }
+        });
+        dialogo.show();
+
+    }
+
 
     public static int getFirstTimeRun(Context contexto) {
         SharedPreferences sp = contexto.getSharedPreferences(Common.MYAPP, 0);
