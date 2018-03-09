@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
@@ -28,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.fragments.FavoritosFragment;
@@ -44,7 +48,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -79,8 +87,11 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     EditText correoUsuAyuda;
     String emailAyuda;
     String passwordAyuda;
+    List<String> listaFondos;
     private static final int LISTA_ICONOS=1;
     private static final int LISTA_FONDOS=2;
+     int contador=0;
+     int aleatorio=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,16 +106,43 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        //CARGAMOS EN EL ARRAY DE FONDOS TODOS LOS FONDOS DE PANTALLA DE DRAWABLE
-        fondos= Imagenes.getCambiaFondos();
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         fondo=findViewById(R.id.header);
+        fondo.setImageResource(R.drawable.series_back);
+
+
+        listaFondos=new ArrayList<>();
+        //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
+        FirebaseDatabase datab = FirebaseDatabase.getInstance();
+        datab.getReference(FirebaseReferences.COMMON).child("fondos_series").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:
+                        dataSnapshot.getChildren()){
+                    contador++;
+                    String uriFondo= (String) snapshot.getValue();
+                    listaFondos.add(uriFondo);
+                }
+                aleatorio=(int)Math.floor(Math.random()*((listaFondos.size())-0)+0);
+
+                //A TRAVÉS DE LA LIBRERIA GLIDE CARGAMOS CARGAMOS EL ENLACE DE FIREBASE STORAGE EN EL IMAGEVIEW
+                Glide.with(TabActivity.this)
+                        .load(listaFondos.get(aleatorio))
+                        .into(fondo);
+                Imagenes.setListaFondos(listaFondos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         //SELECCIONAMOS UN FONDO DE PANTALLA ALEATORIO Y LO APLICAMOS
-        int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
-        fondo.setImageResource(fondos[fondoAleatorio]);
+        //int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
+        //fondo.setImageResource(fondos[fondoAleatorio]);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         Log.i("actividades","OnCreate TabActivity");
@@ -329,7 +367,10 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     int numFondo = data.getIntExtra(Common.FONDO_SELECCIONADO,-1);
                     Log.i("OnActivityResult","Numero de icono -> " + numFondo);
                     if(numFondo != -1){
-                        fondo.setImageResource(fondos[numFondo]);
+                        //fondo.setImageResource(fondos[numFondo]);
+                        Glide.with(TabActivity.this)
+                                .load(listaFondos.get(numFondo))
+                                .into(fondo);
                     }
 
                 }

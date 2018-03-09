@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaCas;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Message;
 import android.os.StrictMode;
@@ -31,12 +32,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.BuildConfig;
 import com.example.luis.series.R;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
+import com.example.luis.series.utilidades.Imagenes;
 import com.example.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +55,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -86,6 +91,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     Session session;
     EditText editTextMensajeAyuda;
     EditText correoUsuAyuda;
+    int contador=0;
+    List<String> listaFondos;
     @Override
     protected void onStart() {
         super.onStart();
@@ -97,6 +104,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.autentificacion_activity);
+        listaFondos=new ArrayList<>();
+
         botonSMS=findViewById(R.id.botonSMS);
         ayudaTexto=findViewById(R.id.ayudaTexto);
         String mystring=new String("Aquí");
@@ -193,7 +202,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     //MÉTODO QUE LANZA UN INTENT A LA PANTALLA DE PRINCIPAL
     private void irAPrincipal() {
-        Intent intent = new Intent(this, TabActivity.class);
+        Intent intent = new Intent(AutentificacionActivity.this, TabActivity.class);
         startActivity(intent);
     }
 

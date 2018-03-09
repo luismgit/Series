@@ -1,7 +1,13 @@
 package com.example.luis.series.utilidades;
 
 
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.ImageView;
+
 import com.example.luis.series.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Imagenes {
 
@@ -37,27 +43,16 @@ public class Imagenes {
                     R.drawable.avatar12,
                     R.drawable.avatar13};
 
-
-    private static int [] cambiaFondos =new int[]
-            {  R.drawable.black_mod,
-                    R.drawable.big,
-                    R.drawable.game_mod,
-                    R.drawable.dexter_mod,
-                    R.drawable.house_mod,
-                    R.drawable.lost_mod,
-                    R.drawable.narcos_mod,
-                    R.drawable.breaking_mod,
-                    R.drawable.sons_mod,
-                    R.drawable.walking_mod,
-                    R.drawable.simpson_mod,
-                    R.drawable.stranger_mod,
-                    R.drawable.vikings_mod,
-                    R.drawable.west_back
-            };
+    private static List<String> listaFondos =new ArrayList<>();
 
 
+    public static List<String> getListaFondos() {
+        return listaFondos;
+    }
 
-
+    public static void setListaFondos(List<String> listaFondos) {
+        Imagenes.listaFondos = listaFondos;
+    }
 
     public static int [] getIconosSeries(){
         return iconos;
@@ -65,7 +60,5 @@ public class Imagenes {
     public static int [] getAvataresUsuarios(){
         return avatares;
     }
-    public static int[] getCambiaFondos() {
-        return cambiaFondos;
-    }
+
 }
