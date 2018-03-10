@@ -2,7 +2,7 @@ package com.example.luis.series.Objetos;
 
 
 public class Usuario {
-    int avatar;
+    String  avatar;
     String nick;
     String correo;
     String telefono;
@@ -12,7 +12,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nick,String telefono,String correo,int avatar,String conectado) {
+    public Usuario(String nick,String telefono,String correo,String avatar,String conectado) {
         this.correo = correo;
         this.telefono=telefono;
         this.nick=nick;
@@ -47,11 +47,11 @@ public class Usuario {
         return nick;
     }
 
-    public int getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(int avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

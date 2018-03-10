@@ -9,12 +9,12 @@
     android:id="@+id/relativeLayout"
 >
     
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp" 
-        android:layout_alignParentLeft="true"
-        android:id="@+id/imagenSerie"
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:id="@+id/imagenSerie"
+        android:layout_alignParentLeft="true"
         />
     <TextView
         android:layout_width="wrap_content"

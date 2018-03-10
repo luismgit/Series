@@ -64,6 +64,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         holder.textViewNombre.setText(serie.getNombre());
         Glide.with(mContext)
                 .load(serie.getImagen())
+                .fitCenter()
+                .centerCrop()
                 .into(holder.iconoSerie);
        // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());

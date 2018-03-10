@@ -32,7 +32,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_avatar"
+        android:text="@string/selecciona_una_foto_de_perfil"
         android:onClick="seleccionarAvatar"
         android:id="@+id/botonAvatar"
         android:textColor="#bab7b7"
@@ -42,13 +42,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:id="@+id/avatarIcono"
-            android:layout_centerInParent="true"
-            android:layout_margin="15dp"
-            />
+
+          <de.hdodenhof.circleimageview.CircleImageView
+              android:layout_width="130dp"
+              android:layout_height="130dp"
+              android:id="@+id/avatarIcono"
+              android:layout_centerInParent="true"
+              android:layout_margin="15dp"
+
+              />
 
     </RelativeLayout>
 

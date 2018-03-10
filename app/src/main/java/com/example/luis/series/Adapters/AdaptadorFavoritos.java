@@ -65,6 +65,8 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
        // holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(mContext)
                 .load(suscripcion.getImagen())
+                .fitCenter()
+                .centerCrop()
                 .into(holder.imagenSerie);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.ratingBarFavoritos.setAnimation(holder.myRotation);

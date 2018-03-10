@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Adapters.AdaptadorInfoContactos;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
@@ -52,7 +53,12 @@ private int [] avatares;
         nombreUsuario.setText(getIntent().getStringExtra(Common.CONTACTO));
 
         //LE ASIGNAMOS SU AVATAR
-        avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);
+        //avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);
+        Glide.with(this)
+                .load(getIntent().getStringExtra(Common.AVATAR))
+                .fitCenter()
+                .centerCrop()
+                .into(avatarUsuario);
 
         //RECOGEMOS EL TELÉFONO DEL USUARIO SELECCIONADO
         telefonoUsuarioSeleccionado=getIntent().getStringExtra(Common.TELEFONO);

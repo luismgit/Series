@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.actividades.InfoContactoActivity;
@@ -44,7 +46,10 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         Usuario usuario = usuarios.get(position);
 
         holder.textViewNick.setText(usuario.getNick());
-        holder.avatar.setImageResource(iconos[usuario.getAvatar()]);
+        Log.i("avatar","-> " + usuario.getAvatar());
+        Glide.with(context)
+                .load(usuario.getAvatar())
+                .into(holder.avatar);
         if(usuario.getConectado().equals("online")){
             holder.estado.setTextColor(Color.GREEN);
         }else{
