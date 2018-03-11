@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.transcode.BitmapBytesTranscoder;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
@@ -147,7 +148,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         super.onBackPressed();
     }
 
-    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
+    //MÉTODO QUE ABRIRÁ LA UN DIÁLOGO PARA SELECCIONAR DE DONDE QUEREMOS TOMAR LA FOTO
     public void seleccionarAvatar(View view) {
 
         final CharSequence[] items = {"Cámara","Galería","Cancelar"};
@@ -199,10 +200,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                 avatarIcono.setImageBitmap(bmp);
                 stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                /*Glide.with(this)
-                        .load(stream.toByteArray())
-                        .asBitmap()
-                        .into(avatarIcono);*/
 
 
             }else if(requestCode==GALLERY_INTENT){
@@ -218,18 +215,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         .centerCrop()
                         .fitCenter()
                         .into(avatarIcono);
-                BitmapDrawable bitmapDrawable = ((BitmapDrawable)avatarIcono.getDrawable());
-                Bitmap bitmap;
-                if(bitmapDrawable==null){
-                    avatarIcono.buildDrawingCache();
-                    bitmap=avatarIcono.getDrawingCache();
-                    avatarIcono.buildDrawingCache();
-                }else{
-                    bitmap=bitmapDrawable.getBitmap();
-                }
-
-                stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             }
         }
     }
@@ -270,10 +255,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            //SI EL USUARIO NO SELECCIONA NINGUN ICONO SELECCIONAMOS EL DE POR DEFECTO
-        /*     if(iconoSeleccionado == -1){
-            iconoSeleccionado=0;
-        }*/
+
 
         //HACEMOS TODAS LAS COMPROBACIONES DE NICK Y EMAIL Y LES QUITAMOS POSIBLES ESPACIOS
          textViewError.setText("");
@@ -326,16 +308,21 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
 
                          } else if (galeria) {
                              Log.i("perfil ", "entra galeria");
-                             byte[] data = stream.toByteArray();
-                             UploadTask uploadTask = filePath.putBytes(data);
-                             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                 @Override
-                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                     enlaceFotoFirebasde=taskSnapshot.getDownloadUrl();
-                                     Log.i("perfil", "foto subida de galeria con el enlace " + enlaceFotoFirebasde.toString());
-                                     registro();
-                                 }
-                             });
+                           avatarIcono.setDrawingCacheEnabled(true);
+                           avatarIcono.buildDrawingCache();
+                           Bitmap bitmap = avatarIcono.getDrawingCache();
+                           ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                           bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                           byte [] data = byteArrayOutputStream.toByteArray();
+                           UploadTask uploadTask = filePath.putBytes(data);
+                           uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                               @Override
+                               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                   enlaceFotoFirebasde=taskSnapshot.getDownloadUrl();
+                                   registro();
+                               }
+                           });
+
                          }else{
                              enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries.png?alt=media&token=1e9f324b-fd5d-4f8e-97a4-bca0fffe92b5");
                              registro();

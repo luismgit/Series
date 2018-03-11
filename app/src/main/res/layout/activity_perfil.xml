@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.luis.series.actividades.Perfil"
+    android:background="@drawable/degradado_registro">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:id="@+id/fotoPerfil"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="30dp"
+
+            />
+
+
+
+
+
+</RelativeLayout>

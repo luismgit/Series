@@ -327,14 +327,14 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     }
 
 
-    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE ListaIconos ESPERANDO UN RESULTADO
+    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE "" ESPERANDO UN RESULTADO
     public void seleccionarAvatar() {
 
-        Intent intent = new Intent(this,ListaIconos.class);
-        startActivityForResult(intent,LISTA_ICONOS);
+       // Intent intent = new Intent(this,.class);
+        //startActivityForResult(intent,LISTA_ICONOS);
     }
 
-    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA ListaIconos o de ListaFondos
+    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA "" o de ListaFondos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

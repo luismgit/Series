@@ -25,7 +25,6 @@ import java.util.List;
 public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.UsuariosviewHolder>{
 
     List<Usuario> usuarios=new ArrayList<>();
-    private int [] iconos = Imagenes.getAvataresUsuarios();
     Context context;
     public AdaptadorContactos(List usuarios, Context context) {
         this.usuarios = usuarios;
