@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.fragments.FavoritosFragment;
@@ -88,8 +89,10 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     String emailAyuda;
     String passwordAyuda;
     List<String> listaFondos;
-    private static final int LISTA_ICONOS=1;
+    private static final int PERFIL=1;
     private static final int LISTA_FONDOS=2;
+    public static final String EMAIL_USUARIO="emailUsuario";
+    public static final String FOTO_USUARIO="fotoUsuario";
      int contador=0;
      int aleatorio=0;
     @Override
@@ -329,9 +332,32 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE "" ESPERANDO UN RESULTADO
     public void seleccionarAvatar() {
+        FirebaseDatabase data = FirebaseDatabase.getInstance();
+        final DatabaseReference root = data.getReference();
+        root.child(FirebaseReferences.USUARIOS_REFERENCE)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot:
+                                dataSnapshot.getChildren()){
+                            Usuario user = snapshot.getValue(Usuario.class);
+                            if(user.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                                Log.i("userem","email -> " + user.getCorreo());
+                                Intent intent = new Intent(TabActivity.this,Perfil.class);
+                                intent.putExtra(EMAIL_USUARIO,user.getCorreo());
+                                intent.putExtra(FOTO_USUARIO,user.getAvatar());
+                                startActivityForResult(intent,PERFIL);
+                            }
 
-       // Intent intent = new Intent(this,.class);
-        //startActivityForResult(intent,LISTA_ICONOS);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA "" o de ListaFondos
@@ -341,7 +367,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
         switch(requestCode){
             //SI VIENE DE LISTA ICONOS
-            case LISTA_ICONOS:
+            case PERFIL:
 
                 //SI LOS DATOS NO SON NULOS
                 if(data != null && resultCode == RESULT_OK){

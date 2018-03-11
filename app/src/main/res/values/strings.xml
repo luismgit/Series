@@ -53,6 +53,8 @@
     <string name="cambiar_avatar_usuario">Cambiar avatar usuario</string>
     <string name="mod_avatar">Avatar modificado correctamente</string>
     <string name="selecciona_una_foto_de_perfil">SELECCIONA UNA FOTO DE PERFIL</string>
+    <string name="mofificar">Mofificar</string>
+    <string name="modificar">modificar</string>
 
 
 </resources>
