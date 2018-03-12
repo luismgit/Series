@@ -28,7 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -191,10 +193,10 @@ public class ContactosFragment extends Fragment {
                         //SI SE CONECTA ESTABLECEMOS EL NODO 'conectado' A ONLINE,CUANDO SE DESCONECTE LO PASAMOS A OFFLINE
                         if(connected){
                             myConnectionsRef.setValue(FirebaseReferences.ONLINE);
-                            DatabaseReference con = myConnectionsRef;
-                            con.onDisconnect().setValue(FirebaseReferences.OFFLINE);
+                           // DatabaseReference con = myConnectionsRef;
+                            myConnectionsRef.onDisconnect().setValue(getFecha());
                             //lastOnlineRef.onDisconnect().setValue(ServerValue.TIMESTAMP);
-                            //con.setValue(Boolean.TRUE);
+
                         }
                     }
 
@@ -214,6 +216,12 @@ public class ContactosFragment extends Fragment {
 
 
         return  vista;
+    }
+
+    private String getFecha(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
+        return sdf.format(date);
     }
 
     private void loadContactFromTlf() {

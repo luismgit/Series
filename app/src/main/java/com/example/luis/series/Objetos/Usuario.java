@@ -9,7 +9,7 @@ public class Usuario implements Serializable{
     String correo;
     String telefono;
     String conectado;
-    //String ultimaconexion;
+   // String ultimaconexion;
 
     public Usuario() {
     }
@@ -21,6 +21,7 @@ public class Usuario implements Serializable{
         this.avatar=avatar;
         this.conectado=conectado;
         //this.ultimaconexion=ultimaconexion;
+
     }
 
     public String getConectado() {

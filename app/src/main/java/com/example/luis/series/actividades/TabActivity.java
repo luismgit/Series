@@ -43,6 +43,7 @@ import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
 import com.example.luis.series.utilidades.Utilities;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -329,6 +330,27 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         startActivityForResult(intent,LISTA_FONDOS);
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        if (FirebaseDatabase.getInstance() != null)
+        {
+            FirebaseDatabase.getInstance().goOnline();
+        }
+    }
+
+    @Override
+    public void onPause() {
+
+        super.onPause();
+
+        if(FirebaseDatabase.getInstance()!=null)
+        {
+            FirebaseDatabase.getInstance().goOffline();
+        }
+    }
 
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE "" ESPERANDO UN RESULTADO
     public void seleccionarAvatar() {

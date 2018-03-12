@@ -22,7 +22,9 @@ import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.UsuariosviewHolder>{
@@ -55,12 +57,16 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
                 .into(holder.avatar);
         if(usuario.getConectado().equals("online")){
             holder.estado.setTextColor(Color.GREEN);
+            holder.estado.setText("En línea");
         }else{
             holder.estado.setTextColor(Color.BLACK);
+            holder.estado.setText(getMensajeUltimaConexion(usuario.getConectado()));
         }
-        holder.estado.setText(usuario.getConectado());
+
         holder.setOnclickListener();
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -121,5 +127,21 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             intent.putExtra(Common.TELEFONO,usuario.getTelefono());
             this.context.startActivity(intent);
         }
+    }
+
+    private String getMensajeUltimaConexion(String fechaConexion) {
+        String fechaActual=getFecha();
+        String fechaUltimaConexion=fechaConexion;
+        if(fechaActual.substring(0,4).equals(fechaUltimaConexion.substring(0,4))){
+            return "últ. vez hoy a las " + fechaUltimaConexion.substring(6,fechaUltimaConexion.length());
+        }else{
+            return "últ. vez " + fechaUltimaConexion;
+        }
+    }
+
+    private String getFecha(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
+        return sdf.format(date);
     }
 }
