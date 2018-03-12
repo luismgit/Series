@@ -347,7 +347,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE);
+        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,"principiante", (long) 0);
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)

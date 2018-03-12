@@ -9,17 +9,21 @@ public class Usuario implements Serializable{
     String correo;
     String telefono;
     String conectado;
+    String nivel;
+    Long numSuscripciones;
    // String ultimaconexion;
 
     public Usuario() {
     }
 
-    public Usuario(String nick,String telefono,String correo,String avatar,String conectado) {
+    public Usuario(String nick,String telefono,String correo,String avatar,String conectado,String nivel,Long numSuscripciones) {
         this.correo = correo;
         this.telefono=telefono;
         this.nick=nick;
         this.avatar=avatar;
         this.conectado=conectado;
+        this.nivel=nivel;
+        this.numSuscripciones=numSuscripciones;
         //this.ultimaconexion=ultimaconexion;
 
     }
@@ -40,7 +44,21 @@ public class Usuario implements Serializable{
         this.ultimaconexion = ultimaconexion;
     }*/
 
+    public Long getNumSuscripciones() {
+        return numSuscripciones;
+    }
 
+    public void setNumSuscripciones(Long numSuscripciones) {
+        this.numSuscripciones = numSuscripciones;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
 
     public String getCorreo() {
         return correo;

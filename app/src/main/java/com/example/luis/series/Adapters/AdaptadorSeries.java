@@ -181,6 +181,33 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
+                                                                    final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child("suscripciones");
+                                                                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                            Long numSuscripciones= (Long) dataSnapshot.getValue();
+                                                                            numSuscripciones++;
+                                                                            String nivel;
+                                                                            if(numSuscripciones>=5 && numSuscripciones<10){
+                                                                                nivel="intermedio";
+                                                                            }else if(numSuscripciones>=10){
+                                                                                nivel="avanzado";
+                                                                            }else{
+                                                                                nivel="principiante";
+                                                                            }
+
+                                                                            dataRef.setValue(numSuscripciones);
+                                                                            DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                                                    .child(ComunicarClaveUsuarioActual.getClave()).child("nivel");
+                                                                            datRef.setValue(nivel);
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
                                                                     Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
                                                                 }
                                                             }

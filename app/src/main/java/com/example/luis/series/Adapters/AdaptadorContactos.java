@@ -21,6 +21,8 @@ import com.example.luis.series.actividades.InfoContactoActivity;
 import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +64,17 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             holder.estado.setTextColor(Color.BLACK);
             holder.estado.setText(getMensajeUltimaConexion(usuario.getConectado()));
         }
-
+        switch (usuario.getNivel()){
+            case "principiante":
+                holder.medalla.setImageResource(R.drawable.bronce_mod);
+                break;
+            case "intermedio":
+                holder.medalla.setImageResource(R.drawable.plata_mod);
+                break;
+            case "avanzado":
+                holder.medalla.setImageResource(R.drawable.oro_mod);
+                break;
+        }
         holder.setOnclickListener();
     }
 
@@ -78,6 +90,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         TextView textViewNick;
         ImageView avatar;
         TextView estado;
+        ImageView medalla;
         List<Usuario> usuarios = new ArrayList<>();
         Context context;
         Dialog miDialogo;
@@ -90,6 +103,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             textViewNick=itemView.findViewById(R.id.nombre);
             avatar=itemView.findViewById(R.id.avatarImagen);
             estado=itemView.findViewById(R.id.estado);
+            medalla=itemView.findViewById(R.id.imagenMedalla);
         }
 
         public void setOnclickListener(){

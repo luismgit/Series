@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.luis.series.ComunicarCorreoUsuario;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.fragments.ContactosFragment;
@@ -171,9 +172,25 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         root.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild(FirebaseReferences.PHONE_REFERENCE).equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                for (final DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                     String claveUsuarioActual = childSnapshot.getKey();
+                    Log.i("CorreoEl",claveUsuarioActual);
                     ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
+                    DatabaseReference dref=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual)
+                            .child(FirebaseReferences.CORREO_USUARIO);
+                    dref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                String correo= (String) dataSnapshot.getValue();
+                            ComunicarCorreoUsuario.setCorreoUsuario(correo);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -244,7 +261,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             builder.setView(miVista);
             editTextMensajeAyuda=miVista.findViewById(R.id.editTextAyuda);
             correoUsuAyuda=miVista.findViewById(R.id.userEmail);
-
+            correoUsuAyuda.setText(ComunicarCorreoUsuario.getCorreoUsuario());
 
             builder.setPositiveButton(R.string.btn_enviar_ayuda, new DialogInterface.OnClickListener() {
                 @Override
@@ -352,7 +369,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         }
     }
 
-    //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE AVATARES DE "" ESPERANDO UN RESULTADO
+    //MÉTODO QUE ABRIRÁ LA PANTALLA DE CAMBIO DE PERFIL
     public void seleccionarAvatar() {
         FirebaseDatabase data = FirebaseDatabase.getInstance();
         final DatabaseReference root = data.getReference();
@@ -383,7 +400,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     }
 
-    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA "" o de ListaFondos
+    //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA DE ListaFondos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

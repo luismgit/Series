@@ -227,6 +227,33 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                                     Log.i("Clave","clave Serie -> " + claveSerie);
                                                     Log.i("Clave","--------------------------------------------------");
                                                     database.getReference(FirebaseReferences.SUSCRIPCIONES).child(claveSerie).removeValue();
+                                                    final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                            .child(ComunicarClaveUsuarioActual.getClave()).child("suscripciones");
+                                                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            Long numSuscripciones= (Long) dataSnapshot.getValue();
+                                                            numSuscripciones--;
+                                                            String nivel;
+                                                            if(numSuscripciones>=5 && numSuscripciones<10){
+                                                                nivel="intermedio";
+                                                            }else if(numSuscripciones>=10){
+                                                                nivel="avanzado";
+                                                            }else{
+                                                                nivel="principiante";
+                                                            }
+
+                                                            dataRef.setValue(numSuscripciones);
+                                                            DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                                    .child(ComunicarClaveUsuarioActual.getClave()).child("nivel");
+                                                            datRef.setValue(nivel);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                 }
 
                                             }

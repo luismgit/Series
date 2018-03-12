@@ -15,7 +15,7 @@
     <item
         android:id="@+id/item_cambiar_avatar"
         android:orderInCategory="100"
-        android:title="@string/cambiar_avatar_usuario"
+        android:title="Perfil"
         app:showAsAction="never" />
 
 
