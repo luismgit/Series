@@ -344,9 +344,10 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                             if(user.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
                                 Log.i("userem","email -> " + user.getCorreo());
                                 Intent intent = new Intent(TabActivity.this,Perfil.class);
-                                intent.putExtra(EMAIL_USUARIO,user.getCorreo());
-                                intent.putExtra(FOTO_USUARIO,user.getAvatar());
-                                startActivityForResult(intent,PERFIL);
+                                //intent.putExtra(EMAIL_USUARIO,user.getCorreo());
+                                //intent.putExtra(FOTO_USUARIO,user.getAvatar());
+                                intent.putExtra("usuario",user);
+                                startActivity(intent);
                             }
 
                         }
@@ -366,26 +367,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode){
-            //SI VIENE DE LISTA ICONOS
-            case PERFIL:
-
-                //SI LOS DATOS NO SON NULOS
-                if(data != null && resultCode == RESULT_OK){
-
-                    //GUARDAMOS EN numIcono EL NºDE AVATAR(VISTA) SELECCIONADA
-                    int numIcono = data.getIntExtra(Common.ICONOSELECCIONADO,-1);
-                    if(numIcono == -1){
-                        //SI NO HA SELECCIONADO NINGÚN AVATAR ,NADA
-                    }else{
-                        //ACTUALIZAMOS LA REFERENCIA AVATAR DE FIREBASE DEL USUARIO ACTUAL
-                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                        DatabaseReference rootRef = firebaseDatabase.getReference();
-                        rootRef.child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.AVATAR).setValue(numIcono);
-                        Toast.makeText(this.getApplicationContext(), R.string.mod_avatar,Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-                break;
 
             //SI VIENE DE LISTA FONDOS CAMBIAMOS LA IMAGEN DE FONDO QUE NOS VIENE DEVUELTA.
             case LISTA_FONDOS:

@@ -32,19 +32,52 @@
             android:layout_marginRight="15dp"
             android:inputType="textEmailAddress"
             android:id="@+id/editTextEmail"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="5dp"
 
             />
-        <Button
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/modificar"
-            android:background="@drawable/degradado_boton"
-            android:id="@+id/botonModificar"
-            android:textColor="#bab7b7"
-            android:textSize="17sp"
             android:layout_below="@id/editTextEmail"
-            android:layout_marginTop="80dp"/>
+            android:orientation="horizontal"
+            >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginHorizontal="30dp">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/modificar"
+                            android:background="@drawable/degradado_boton"
+                            android:id="@+id/botonModificar"
+                            android:textColor="#bab7b7"
+                            android:textSize="17sp"
+                            android:onClick="modificarPerfil"
+                            android:paddingHorizontal="10dp"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Volver"
+                            android:background="@drawable/degradado_boton"
+                            android:id="@+id/botonVolver"
+                            android:textColor="#bab7b7"
+                            android:textSize="17sp"
+                            android:onClick="volver"
+                            android:layout_alignParentRight="true"
+                            android:paddingHorizontal="23dp"
+                            />
+
+
+                </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+
 
 
 

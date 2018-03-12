@@ -1,7 +1,9 @@
 package com.example.luis.series.Objetos;
 
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable{
     String  avatar;
     String nick;
     String correo;

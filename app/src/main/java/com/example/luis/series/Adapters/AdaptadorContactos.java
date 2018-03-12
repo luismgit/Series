@@ -1,9 +1,11 @@
 package com.example.luis.series.Adapters;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.actividades.InfoContactoActivity;
+import com.example.luis.series.fragments.ContactosFragment;
 import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.Imagenes;
 
@@ -26,6 +29,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
 
     List<Usuario> usuarios=new ArrayList<>();
     Context context;
+
     public AdaptadorContactos(List usuarios, Context context) {
         this.usuarios = usuarios;
         this.context=context;
@@ -55,7 +59,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             holder.estado.setTextColor(Color.BLACK);
         }
         holder.estado.setText(usuario.getConectado());
-
+        holder.setOnclickListener();
     }
 
     @Override
@@ -70,6 +74,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         TextView estado;
         List<Usuario> usuarios = new ArrayList<>();
         Context context;
+        Dialog miDialogo;
 
         public UsuariosviewHolder(View itemView, Context context, List usuarios) {
             super(itemView);
@@ -80,6 +85,29 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             avatar=itemView.findViewById(R.id.avatarImagen);
             estado=itemView.findViewById(R.id.estado);
         }
+
+        public void setOnclickListener(){
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    miDialogo=new Dialog(context);
+                    ImageView imagen;
+                    miDialogo.setContentView(R.layout.image_pop_up);
+                    imagen=miDialogo.findViewById(R.id.imagenAmpliada);
+                    int position = getAdapterPosition();
+                    Usuario usuario = usuarios.get(position);
+                    Glide.with(context)
+                            .load(usuario.getAvatar())
+                            .fitCenter()
+                            .centerCrop()
+                            .into(imagen);
+                    miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    miDialogo.show();
+                }
+            });
+        }
+
+
 
 
         //CUANDO SE PULSE UNA DE LAS VISTAS , LANZAMOS UN INTENT CON VARIOS PARÁMETROS PARA INICIAR LA ACTIVIDAD QUE MUESTRA LOS FAVORITOS DE CADA USUARIO
