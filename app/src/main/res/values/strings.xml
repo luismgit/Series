@@ -55,6 +55,15 @@
     <string name="selecciona_una_foto_de_perfil">SELECCIONA UNA FOTO DE PERFIL</string>
     <string name="mofificar">Mofificar</string>
     <string name="modificar">modificar</string>
+    <string name="camara">Cámara</string>
+    <string name="galeria">Galería</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="selec_accion">Selecciona una acción</string>
+    <string name="selec_app">Selecciona aplicación</string>
+    <string name="perfil_mod">Perfil modificado correctamente</string>
+    <string name="importante">Importante</string>
+    <string name="guardarcambios">¿Desea guardar los cambios?</string>
+    <string name="confirmar">Confirmar</string>
 
 
 </resources>

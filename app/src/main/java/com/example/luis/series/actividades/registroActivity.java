@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -67,29 +70,33 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
  private ProgressBar progressBar;
  private Button botonAvatar,botonRegistro;
     private ImageView avatarIcono;
-    private String claveUsuarioActual;
     private String nick,correo,phoneNumber;
-    private static final int LISTA_ICONOS=1;
     private boolean error=false;
     private StorageReference refStorage;
-    private static final int GALLERY_INTENT=1;
-    private static final int CAMERA_INTENT=2;
+    private static final int GALLERY_INTENT=4;
+    private static final int CAMERA_INTENT=5;
+    private static final int CAMARA=0;
+    private static final int GALERIA=1;
+    private static final int CANCELAR=2;
     StorageReference filePath;
     boolean camara=false;
     boolean galeria=false;
-    ByteArrayOutputStream stream;
     Uri imagenSeleccionada;
     Uri enlaceFotoFirebasde;
-    Uri file;
+    private  final String CARPETA_RAIZ="Series/";
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+"series";
+    String miPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro_activity);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         refStorage= FirebaseStorage.getInstance().getReference();
         avatarIcono=findViewById(R.id.avatarIcono);
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries.png?alt=media&token=1e9f324b-fd5d-4f8e-97a4-bca0fffe92b5")
+                .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
                 .into(avatarIcono);
         avatarIcono.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,31 +158,43 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     //MÉTODO QUE ABRIRÁ LA UN DIÁLOGO PARA SELECCIONAR DE DONDE QUEREMOS TOMAR LA FOTO
     public void seleccionarAvatar(View view) {
 
-        final CharSequence[] items = {"Cámara","Galería","Cancelar"};
+        final CharSequence[] items = {getString(R.string.camara),getString(R.string.galeria),getString(R.string.cancelar)};
         AlertDialog.Builder builder = new AlertDialog.Builder(registroActivity.this);
-        builder.setTitle("Selecciona un foto de perfil");
+        builder.setTitle(R.string.selec_accion);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String opcion= (String) items[i];
+                int opcion= i;
                 switch (opcion){
 
-                    case "Cámara":
+                    case CAMARA:
                         Log.i("perfil","Selecciona camara");
+                        File fileImagen = new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
+                        boolean creada=fileImagen.exists();
+                        String nombreImagen="";
+                        if(!creada){
+                            creada=fileImagen.mkdirs();
+                        }
+                        if(creada){
+                             nombreImagen=(System.currentTimeMillis()/1000)+".jpg";
+                        }
+                         miPath=Environment.getExternalStorageDirectory()+File.separator+RUTA_IMAGEN+File.separator+nombreImagen;
+                        File imagen = new File(miPath);
 
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(imagen));
                         startActivityForResult(intent,CAMERA_INTENT);
                         break;
 
-                    case "Galería":
+                    case GALERIA:
                         Log.i("perfil","Selecciona galeria");
                         Intent intent1=new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent1.setType("image/*");
-                        startActivityForResult(intent1.createChooser(intent1,"Selecciona foto"),GALLERY_INTENT);
+                        startActivityForResult(intent1.createChooser(intent1,getString(R.string.selec_app)),GALLERY_INTENT);
 
                         break;
 
-                    case "Cancelar":
+                    case CANCELAR:
                         dialogInterface.dismiss();
                         break;
                 }
@@ -194,13 +213,28 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
             if(requestCode==CAMERA_INTENT){
                 camara=true;
                 galeria=false;
-                Bundle bundle = data.getExtras();
+               /* Bundle bundle = data.getExtras();
                 final Bitmap bmp = (Bitmap) bundle.get("data");
                 Log.i("perfil","requestCode==CAMERA_INTENT");
                 avatarIcono.setImageBitmap(bmp);
                 stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);*/
+                MediaScannerConnection.scanFile(this, new String[]{miPath}, null,
+                        new MediaScannerConnection.OnScanCompletedListener() {
+                            @Override
+                            public void onScanCompleted(String s, Uri uri) {
+                                Log.i("Ruta de almacenamiento","Path -> " + miPath);
+                            }
+                        });
+                //Bitmap bitmap = BitmapFactory.decodeFile(miPath);
+                //avatarIcono.setImageBitmap(bitmap);
+                Glide.with(this)
+                        .load(miPath)
+                        .centerCrop()
+                        .fitCenter()
+                        .into(avatarIcono);
+                //stream = new ByteArrayOutputStream();
+                //bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
             }else if(requestCode==GALLERY_INTENT){
                 galeria=true;
@@ -295,7 +329,13 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                          Log.i("fecha -> ", new Date().toString());
                          if (camara) {
                              Log.i("perfil ", "entra camara");
-                             byte[] data = stream.toByteArray();
+                             //byte[] data = stream.toByteArray();
+                             avatarIcono.setDrawingCacheEnabled(true);
+                             avatarIcono.buildDrawingCache();
+                             Bitmap bitmap = avatarIcono.getDrawingCache();
+                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                             byte[] data = byteArrayOutputStream.toByteArray();
                              UploadTask uploadTask = filePath.putBytes(data);
                              uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                  @Override
@@ -324,7 +364,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                            });
 
                          }else{
-                             enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries.png?alt=media&token=1e9f324b-fd5d-4f8e-97a4-bca0fffe92b5");
+                             enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88");
                              registro();
                          }
 
