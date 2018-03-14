@@ -39,6 +39,7 @@ private int [] avatares;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_contacto);
+        FirebaseDatabase.getInstance().goOnline();
         nombreUsuario=findViewById(R.id.nombreContacto);
         avatarUsuario=findViewById(R.id.avatarContacto);
         sinFavoritos=findViewById(R.id.sinFavoritos);

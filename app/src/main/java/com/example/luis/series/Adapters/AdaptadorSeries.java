@@ -22,6 +22,7 @@ import com.example.luis.series.Objetos.Series;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
+import com.example.luis.series.actividades.ComentariosActivity;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
@@ -37,6 +38,7 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 
 import java.sql.Ref;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -44,11 +46,13 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     List<Series> series;
     private Context mContext;
+    private Hashtable<String,String> contactos;
     //private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorSeries(List<Series> series,Context mContext) {
         this.series = series;
         this.mContext=mContext;
+
     }
 
     @Override
@@ -99,6 +103,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         String imagenSuscripcion;
         long suscripciones;
         boolean repetidoFavorito;
+        TextView textComentarios;
+        ImageView iconoComentarios;
 
         public SeriesViewHolder(View itemView) {
             super(itemView);
@@ -111,11 +117,26 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
+            textComentarios=itemView.findViewById(R.id.textoComentarios);
+            iconoComentarios=itemView.findViewById(R.id.iconoComentarios);
 
         }
 
         public void setOnclickListener(){
             textViewOptions.setOnClickListener(this);
+            textComentarios.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   irAComentarios();
+                }
+
+            });
+            iconoComentarios.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    irAComentarios();
+                }
+            });
 
         }
 
@@ -275,6 +296,12 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             Uri uri = Uri.parse(web);
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
             context.startActivity(intent);
+        }
+
+        private void irAComentarios() {
+           Intent intent = new Intent(context, ComentariosActivity.class);
+           intent.putExtra("nombreSerie",textViewNombre.getText().toString());
+           context.startActivity(intent);
         }
 
 

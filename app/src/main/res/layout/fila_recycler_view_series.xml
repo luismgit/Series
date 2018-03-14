@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="170dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
@@ -87,6 +87,27 @@
         android:layout_alignParentBottom="true"
         android:background="#d4d4d4"
         />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/numLikes"
+        android:layout_toRightOf="@id/imagenSerie"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/comment_edit"
+        android:id="@+id/iconoComentarios"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/numLikes"
+        android:layout_toRightOf="@id/iconoComentarios"
+        android:layout_marginTop="15dp"
+        android:text="Comentarios"
+        android:textStyle="bold"
+        android:id="@+id/textoComentarios"
+        />
+
 
 
 

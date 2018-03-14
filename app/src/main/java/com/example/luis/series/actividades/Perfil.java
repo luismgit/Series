@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Utilities;
@@ -67,6 +68,7 @@ public class Perfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+        FirebaseDatabase.getInstance().goOnline();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         botonModificar = findViewById(R.id.botonModificar);
@@ -255,7 +257,26 @@ public class Perfil extends AppCompatActivity {
         DatabaseReference refef = d.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
                 .child(FirebaseReferences.AVATAR);
         refef.setValue(enlaceFotoFirebase.toString());
+        ComunicarAvatarUsuario.setAvatarUsuario(enlaceFotoFirebase.toString());
         Toast.makeText(Perfil.this,  R.string.perfil_mod, Toast.LENGTH_SHORT).show();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("comentarios");
+                databaseReference.orderByChild("phoneNumberUsuario").equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                            String claveComentario=childSnapshot.getKey();
+                            Log.i("claveComentario","claveComentario -> " + claveComentario);
+                            DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child("comentarios").child(claveComentario)
+                                    .child("avatarUsuario");
+                                    dfr.setValue(enlaceFotoFirebase.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
         cambios = false;
         botonModificar.setClickable(true);
         //finish();

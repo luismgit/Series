@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.example.luis.series.Adapters.AdapatadorRecyclerFondos;
 import com.example.luis.series.R;
 import com.example.luis.series.utilidades.Common;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ListaFondos extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class ListaFondos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_fondos);
+        FirebaseDatabase.getInstance().goOnline();
         recyclerView=findViewById(R.id.listaFondosRecycler);
 
         adaptador=new AdapatadorRecyclerFondos(this);

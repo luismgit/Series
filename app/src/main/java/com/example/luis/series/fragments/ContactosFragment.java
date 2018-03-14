@@ -19,13 +19,13 @@ import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ public class ContactosFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i("actividades"," public View onCreateView(LayoutInflater inflater, ViewGroup container,\n" +
                 "                             Bundle savedInstanceState) ");
@@ -133,7 +133,9 @@ public class ContactosFragment extends Fragment {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 usuarios.removeAll(usuarios);
+                ComunicarContactosPhoneNumber.removeAllPhoneNumbers();
                 Log.i("Carga","empieza la carga");
                 for (DataSnapshot snapshot:
                         dataSnapshot.getChildren() ){
@@ -146,6 +148,7 @@ public class ContactosFragment extends Fragment {
                             Log.i("CONTACTOSS","finales -> " + contactos.get(phoneNumber));
                             usuario.setNick(contactos.get(phoneNumber));
                             usuarios.add(usuario);
+                            ComunicarContactosPhoneNumber.addPhoneNumber(usuario.getTelefono());
                         }
                     }
                 }
@@ -224,7 +227,7 @@ public class ContactosFragment extends Fragment {
         return sdf.format(date);
     }
 
-    private void loadContactFromTlf() {
+    public void loadContactFromTlf() {
         ContentResolver contentResolver=getContext().getContentResolver();
         String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
         //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};

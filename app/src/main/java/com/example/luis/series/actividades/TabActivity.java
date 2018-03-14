@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.example.luis.series.utilidades.ComunicarCorreoUsuario;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
@@ -178,6 +179,20 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                                 String correo= (String) dataSnapshot.getValue();
                             ComunicarCorreoUsuario.setCorreoUsuario(correo);
 
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    DatabaseReference drefer=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual)
+                            .child(FirebaseReferences.AVATAR);
+                    drefer.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String avatar= (String) dataSnapshot.getValue();
+                            ComunicarAvatarUsuario.setAvatarUsuario(avatar);
                         }
 
                         @Override

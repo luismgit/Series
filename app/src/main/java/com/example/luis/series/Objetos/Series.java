@@ -1,6 +1,8 @@
 package com.example.luis.series.Objetos;
 
 
+import java.util.List;
+
 public class Series {
 
     String nombre;
