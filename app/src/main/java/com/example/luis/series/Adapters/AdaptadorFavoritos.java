@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Suscripcion;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
@@ -236,11 +237,11 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                                             numSuscripciones--;
                                                             String nivel;
                                                             if(numSuscripciones>=5 && numSuscripciones<10){
-                                                                nivel="intermedio";
+                                                                nivel= Common.PRINCIPIANTE;
                                                             }else if(numSuscripciones>=10){
-                                                                nivel="avanzado";
+                                                                nivel=Common.INTERMEDIO;
                                                             }else{
-                                                                nivel="principiante";
+                                                                nivel=Common.AVANZADO;
                                                             }
 
                                                             dataRef.setValue(numSuscripciones);

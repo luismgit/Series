@@ -64,6 +64,9 @@
     <string name="importante">Importante</string>
     <string name="guardarcambios">¿Desea guardar los cambios?</string>
     <string name="confirmar">Confirmar</string>
+    <string name="debe_comentar">Debe escribir algun comentario</string>
+    <string name="ultima_conex_hoy">últ. vez hoy a las</string>
+    <string name="ultima_conex">últ. vez</string>
 
 
 </resources>

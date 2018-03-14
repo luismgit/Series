@@ -65,13 +65,13 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             holder.estado.setText(getMensajeUltimaConexion(usuario.getConectado()));
         }
         switch (usuario.getNivel()){
-            case "principiante":
+            case Common.PRINCIPIANTE:
                 holder.medalla.setImageResource(R.drawable.bronce_mod);
                 break;
-            case "intermedio":
+            case Common.INTERMEDIO:
                 holder.medalla.setImageResource(R.drawable.plata_mod);
                 break;
-            case "avanzado":
+            case Common.AVANZADO:
                 holder.medalla.setImageResource(R.drawable.oro_mod);
                 break;
         }
@@ -147,9 +147,9 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         String fechaActual=getFecha();
         String fechaUltimaConexion=fechaConexion;
         if(fechaActual.substring(0,4).equals(fechaUltimaConexion.substring(0,4))){
-            return "últ. vez hoy a las " + fechaUltimaConexion.substring(6,fechaUltimaConexion.length());
+            return context.getString(R.string.ultima_conex_hoy) + " " + fechaUltimaConexion.substring(6,fechaUltimaConexion.length());
         }else{
-            return "últ. vez " + fechaUltimaConexion;
+            return context.getString(R.string.ultima_conex) + " " + fechaUltimaConexion;
         }
     }
 

@@ -232,7 +232,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         botonSIGIN.setClickable(false);
         Log.i("SESION", "1----");
         //DAMOS 60 SEGUNDOS PARA QUE LLEGUE EL CÓDIGO DE SEGURIDAD
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber("+34"+phoneNumber, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             //ESTE MÉTODO SE EJECUTARÁ SI GOOGLE CONSIDERA QUE NO ES NECESARIO UN CODIGO DE VERIFICACION
             @Override

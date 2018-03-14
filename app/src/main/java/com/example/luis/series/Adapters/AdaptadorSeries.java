@@ -24,6 +24,7 @@ import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.actividades.ComentariosActivity;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
@@ -203,7 +204,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
                                                                     final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child("suscripciones");
+                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.SUSCRIPCIONES);
                                                                     dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -211,16 +212,16 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                             numSuscripciones++;
                                                                             String nivel;
                                                                             if(numSuscripciones>=5 && numSuscripciones<10){
-                                                                                nivel="intermedio";
+                                                                                nivel=Common.INTERMEDIO;
                                                                             }else if(numSuscripciones>=10){
-                                                                                nivel="avanzado";
+                                                                                nivel=Common.AVANZADO;
                                                                             }else{
-                                                                                nivel="principiante";
+                                                                                nivel=Common.PRINCIPIANTE;
                                                                             }
 
                                                                             dataRef.setValue(numSuscripciones);
                                                                             DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                                                    .child(ComunicarClaveUsuarioActual.getClave()).child("nivel");
+                                                                                    .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NIVEL_USUARIO);
                                                                             datRef.setValue(nivel);
                                                                         }
 
@@ -300,7 +301,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
         private void irAComentarios() {
            Intent intent = new Intent(context, ComentariosActivity.class);
-           intent.putExtra("nombreSerie",textViewNombre.getText().toString());
+           intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,textViewNombre.getText().toString());
            context.startActivity(intent);
         }
 

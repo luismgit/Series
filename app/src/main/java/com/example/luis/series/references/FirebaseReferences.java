@@ -27,4 +27,10 @@ public class FirebaseReferences {
     final public static String FONDOS_SERIES="fondos_series";
     final public static String FOTO_PERFIL_USUARIO="foto_perfil";
     final public static String CORREO_USUARIO="correo";
+    final public static String COMENTARIOS="comentarios";
+    final public static String NIVEL_USUARIO="nivel";
+    final public static String COMENTARIO_AVATAR_USUARIO="avatarUsuario";
+    final public static String COMENTARIO_PHONE_NUMBER="phoneNumberUsuario";
+
+
 }

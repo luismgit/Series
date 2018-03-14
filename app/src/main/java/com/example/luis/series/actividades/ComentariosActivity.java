@@ -11,12 +11,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.luis.series.Adapters.AdaptadorComentarios;
 import com.example.luis.series.Objetos.Comentario;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.Common;
 import com.example.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.example.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
@@ -43,7 +45,7 @@ public class ComentariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
-        nombreSerie=getIntent().getStringExtra("nombreSerie");
+        nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         nuevoComentario=findViewById(R.id.nuevoComentario);
         rv=findViewById(R.id.recyclerComentarios);
         comentarios=new ArrayList<>();
@@ -52,7 +54,7 @@ public class ComentariosActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this);
         rv.setAdapter(adaptadorComentarios);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("comentarios");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,10 +83,15 @@ public class ComentariosActivity extends AppCompatActivity {
 
 
     public void enviarNuevoComentario(View view) {
-        Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser());
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("comentarios");
+        String coment=nuevoComentario.getText().toString().trim();
+        if(coment.equals("")){
+            Toast.makeText(this, R.string.debe_comentar,Toast.LENGTH_SHORT).show();
+        }else{
+            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+            databaseReference.push().setValue(comentario);
+            nuevoComentario.setText("");
+        }
 
-        databaseReference.push().setValue(comentario);
-        nuevoComentario.setText("");
     }
 }

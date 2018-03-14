@@ -39,6 +39,7 @@ import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.utilidades.Common;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.example.luis.series.utilidades.Imagenes;
 import com.example.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -383,6 +384,24 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     }
 
     private void registro(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+        databaseReference.orderByChild(FirebaseReferences.COMENTARIO_PHONE_NUMBER).equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                    String claveComentario=childSnapshot.getKey();
+                    Log.i("claveComentario","claveComentario -> " + claveComentario);
+                    DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
+                            .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
+                    dfr.setValue(enlaceFotoFirebasde.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         progressBar.setVisibility(View.VISIBLE);
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);

@@ -18,8 +18,10 @@ public class Common {
     final public static String FIRSTTIMERUN="FIRSTTIMERUN";
     final public static String ICONOSELECCIONADO="ICONOSELECCIONADO";
     final public static String FONDO_SELECCIONADO="FONDOSELECCIONADO";
-
-
+    final public static String NOMBRE_SERIE_COMENTARIOS="nombreSerie";
+    final public static String INTERMEDIO="intermedio";
+    final public static String AVANZADO="avanzado";
+    final public static String PRINCIPIANTE="principiante";
 
 
 }

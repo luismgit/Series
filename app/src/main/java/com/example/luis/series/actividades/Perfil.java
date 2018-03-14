@@ -259,15 +259,15 @@ public class Perfil extends AppCompatActivity {
         refef.setValue(enlaceFotoFirebase.toString());
         ComunicarAvatarUsuario.setAvatarUsuario(enlaceFotoFirebase.toString());
         Toast.makeText(Perfil.this,  R.string.perfil_mod, Toast.LENGTH_SHORT).show();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("comentarios");
-                databaseReference.orderByChild("phoneNumberUsuario").equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+                databaseReference.orderByChild(FirebaseReferences.COMENTARIO_PHONE_NUMBER).equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                             String claveComentario=childSnapshot.getKey();
                             Log.i("claveComentario","claveComentario -> " + claveComentario);
-                            DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child("comentarios").child(claveComentario)
-                                    .child("avatarUsuario");
+                            DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
+                                    .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
                                     dfr.setValue(enlaceFotoFirebase.toString());
                         }
                     }
