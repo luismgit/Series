@@ -9,18 +9,28 @@ public class Suscripcion {
     String telefono;
     String imagen;
     String tlf_serie;
+    String votada;
 
     public Suscripcion(){
 
     }
 
-    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,String imagen,String tlf_serie) {
+    public Suscripcion(String idUsuario, String serie, Float estrellasUsuario,String telefono,String imagen,String tlf_serie,String votada) {
         this.idUsuario = idUsuario;
         this.serie = serie;
         this.estrellasUsuario = estrellasUsuario;
         this.telefono=telefono;
         this.imagen=imagen;
         this.tlf_serie=tlf_serie;
+        this.votada=votada;
+    }
+
+    public String getVotada() {
+        return votada;
+    }
+
+    public void setVotada(String votada) {
+        this.votada = votada;
     }
 
     public String getTelefono() {

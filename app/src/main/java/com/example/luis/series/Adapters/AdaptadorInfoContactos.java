@@ -2,6 +2,8 @@ package com.example.luis.series.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -53,12 +56,22 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
                 .load(suscripcion.getImagen())
                 .into(holder.avatarSerie);
         //AL TEXTVIEW NOTA LE APLICAMOS LA NOTA QUE EL USUARIO ELEGIDO LE HA PUESTO SOBRE 10
-        float notaSobreDiez=(suscripcion.getEstrellasUsuario()*10)/5;
-        String nota=String.valueOf(notaSobreDiez);
-        if(nota.equals("10.0")){
-            nota=nota.substring(0,2);
+        if(suscripcion.getVotada().equals("si")){
+            float notaSobreDiez=(suscripcion.getEstrellasUsuario()*10)/5;
+            String nota=String.valueOf(notaSobreDiez);
+            if(nota.equals("10.0")){
+                nota=nota.substring(0,2);
+            }
+            holder.textViewNota.setTextSize(25);
+            holder.textViewNota.setText(nota);
+        }else{
+            holder.textViewNota.setTypeface(null, Typeface.NORMAL);
+            holder.textViewNota.setTextColor(Color.GRAY);
+            holder.textViewNota.setText("Sin valorar");
+            holder.barNota.setVisibility(View.INVISIBLE);
+
         }
-        holder.textViewNota.setText(nota);
+
 
         //AL PROGRESS CIRCULAR LE APLICAMOS LA NOTA DE LA SUSCRIPCIÓN
         holder.barNota.setProgress(Math.round(suscripcion.getEstrellasUsuario()));

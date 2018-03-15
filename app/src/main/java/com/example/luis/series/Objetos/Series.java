@@ -10,16 +10,26 @@ public class Series {
     Long likes;
     String web;
     Float estrellas;
+    Long numComentarios;
 
     public Series(){
 
     }
-    public Series(String nombre,String imagen,Long likes,String web,Float estrellas){
+    public Series(String nombre,String imagen,Long likes,String web,Float estrellas,Long numComentarios){
         this.nombre=nombre;
         this.imagen=imagen;
         this.likes=likes;
         this.web=web;
         this.estrellas=estrellas;
+        this.numComentarios=numComentarios;
+    }
+
+    public Long getNumComentarios() {
+        return numComentarios;
+    }
+
+    public void setNumComentarios(Long numComentarios) {
+        this.numComentarios = numComentarios;
     }
 
     public Long getLikes() {

@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ComentariosActivity extends AppCompatActivity {
@@ -51,6 +52,9 @@ public class ComentariosActivity extends AppCompatActivity {
         comentarios=new ArrayList<>();
         contactosPhoneNumber=new ArrayList<>();
         contactosPhoneNumber= ComunicarContactosPhoneNumber.getPhoneNumbers();
+        DatabaseReference fbref=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+                .child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
+        fbref.setValue(0);
         rv.setLayoutManager(new LinearLayoutManager(this));
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this);
         rv.setAdapter(adaptadorComentarios);
@@ -91,6 +95,40 @@ public class ComentariosActivity extends AppCompatActivity {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
             databaseReference.push().setValue(comentario);
             nuevoComentario.setText("");
+            final DatabaseReference dtRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE);
+            dtRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot:
+                            dataSnapshot.getChildren()){
+                       String phoneNumber = snapshot.getKey();
+                       Log.i("snapshot.getKey()",phoneNumber);
+                        if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
+                                    .child(phoneNumber).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Long sinLeer= (Long) dataSnapshot.getValue();
+                                    sinLeer++;
+                                    ref.setValue(sinLeer);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
         }
 
     }

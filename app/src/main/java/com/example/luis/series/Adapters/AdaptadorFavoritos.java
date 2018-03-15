@@ -140,6 +140,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 claveSuscripcionActual = childSnapshot.getKey();
                                 root.child(FirebaseReferences.SUSCRIPCIONES).child(claveSuscripcionActual).child(FirebaseReferences.ESTRELLAS_USUARIO).setValue(ratingBarFavoritos.getRating());
                                 Toast.makeText(context, R.string.voto_registrado,Toast.LENGTH_SHORT).show();
+                                root.child(FirebaseReferences.SUSCRIPCIONES).child(claveSuscripcionActual).child(FirebaseReferences.SERIE_VOTADA).setValue("si");
 
                             }
                             FirebaseDatabase fbd = FirebaseDatabase.getInstance();

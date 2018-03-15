@@ -31,6 +31,9 @@ public class FirebaseReferences {
     final public static String NIVEL_USUARIO="nivel";
     final public static String COMENTARIO_AVATAR_USUARIO="avatarUsuario";
     final public static String COMENTARIO_PHONE_NUMBER="phoneNumberUsuario";
+    final public static String SERIE_VOTADA="votada";
+    final public static String COMENTARIOS_LEIDOS_SERIE="ComentariosLeidosSerie";
+    final public static String COM_LEIDOS="comLeidos";
 
 
 }

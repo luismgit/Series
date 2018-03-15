@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.transcode.BitmapBytesTranscoder;
+import com.example.luis.series.Objetos.Series;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.Objetos.Usuario;
@@ -406,12 +407,30 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,"principiante", (long) 0);
+        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0);
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)
         ref.child(FirebaseReferences.USUARIOS_REFERENCE).push().setValue(usuario);
         Toast.makeText(registroActivity.this, R.string.toast_usu_reg, Toast.LENGTH_SHORT).show();
+        ref.child(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:
+                        dataSnapshot.getChildren()){
+                    Series serie = snapshot.getValue(Series.class);
+                    Log.i("ComentariosLeidosSerie","Serie -> " + serie.getNombre());
+                    DatabaseReference fiRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(phoneNumber)
+                            .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
+                    fiRef.setValue(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         //VAMOS A LA PANTALLA PRINCIPAL
         irAPrincipal();
         finish();

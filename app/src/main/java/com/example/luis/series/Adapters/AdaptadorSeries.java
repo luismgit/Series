@@ -48,6 +48,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     List<Series> series;
     private Context mContext;
     private Hashtable<String,String> contactos;
+    Series serie;
     //private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorSeries(List<Series> series,Context mContext) {
@@ -65,7 +66,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     @Override
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
-        Series serie = series.get(position);
+         serie = series.get(position);
         holder.textViewNombre.setText(serie.getNombre());
         Glide.with(mContext)
                 .load(serie.getImagen())
@@ -75,6 +76,30 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
        // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+                .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                 Long sinleer= (Long) dataSnapshot.getValue();
+                 Log.i("sinleer","sinleer -> " + sinleer);
+                Log.i("sinleer","sinleer -> " + serie.getNombre());
+                Log.i("sinleer","sinleer -> " + ComunicarCurrentUser.getPhoneNumberUser());
+                 if(sinleer==0){
+                     holder.numComentarios.setVisibility(View.INVISIBLE);
+                 }else{
+                     holder.numComentarios.setText(String.valueOf(sinleer));
+                     holder.numComentarios.setVisibility(View.VISIBLE);
+                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         holder.setOnclickListener();
 
     }
@@ -106,6 +131,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         boolean repetidoFavorito;
         TextView textComentarios;
         ImageView iconoComentarios;
+        TextView numComentarios;
 
         public SeriesViewHolder(View itemView) {
             super(itemView);
@@ -120,6 +146,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
             textComentarios=itemView.findViewById(R.id.textoComentarios);
             iconoComentarios=itemView.findViewById(R.id.iconoComentarios);
+            numComentarios=itemView.findViewById(R.id.numComentarios);
 
         }
 
@@ -198,7 +225,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                 if(!repetidoFavorito){
                                                                     DatabaseReference dbr=FirebaseDatabase.getInstance().getReference();
                                                                     Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
-                                                                            ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
+                                                                            ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
                                                                     //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
                                                                     dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
                                                                     suscripciones++;

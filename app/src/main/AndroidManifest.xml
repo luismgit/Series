@@ -42,8 +42,10 @@
         <activity
             android:name=".actividades.InfoContactoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".actividades.Perfil" />
-        <activity android:name=".actividades.ComentariosActivity"></activity>
+        <activity android:name=".actividades.Perfil"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".actividades.ComentariosActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
