@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.luis.series.Adapters.AdaptadorContactos;
 import com.example.luis.series.Objetos.Usuario;
@@ -61,7 +62,7 @@ public class ContactosFragment extends Fragment {
     Hashtable<String,String> contactos;
     String phoneNumberUser;
     FirebaseUser user;
-
+    TextView mensajeSinContactos;
 
     public ContactosFragment() {
         // Required empty public constructor
@@ -109,7 +110,7 @@ public class ContactosFragment extends Fragment {
         rv=vista.findViewById(R.id.recycler);
         contactos = new Hashtable<String, String>();
         usuarios=new ArrayList<>();
-
+        mensajeSinContactos=vista.findViewById(R.id.mensajeSinContactos);
         //LE APLICAMOS UN LAYOUT A EL RECYCLERVIEW
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         //GUARDAMOS EL USUARIO ACTUAL
@@ -151,6 +152,11 @@ public class ContactosFragment extends Fragment {
                             ComunicarContactosPhoneNumber.addPhoneNumber(usuario.getTelefono());
                         }
                     }
+                }
+                if(usuarios.size()==0){
+                    mensajeSinContactos.setVisibility(View.VISIBLE);
+                }else{
+                    mensajeSinContactos.setVisibility(View.GONE);
                 }
                 adapter.notifyDataSetChanged();
             }

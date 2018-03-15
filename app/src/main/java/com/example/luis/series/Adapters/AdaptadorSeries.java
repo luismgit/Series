@@ -231,7 +231,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
                                                                     final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.SUSCRIPCIONES);
+                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
                                                                     dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {

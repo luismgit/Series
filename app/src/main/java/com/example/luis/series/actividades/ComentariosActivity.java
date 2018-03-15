@@ -40,12 +40,17 @@ public class ComentariosActivity extends AppCompatActivity {
     AdaptadorComentarios adaptadorComentarios;
     EditText nuevoComentario;
     String nombreSerie;
+    List<String> contactos;
+    TextView txtSinComentarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
+        contactos=new ArrayList<>();
+        contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
+        txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         nuevoComentario=findViewById(R.id.nuevoComentario);
         rv=findViewById(R.id.recyclerComentarios);
@@ -75,6 +80,12 @@ public class ComentariosActivity extends AppCompatActivity {
                     }
 
                 }
+                if(comentarios.size()==0){
+                    txtSinComentarios.setVisibility(View.VISIBLE);
+                }else{
+                    txtSinComentarios.setVisibility(View.GONE);
+                }
+
                 adaptadorComentarios.notifyDataSetChanged();
             }
 
@@ -99,11 +110,12 @@ public class ComentariosActivity extends AppCompatActivity {
             dtRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
                     for(DataSnapshot snapshot:
                             dataSnapshot.getChildren()){
                        String phoneNumber = snapshot.getKey();
                        Log.i("snapshot.getKey()",phoneNumber);
-                        if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                        if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber)){
                             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
                                     .child(phoneNumber).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
                             ref.addListenerForSingleValueEvent(new ValueEventListener() {
