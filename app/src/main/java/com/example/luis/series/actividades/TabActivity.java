@@ -48,6 +48,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         fondo=findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
 
-
+        Log.i("TOKEN","token -> " + FirebaseInstanceId.getInstance().getToken());
         listaFondos=new ArrayList<>();
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
         FirebaseDatabase datab = FirebaseDatabase.getInstance();

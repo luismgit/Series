@@ -6,9 +6,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,14 @@ import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Comentario;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
+import com.example.luis.series.references.FirebaseReferences;
+import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +72,8 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
         Context context;
         Dialog miDialogo;
         List<Comentario> comentarios=new ArrayList<>();
+        Button botonMegusta;
+        String claveUsuarioActual="";
 
         public ComentariosViewHolder(View itemView,Context context,List comentarios) {
             super(itemView);
@@ -69,6 +81,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
             editTextComentario=itemView.findViewById(R.id.editTextComentario);
             avatarComentario=itemView.findViewById(R.id.avatarComentario);
             this.comentarios=comentarios;
+            botonMegusta=itemView.findViewById(R.id.botonMegusta);
         }
         public void setOnclickListener(){
             avatarComentario.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +102,35 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                     miDialogo.show();
                 }
             });
+
+            botonMegusta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int position = getAdapterPosition();
+                    Comentario comentario= comentarios.get(position);
+                    DatabaseReference dr= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
+                    dr.orderByChild("telefono").equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                         Usuario usuario = childSnapshot.getValue(Usuario.class);
+                                         Log.i("prueba",usuario.getTelefono());
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                }
+            });
+
         }
     }
 }

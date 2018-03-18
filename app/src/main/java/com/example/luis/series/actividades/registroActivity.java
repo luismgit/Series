@@ -49,6 +49,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -407,7 +408,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0);
+        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0, FirebaseInstanceId.getInstance().getToken());
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)

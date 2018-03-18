@@ -11,12 +11,12 @@ public class Usuario implements Serializable{
     String conectado;
     String nivel;
     Long numSuscripciones;
-   // String ultimaconexion;
+    String token;
 
     public Usuario() {
     }
 
-    public Usuario(String nick,String telefono,String correo,String avatar,String conectado,String nivel,Long numSuscripciones) {
+    public Usuario(String nick,String telefono,String correo,String avatar,String conectado,String nivel,Long numSuscripciones,String token) {
         this.correo = correo;
         this.telefono=telefono;
         this.nick=nick;
@@ -24,7 +24,8 @@ public class Usuario implements Serializable{
         this.conectado=conectado;
         this.nivel=nivel;
         this.numSuscripciones=numSuscripciones;
-        //this.ultimaconexion=ultimaconexion;
+        this.token=token;
+
 
     }
 
@@ -36,13 +37,13 @@ public class Usuario implements Serializable{
         this.conectado = conectado;
     }
 
- /*   public String getUltimaconexion() {
-        return ultimaconexion;
+    public String getToken() {
+        return token;
     }
 
-    public void setUltimaconexion(String ultimaconexion) {
-        this.ultimaconexion = ultimaconexion;
-    }*/
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public Long getNumSuscripciones() {
         return numSuscripciones;
