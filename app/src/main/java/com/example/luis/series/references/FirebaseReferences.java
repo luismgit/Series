@@ -34,6 +34,6 @@ public class FirebaseReferences {
     final public static String COMENTARIOS_LEIDOS_SERIE="ComentariosLeidosSerie";
     final public static String COM_LEIDOS="comLeidos";
     final public static String NUM_SUSCRIPCIONES="numSuscripciones";
-
+        final public static String NICK="nick";
 
 }

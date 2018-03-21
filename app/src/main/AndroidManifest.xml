@@ -37,6 +37,7 @@
             android:name=".actividades.TabActivity"
             android:label="@string/title_activity_tab"
             android:screenOrientation="portrait"
+            android:launchMode = "singleTask"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".actividades.ListaFondos"
@@ -47,7 +48,8 @@
         <activity android:name=".actividades.Perfil"
             android:screenOrientation="portrait"/>
         <activity android:name=".actividades.ComentariosActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+           ></activity>
 
         <service
             android:name=".MiFirebaseInstanceIdService">

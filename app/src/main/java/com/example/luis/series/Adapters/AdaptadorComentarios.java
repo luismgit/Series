@@ -20,7 +20,7 @@ import com.example.luis.series.Objetos.Notification;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
-import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.example.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -109,7 +109,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                 public void onClick(View view) {
 
                     int position = getAdapterPosition();
-                    Comentario comentario= comentarios.get(position);
+                    final Comentario comentario= comentarios.get(position);
                     DatabaseReference dr= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
                     dr.orderByChild("telefono").equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -117,7 +117,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                          Usuario usuario = childSnapshot.getValue(Usuario.class);
                                          Log.i("prueba",usuario.getTelefono());
-                                        Notification not = new Notification(usuario.getToken(),ComunicarClaveUsuarioActual.getClave());
+                                        Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie());
                                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
                                         ref.push().setValue(not);
                                     }

@@ -22,6 +22,7 @@ import com.example.luis.series.references.FirebaseReferences;
 import com.example.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.example.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.example.luis.series.utilidades.ComunicarCurrentUser;
+import com.example.luis.series.utilidades.ListaNumerosAgendaTelefonos;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -186,6 +187,7 @@ public class ContactosFragment extends Fragment {
                     String claveUsuarioActual = childSnapshot.getKey();
                     ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
 
+
                 }
 
                 //LLEGAMOS HASTA EL NODO EN LA BB.DD DONDE ESTÁ EL USUARIO ACTUAL Y ACCEDEMOS A SU NODO HIJO 'conectado'
@@ -264,6 +266,7 @@ public class ContactosFragment extends Fragment {
 
             //Log.i("contactos","Tipo: " + cursor.getString(3));
         }
+        ListaNumerosAgendaTelefonos.setContactos(contactos);
         cursor.close();
     }
 

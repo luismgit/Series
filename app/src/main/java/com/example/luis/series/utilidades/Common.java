@@ -21,6 +21,7 @@ public class Common {
     final public static String INTERMEDIO="intermedio";
     final public static String AVANZADO="avanzado";
     final public static String PRINCIPIANTE="principiante";
-
+    final public static String TAB1="TAB1";
+    final public static String NOTIFICACION="notificacion";
 
 }

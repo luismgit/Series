@@ -111,7 +111,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         tabLayout.setupWithViewPager(mViewPager);
         fondo=findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
-
         Log.i("TOKEN","token -> " + FirebaseInstanceId.getInstance().getToken());
         listaFondos=new ArrayList<>();
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
@@ -201,6 +200,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
                         }
                     });
+
                 }
             }
 
@@ -237,8 +237,32 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
             }
         });
+        String accion = getIntent().getStringExtra(Common.NOTIFICACION);
+        Log.i("compruebaNotif","accion en Tab -> " + accion);
+        if(accion!=null){
+            if(accion.equals(Common.NOTIFICACION)){
+                SharedPreferences sharedPreferences = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorr = sharedPreferences.edit();
+                editorr.putBoolean("notify",false);
+                editorr.commit();
+                Log.i("compruebaNotif","llega a tabActivity con una notificacion");
+                mViewPager.setCurrentItem(1);
+                String nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+
+                Intent intent = new Intent(this, ComentariosActivity.class);
+                intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,nombreSerie);
+
+                startActivity(intent);
+            }
+        }
+
+
+
+
+
 
     }
+
 
 
 
@@ -366,17 +390,39 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         {
             FirebaseDatabase.getInstance().goOnline();
         }
+        Log.i("compruebaNotif","resume");
+        SharedPreferences sharedPre = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
+        boolean deNotificacion=sharedPre.getBoolean("notify",false);
+        SharedPreferences sharedPreference = getSharedPreferences("serieNotificacion",Context.MODE_PRIVATE);
+        String serie =sharedPreference.getString("serie","");
+        Log.i("Serie","Serie -> " + serie);
+        if(deNotificacion){
+            SharedPreferences sharedPreferences = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editorr = sharedPreferences.edit();
+            editorr.putBoolean("notify",false);
+            editorr.commit();
+            Log.i("compruebaNotif","llega a tabActivity con una notificacion");
+            mViewPager.setCurrentItem(1);
+            String nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+
+            Intent intent = new Intent(this, ComentariosActivity.class);
+            intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,serie);
+
+            startActivity(intent);
+        }
+
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
-
+        Log.i("compruebaNotif","pause");
         if(FirebaseDatabase.getInstance()!=null)
         {
             FirebaseDatabase.getInstance().goOffline();
         }
+
     }
 
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE CAMBIO DE PERFIL
