@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.luis.series.Objetos.Comentario;
+import com.example.luis.series.Objetos.Notification;
 import com.example.luis.series.Objetos.Usuario;
 import com.example.luis.series.R;
 import com.example.luis.series.references.FirebaseReferences;
@@ -116,6 +117,9 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                          Usuario usuario = childSnapshot.getValue(Usuario.class);
                                          Log.i("prueba",usuario.getTelefono());
+                                        Notification not = new Notification(usuario.getToken(),ComunicarClaveUsuarioActual.getClave());
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
+                                        ref.push().setValue(not);
                                     }
 
 
