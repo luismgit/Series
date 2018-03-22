@@ -8,12 +8,14 @@ public class Notification {
     String avatar;
     String telefono;
     String serie;
+    String telefono_usuario_final;
 
-    public Notification(String token,String avatar,String telefono,String serie) {
+    public Notification(String token,String avatar,String telefono,String serie,String telefono_usuario_final) {
         this.token=token;
         this.avatar=avatar;
         this.telefono=telefono;
         this.serie=serie;
+        this.telefono_usuario_final=telefono_usuario_final;
     }
     public  Notification(){
 
@@ -49,5 +51,13 @@ public class Notification {
 
     public void setSerie(String serie) {
         this.serie = serie;
+    }
+
+    public String getTelefono_usuario_final() {
+        return telefono_usuario_final;
+    }
+
+    public void setTelefono_usuario_final(String telefono_usuario_final) {
+        this.telefono_usuario_final = telefono_usuario_final;
     }
 }

@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +75,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
         Context context;
         Dialog miDialogo;
         List<Comentario> comentarios=new ArrayList<>();
-        Button botonMegusta;
+        LikeButton botonMegusta;
         String claveUsuarioActual="";
 
         public ComentariosViewHolder(View itemView,Context context,List comentarios) {
@@ -104,7 +106,21 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                 }
             });
 
-            botonMegusta.setOnClickListener(new View.OnClickListener() {
+
+            botonMegusta.setOnLikeListener(new OnLikeListener() {
+                @Override
+                public void liked(LikeButton likeButton) {
+                    Log.i("like","true");
+                    likeButton.setLiked(true);
+                }
+
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    likeButton.setLiked(false);
+                }
+            });
+
+           /* botonMegusta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -117,9 +133,12 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                          Usuario usuario = childSnapshot.getValue(Usuario.class);
                                          Log.i("prueba",usuario.getTelefono());
-                                        Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie());
-                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
-                                        ref.push().setValue(not);
+                                         if(!usuario.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                                             Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie(),usuario.getTelefono());
+                                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
+                                             ref.push().setValue(not);
+                                         }
+
                                     }
 
 
@@ -133,7 +152,8 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
 
 
                 }
-            });
+            });*/
+
 
         }
     }

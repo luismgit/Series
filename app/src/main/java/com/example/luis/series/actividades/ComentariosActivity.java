@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luis.series.Adapters.AdaptadorComentarios;
 import com.example.luis.series.Objetos.Comentario;
 import com.example.luis.series.Objetos.Usuario;
@@ -42,6 +43,7 @@ public class ComentariosActivity extends AppCompatActivity {
     String nombreSerie;
     List<String> contactos;
     TextView txtSinComentarios;
+    ImageView imagenSerieComentarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,27 @@ public class ComentariosActivity extends AppCompatActivity {
         contactos=new ArrayList<>();
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
+        txtSinComentarios.setVisibility(View.GONE);
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+        imagenSerieComentarios=findViewById(R.id.imagenSerieComentarios);
+        DatabaseReference r = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie);
+        r.child(FirebaseReferences.IMAGEN_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url= (String) dataSnapshot.getValue();
+                Glide.with(ComentariosActivity.this)
+                        .load(url)
+                        .centerCrop()
+                        .fitCenter()
+                        .into(imagenSerieComentarios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         nuevoComentario=findViewById(R.id.nuevoComentario);
         rv=findViewById(R.id.recyclerComentarios);
         comentarios=new ArrayList<>();

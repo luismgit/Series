@@ -230,7 +230,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                                     Log.i("Clave","--------------------------------------------------");
                                                     database.getReference(FirebaseReferences.SUSCRIPCIONES).child(claveSerie).removeValue();
                                                     final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                            .child(ComunicarClaveUsuarioActual.getClave()).child("suscripciones");
+                                                            .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
                                                     dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(DataSnapshot dataSnapshot) {

@@ -8,11 +8,43 @@
     android:orientation="vertical"
     android:padding="15dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/imagenSerieComentarios"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textoSerieComentarios"
+            android:text="Breaking bad"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#d4d4d4"
+        android:layout_marginBottom="5dp"
+        />
+
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="25"
+            android:layout_weight="90"
             android:text="@string/esta_serie_no_tiene_comentarios_se_el_primero_en_comentarla"
             android:id="@+id/mensajeSinComentarios"
             android:layout_centerInParent="true"
@@ -32,14 +64,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/recyclerComentarios"
-        android:layout_weight="9"
+        android:layout_weight="5"
         >
 
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
 
         <EditText
             android:layout_width="match_parent"
@@ -55,6 +88,7 @@
             android:id="@+id/imageEnviar"
             android:src="@drawable/sendmessage"
             android:onClick="enviarNuevoComentario"
+
             />
 
 

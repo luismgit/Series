@@ -116,10 +116,6 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         Log.i("compruebaNotif","entra autentifOncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-       // SharedPreferences Pref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-       //SharedPreferences.Editor editor = Pref.edit();
-        //editor.putBoolean("notify",false);
-        //editor.commit();
         listaFondos=new ArrayList<>();
         //MÉTODO QUE COMPRUEBA LA VERSIÓN DEK SDK Y SI EL PÉRMISO ESTÁ YA DADO.
         pedirPermisos();
@@ -138,35 +134,14 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 //SI EL USUARIO NUNCA SE HA REGISTRADO LO MANDAMOS A LA ACTIVITY DE REGISTRO SI NUNCA HA PASADO POR ELLA PASÁNDOLE SU NÚMERO DE TELÉFONO
                 if (user != null) {
                     Log.i("SESION", "Sesion iniciada con telefono " + user.getPhoneNumber());
-                    ComunicarCurrentUser.setUser(user);
+                    ComunicarCurrentUser.setPhoneNumber(user.getPhoneNumber());
                     if(registroCerrado){
                         irARegistro(user.getPhoneNumber());
 
                     //SI EL USUARIO YA ESTÁ EN FIREBASE COMPROBAMOS SI NO ES LA 1º VEZ QUE EJECUTA LA APP  PARA MANDARLO DIRECTAMENTE A LA PANTALLA PRINCIPAL
                     }else{
-
                         if(getFirstTimeRun(AutentificacionActivity.this)==1){
-                            boolean deNotificacion=false;
-                            String accion = getIntent().getStringExtra(Common.NOTIFICACION);
-                            SharedPreferences sharedPre = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-                            deNotificacion=sharedPre.getBoolean("notify",false);
-                            Log.i("entra","deNotificacion-> " + deNotificacion);
-                            if(deNotificacion){
-                                if(accion!=null){
-                                    if(accion.equals(Common.NOTIFICACION)){
-                                       /* SharedPreferences sharedPreferences = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putBoolean("notify",false);
-                                        editor.commit();*/
-                                        Log.i("compruebaNotif","Autentifica -- ha llegado despues de una notificacion");
-                                        String nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
-                                        irAPrincipal(true,nombreSerie);
-                                    }
-                                }
-                            }else{
-                                Log.i("compruebaNotif","Autentifica -- no ha habido ninguna notificacion");
-                                irAPrincipal(false,"");
-                            }
+                            irAPrincipal();
                             finish();
                         }
                     }
@@ -232,20 +207,10 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
     //MÉTODO QUE LANZA UN INTENT A LA PANTALLA DE PRINCIPAL
-    private void irAPrincipal(boolean notificacion,String nombreSerie) {
-        if(notificacion){
-            Log.i("compruebaNotif","Se va a tabACt con notif");
-            Intent intent = new Intent(AutentificacionActivity.this, TabActivity.class);
-            intent.putExtra(Common.NOTIFICACION,Common.NOTIFICACION);
-            intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,nombreSerie);
-            String accion = intent.getStringExtra(Common.NOTIFICACION);
-            Log.i("compruebaNotif","Accion en autenif -> " + accion);
-            startActivity(intent);
-        }else{
-            Log.i("compruebaNotif","Se va a tabACt SIN notif");
-            Intent intent = new Intent(AutentificacionActivity.this, TabActivity.class);
-            startActivity(intent);
-        }
+    private void irAPrincipal() {
+
+        Intent intent = new Intent(AutentificacionActivity.this, TabActivity.class);
+        startActivity(intent);
 
     }
 
@@ -356,7 +321,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 }else{
                     Toast.makeText(AutentificacionActivity.this, R.string.usu_ya_registrado,Toast.LENGTH_LONG).show();
                     Log.i("SESION", "Usuario ya registrado en la BB.DD");
-                    irAPrincipal(false,"");
+                    irAPrincipal();
                     finish();
                 }
 

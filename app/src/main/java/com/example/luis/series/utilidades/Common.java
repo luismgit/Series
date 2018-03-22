@@ -23,5 +23,7 @@ public class Common {
     final public static String PRINCIPIANTE="principiante";
     final public static String TAB1="TAB1";
     final public static String NOTIFICACION="notificacion";
+    final public static String TELEFONO_USUARIO_FINAL="telefono_usuario_final";
+    final public static String SERIE="serie";
 
 }

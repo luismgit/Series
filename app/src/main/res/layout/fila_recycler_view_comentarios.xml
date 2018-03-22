@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
-    android:paddingTop="10dp"
-    >
+    android:paddingTop="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="45dp"
@@ -17,17 +16,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editTextComentario"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/avatarComentario"
         android:layout_marginTop="7dp"
         android:textStyle="bold"
+
         />
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/avatarComentario"
+    <com.like.LikeButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:icon_size="20dp"
+        app:icon_type="thumb"
+        android:layout_below="@id/editTextComentario"
         android:layout_toRightOf="@id/avatarComentario"
         android:id="@+id/botonMegusta"
+        android:layout_marginLeft="5dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Me gusta"
+       android:layout_alignBottom="@id/barraSep"
+        android:layout_marginBottom="18dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d4d4d4"
+        android:layout_below="@id/botonMegusta"
+        android:id="@+id/barraSep"
         />
 
 </RelativeLayout>

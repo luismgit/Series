@@ -115,9 +115,9 @@ public class ContactosFragment extends Fragment {
         //LE APLICAMOS UN LAYOUT A EL RECYCLERVIEW
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         //GUARDAMOS EL USUARIO ACTUAL
-        user= ComunicarCurrentUser.getUser();
+        //user= ComunicarCurrentUser.getUser();---------------------------------------------
         //GUARDAMOS EL TELEÉFONO DEL USUARIO ACTUAL
-        phoneNumberUser = user.getPhoneNumber();
+        phoneNumberUser = ComunicarCurrentUser.getPhoneNumberUser();
         phoneNumberUser.replaceAll("\\s","");
         if(phoneNumberUser.substring(0,3).equals("+34")){
             phoneNumberUser=phoneNumberUser.substring(3,phoneNumberUser.length());
@@ -170,8 +170,8 @@ public class ContactosFragment extends Fragment {
 
 
         //GUARDAMOS EL TELÉFONO DEL USUARIO
-        FirebaseUser user = ComunicarCurrentUser.getUser();
-        String phoneNumber=user.getPhoneNumber();
+        //FirebaseUser user = ComunicarCurrentUser.getUser();--------------------------------------
+        String phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
         phoneNumber.replaceAll("\\s","");
         if(phoneNumber.substring(0,3).equals("+34")){
             phoneNumber=phoneNumber.substring(3,phoneNumber.length());

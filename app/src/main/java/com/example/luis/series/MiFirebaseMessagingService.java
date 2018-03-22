@@ -38,15 +38,16 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("prueba","hola -> " );
         if(remoteMessage.getData().size()>0){
             Map<String,String> data = remoteMessage.getData();
-            String telefono=data.get("telefono");
-            String serie=data.get("serie");
+            String telefono=data.get(Common.TELEFONO);
+            String telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
+            String serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);
             Log.i("prueba","contactoAgenda -> " + contactoAgenda);
             Bitmap bitmap=null;
             try {
                  bitmap= Glide
                         .with(this)
-                        .load(data.get("avatar"))
+                        .load(data.get(Common.AVATAR))
                         .asBitmap()
                         .into(100,100)
                         .get();
@@ -55,18 +56,20 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            Intent intent = new Intent(this, AutentificacionActivity.class);
+            Intent intent = new Intent(this, TabActivity.class);
             intent.putExtra(Common.NOTIFICACION,Common.NOTIFICACION);
             intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,serie);
-            PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+            intent.putExtra(Common.TELEFONO,telefono_usuario_final);
+            PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
             Uri sonido = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder builder=new NotificationCompat.Builder(this)
-            .setSmallIcon(R.drawable.avatar3)
-                    .setColor(Color.CYAN)
+            .setSmallIcon(R.mipmap.ic_launcher)
+                    .setColor(Color.RED)
                     .setLargeIcon(bitmap)
-                    .setContentTitle("Series")
-                    .setContentText(contactoAgenda + " le ha dado a 'me gusta' a un comentario")
+                    .setContentTitle("Like")
+                    .setContentText(contactoAgenda)
                     .setAutoCancel(true)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText("A " + contactoAgenda + " " + "le ha gustado tu comentario en" + " " + serie))
                     .setSound(sonido)
                     .setContentIntent(pendingIntent);
             NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -76,10 +79,6 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             editor.putBoolean("notify",true);
             editor.commit();
 
-            SharedPreferences sharedPreferences = getSharedPreferences("serieNotificacion",Context.MODE_PRIVATE);
-            SharedPreferences.Editor edit = sharedPreferences.edit();
-            edit.putString("serie",serie);
-            edit.commit();
         }
 
 
