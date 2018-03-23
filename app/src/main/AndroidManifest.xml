@@ -35,7 +35,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".actividades.TabActivity"
-            android:label="@string/title_activity_tab"
+            android:label=""
             android:screenOrientation="portrait"
             android:launchMode = "singleTask"
             android:theme="@style/AppTheme" />
