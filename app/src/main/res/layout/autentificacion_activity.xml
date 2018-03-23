@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.luis.series.actividades.AutentificacionActivity"
+    tools:context="com.maniac.luis.series.actividades.AutentificacionActivity"
     android:orientation="vertical"
     android:background="@drawable/degradado_autentificacion"
     >
