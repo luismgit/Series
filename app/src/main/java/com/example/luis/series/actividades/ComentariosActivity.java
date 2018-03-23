@@ -44,6 +44,7 @@ public class ComentariosActivity extends AppCompatActivity {
     List<String> contactos;
     TextView txtSinComentarios;
     ImageView imagenSerieComentarios;
+    TextView textoSerieComentarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class ComentariosActivity extends AppCompatActivity {
         contactos=new ArrayList<>();
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
+        textoSerieComentarios=findViewById(R.id.textoSerieComentarios);
         txtSinComentarios.setVisibility(View.GONE);
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         imagenSerieComentarios=findViewById(R.id.imagenSerieComentarios);
@@ -66,6 +68,18 @@ public class ComentariosActivity extends AppCompatActivity {
                         .centerCrop()
                         .fitCenter()
                         .into(imagenSerieComentarios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        r.child(FirebaseReferences.NOMBRE_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String nombreSerie= (String) dataSnapshot.getValue();
+                textoSerieComentarios.setText(nombreSerie);
             }
 
             @Override
