@@ -13,6 +13,8 @@ public class Usuario implements Serializable{
     Long numSuscripciones;
     String token;
 
+
+
     public Usuario() {
     }
 

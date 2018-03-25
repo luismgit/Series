@@ -1,16 +1,19 @@
 package com.maniac.luis.series.actividades;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,12 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
 import com.maniac.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +55,10 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -77,6 +85,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     private  final String CARPETA_RAIZ="Series/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"series";
     String miPath;
+    List<String> phoneNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         refStorage= FirebaseStorage.getInstance().getReference();
+        phoneNumbers=new ArrayList();
+        loadContactFromTlf();
         avatarIcono=findViewById(R.id.avatarIcono);
         Glide.with(this)
                 .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
@@ -380,10 +391,46 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                     String claveComentario=childSnapshot.getKey();
-                    Log.i("claveComentario","claveComentario -> " + claveComentario);
-                    DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
-                            .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
-                    dfr.setValue(enlaceFotoFirebasde.toString());
+                    Comentario comentario=childSnapshot.getValue(Comentario.class);
+                    if(phoneNumbers.contains(comentario.getPhoneNumberUsuario())){
+                        DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
+                                .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
+                        dfr.setValue(enlaceFotoFirebasde.toString());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        final DatabaseReference dbreference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot :
+                        dataSnapshot.getChildren()){
+                    String key = snapshot.getKey();
+                   final DatabaseReference dataref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
+                            .child(key).child("liked");
+                   dataref.addListenerForSingleValueEvent(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(DataSnapshot dataSnapshot) {
+
+                           Map<String,Boolean> liked = (Map<String, Boolean>) dataSnapshot.getValue();
+                           liked.put(ComunicarCurrentUser.getPhoneNumberUser(),false);
+                           dataref.setValue(liked);
+
+                       }
+
+                       @Override
+                       public void onCancelled(DatabaseError databaseError) {
+
+                       }
+                   });
                 }
             }
 
@@ -429,6 +476,40 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf= new SimpleDateFormat("dd_MM_yyyy_HH:mm:ss");
         return sdf.format(date);
+    }
+
+    public void loadContactFromTlf() {
+        ContentResolver contentResolver=this.getContentResolver();
+        String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
+        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
+        String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
+                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
+                ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
+        //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
+        Cursor cursor=this.getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
+        while(cursor.moveToNext()){
+            String name=cursor.getString(0);
+            String phoneNumber=cursor.getString(1);
+            if(phoneNumber.length()>=9){
+                phoneNumber=phoneNumber.replaceAll("\\s","");
+                if(phoneNumber.substring(0,3).equals("+34")){
+                    phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+                    //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
+
+                }
+                //nombreContactosTelefono.add(name);
+                // contactosTelefono.add(phoneNumber);
+                Log.i("contactos","Nombre: " + name);
+                Log.i("contactos","Numero: " + phoneNumber);
+                phoneNumbers.add(phoneNumber);
+            }
+
+            //Log.i("contactos","Identificador: " + cursor.getString(0));
+
+
+            //Log.i("contactos","Tipo: " + cursor.getString(3));
+        }
+        cursor.close();
     }
 
 

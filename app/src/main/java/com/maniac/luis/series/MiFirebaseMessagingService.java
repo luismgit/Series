@@ -1,5 +1,6 @@
 package com.maniac.luis.series;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -16,11 +17,14 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.utilidades.Common;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -30,6 +34,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.i("prueba","hola -> " );
+        String mensaje="";
         if(remoteMessage.getData().size()>0){
             Map<String,String> data = remoteMessage.getData();
             String telefono=data.get(Common.TELEFONO);
@@ -37,6 +42,11 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             String serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);
             Log.i("prueba","contactoAgenda -> " + contactoAgenda);
+            if(contactoAgenda.equals("")){
+                mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario en" + " " + serie;
+            }else{
+               mensaje="A " + contactoAgenda + " " + "le ha gustado tu comentario en" + " " + serie;
+            }
             Bitmap bitmap=null;
             try {
                  bitmap= Glide
@@ -63,15 +73,18 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentTitle("Like")
                     .setContentText(contactoAgenda)
                     .setAutoCancel(true)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText("A " + contactoAgenda + " " + "le ha gustado tu comentario en" + " " + serie))
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(mensaje))
                     .setSound(sonido)
                     .setContentIntent(pendingIntent);
             NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0,builder.build());
+            int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+            notificationManager.notify(m,builder.build());
             SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("notify",true);
             editor.commit();
+
 
         }
 

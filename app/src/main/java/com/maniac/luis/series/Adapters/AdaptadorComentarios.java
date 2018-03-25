@@ -6,6 +6,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,34 +34,68 @@ import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentarios.ComentariosViewHolder>{
+public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private static final int NO_USER = 1;
+    private static final int USER = 2;
     List<Comentario> comentarios=new ArrayList<>();
     Context context;
+    Map<String,String> agenda;
 
-    public AdaptadorComentarios(List comentarios,Context context){
+    public AdaptadorComentarios(List comentarios, Context context, Map agenda){
        this.comentarios=comentarios;
        this.context=context;
+       this.agenda=agenda;
     }
 
     @Override
-    public ComentariosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_comentarios,parent,false);
-        ComentariosViewHolder holder = new ComentariosViewHolder(view,context,comentarios);
-        return holder;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == NO_USER){
+            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_comentarios,parent,false);
+            return new ComentariosViewHolder(view,context,comentarios);
+        }else{
+            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_comentarios_dos,parent,false);
+            return new ComentariosViewHolderUser(view);
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(ComentariosViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (holder.getItemViewType()){
+            case NO_USER:
+                initLayoutNoUser((ComentariosViewHolder) holder,position);
+                break;
+            case USER:
+                iniLayoutUser((ComentariosViewHolderUser)holder,position);
+                break;
+        }
+    }
+
+
+    private void initLayoutNoUser(ComentariosViewHolder holder, int position) {
         Comentario comentario= comentarios.get(position);
+        String contacto = agenda.get(comentario.getPhoneNumberUsuario());
         Glide.with(context)
                 .load(comentario.getAvatarUsuario())
                 .centerCrop()
                 .fitCenter()
                 .into(holder.avatarComentario);
-        holder.editTextComentario.setText(comentario.getComentario());
+        String texto=contacto + ": " + comentario.getComentario();
+        Spannable spannable = new SpannableString(texto);
+        spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
         holder.setOnclickListener();
+    }
+
+    private void iniLayoutUser(ComentariosViewHolderUser holder, int position) {
+        Comentario comentario= comentarios.get(position);
+        String texto="Yo: " + comentario.getComentario();
+        Spannable spannable = new SpannableString(texto);
+        spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
     }
 
     @Override
@@ -66,6 +103,24 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<AdaptadorComentar
         return comentarios.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        Comentario com=comentarios.get(position);
+        if(com.getTipo() == Comentario.ComentarioType.OTHER_USERS){
+            return NO_USER;
+        }else{
+            return USER;
+        }
+    }
+
+    public static class ComentariosViewHolderUser extends RecyclerView.ViewHolder{
+
+        TextView editTextComentario;
+        public ComentariosViewHolderUser(View itemView) {
+            super(itemView);
+            editTextComentario=itemView.findViewById(R.id.editTextComentario);
+        }
+    }
 
     public static class ComentariosViewHolder extends RecyclerView.ViewHolder{
 

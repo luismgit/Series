@@ -1,5 +1,9 @@
 package com.maniac.luis.series.actividades;
 
+import android.content.ClipData;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,9 +29,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
+import com.sun.mail.imap.protocol.Item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComentariosActivity extends AppCompatActivity {
 
@@ -41,6 +49,7 @@ public class ComentariosActivity extends AppCompatActivity {
     TextView txtSinComentarios;
     ImageView imagenSerieComentarios;
     TextView textoSerieComentarios;
+    Map<String,String> agenda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,8 @@ public class ComentariosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
         contactos=new ArrayList<>();
+        agenda=new HashMap<>();
+        loadContactFromTlf();
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
         textoSerieComentarios=findViewById(R.id.textoSerieComentarios);
@@ -86,6 +97,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
         nuevoComentario=findViewById(R.id.nuevoComentario);
         rv=findViewById(R.id.recyclerComentarios);
+
         comentarios=new ArrayList<>();
         contactosPhoneNumber=new ArrayList<>();
         contactosPhoneNumber= ComunicarContactosPhoneNumber.getPhoneNumbers();
@@ -93,7 +105,7 @@ public class ComentariosActivity extends AppCompatActivity {
                 .child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
         fbref.setValue(0);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adaptadorComentarios=new AdaptadorComentarios(comentarios,this);
+        adaptadorComentarios=new AdaptadorComentarios(comentarios,this,agenda);
         rv.setAdapter(adaptadorComentarios);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
@@ -107,8 +119,15 @@ public class ComentariosActivity extends AppCompatActivity {
                     /*if(contactosPhoneNumber.contains(com.getPhoneNumberUsuario())){
                         comentarios.add(com);
                     }*/
+                    if(com.getPhoneNumberUsuario().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                        com.setTipo(Comentario.ComentarioType.USER_PROP);
+                    }else{
+                        com.setTipo(Comentario.ComentarioType.OTHER_USERS);
+                    }
                     if(com.getSerie().equals(nombreSerie)){
+
                         comentarios.add(com);
+
                     }
 
                 }
@@ -134,7 +153,15 @@ public class ComentariosActivity extends AppCompatActivity {
         if(coment.equals("")){
             Toast.makeText(this, R.string.debe_comentar,Toast.LENGTH_SHORT).show();
         }else{
-            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser());
+            Map<String,Boolean> liked = new HashMap<>();
+            List<String> numeroContactos=new ArrayList<>();
+            numeroContactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
+            for (int i = 0; i < numeroContactos.size(); i++) {
+                Log.i("liked","numeros -> " + numeroContactos.get(i));
+                liked.put(numeroContactos.get(i),false);
+            }
+            liked.put("prueba",false);
+            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
             databaseReference.push().setValue(comentario);
             nuevoComentario.setText("");
@@ -175,6 +202,30 @@ public class ComentariosActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void loadContactFromTlf() {
+        ContentResolver contentResolver=this.getContentResolver();
+        String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
+        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
+        String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
+                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
+                ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
+        //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
+        Cursor cursor=this.getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
+        while(cursor.moveToNext()){
+            String name=cursor.getString(0);
+            String phoneNumber=cursor.getString(1);
+            if(phoneNumber.length()>=9){
+                phoneNumber=phoneNumber.replaceAll("\\s","");
+                if(phoneNumber.substring(0,3).equals("+34")){
+                    phoneNumber=phoneNumber.substring(3,phoneNumber.length());
+                }
+                agenda.put(phoneNumber,name);
+            }
+
+        }
+        cursor.close();
     }
 
 
