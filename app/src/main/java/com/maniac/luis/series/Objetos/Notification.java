@@ -9,16 +9,26 @@ public class Notification {
     String telefono;
     String serie;
     String telefono_usuario_final;
+    String comentario;
 
-    public Notification(String token,String avatar,String telefono,String serie,String telefono_usuario_final) {
+    public Notification(String token,String avatar,String telefono,String serie,String telefono_usuario_final,String comentario) {
         this.token=token;
         this.avatar=avatar;
         this.telefono=telefono;
         this.serie=serie;
         this.telefono_usuario_final=telefono_usuario_final;
+        this.comentario=comentario;
     }
     public  Notification(){
 
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
     public String getToken() {

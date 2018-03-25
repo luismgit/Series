@@ -10,6 +10,7 @@ public class Comentario {
     private String avatarUsuario;
     private String phoneNumberUsuario;
     private String serie;
+    private String keyFB;
     private Map<String,Boolean> liked=new HashMap<>();
     private ComentarioType tipo;
 
@@ -20,13 +21,22 @@ public class Comentario {
     public Comentario(){
 
     }
-    public Comentario(String comentario, String avatarUsuario,String serie,String phoneNumberUsuario,Map<String,Boolean> liked,ComentarioType type) {
+    public Comentario(String comentario, String avatarUsuario,String serie,String phoneNumberUsuario,Map<String,Boolean> liked,ComentarioType type,String keyFB) {
         this.comentario = comentario;
         this.avatarUsuario = avatarUsuario;
         this.serie=serie;
         this.phoneNumberUsuario=phoneNumberUsuario;
         this.liked=liked;
         this.tipo=tipo;
+        this.keyFB=keyFB;
+    }
+
+    public String getKeyFB() {
+        return keyFB;
+    }
+
+    public void setKeyFB(String keyFB) {
+        this.keyFB = keyFB;
     }
 
     public ComentarioType getTipo() {

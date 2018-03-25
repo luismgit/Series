@@ -33,6 +33,8 @@ import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
        this.comentarios=comentarios;
        this.context=context;
        this.agenda=agenda;
+       Log.i("constructor","entra a constructor");
     }
 
     @Override
@@ -89,6 +92,13 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
        // spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         //holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
         holder.editTextComentario.setText(comentario.getComentario());
+        Map<String,Boolean> liked = comentario.getLiked();
+        Boolean isLiked=liked.get(ComunicarCurrentUser.getPhoneNumberUser());
+        Log.i("Liked","comentario -> " + comentario.getComentario());
+        Log.i("Liked","numero -> " + ComunicarCurrentUser.getPhoneNumberUser());
+        Log.i("Liked","isliked -> " + isLiked);
+
+        holder.botonMegusta.setLiked(isLiked);
         holder.setOnclickListener();
     }
 
@@ -166,21 +176,50 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
             });
 
 
-           /* botonMegusta.setOnLikeListener(new OnLikeListener() {
+            botonMegusta.setOnLikeListener(new OnLikeListener() {
                 @Override
                 public void liked(LikeButton likeButton) {
-                    Log.i("like","true");
-                    likeButton.setLiked(true);
+                    final Comentario comentario=comentarios.get(getAdapterPosition());
+                    Log.i("LIKED","LIKE");
+                    DatabaseReference re=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
+                            .child(comentario.getKeyFB()).child("liked").child(ComunicarCurrentUser.getPhoneNumberUser());
+                    re.setValue(true);
+                    DatabaseReference dr= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
+                    dr.orderByChild("telefono").equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                Usuario usuario = childSnapshot.getValue(Usuario.class);
+                                Log.i("prueba",usuario.getTelefono());
+                                if(!usuario.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                                    Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie(),usuario.getTelefono(),comentario.getComentario());
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
+                                    ref.push().setValue(not);
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
                 public void unLiked(LikeButton likeButton) {
-                    likeButton.setLiked(false);
+                    Comentario comentario=comentarios.get(getAdapterPosition());
+                    Log.i("LIKED","LIKE");
+                    DatabaseReference re=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
+                            .child(comentario.getKeyFB()).child("liked").child(ComunicarCurrentUser.getPhoneNumberUser());
+                    re.setValue(false);
+
                 }
-            });*/
+            });
 
 
-            botonMegusta.setOnClickListener(new View.OnClickListener() {
+          /*  botonMegusta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
@@ -208,9 +247,13 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                     });
 
                 }
-            });
+            });*/
 
 
         }
     }
+
+
+
+
 }

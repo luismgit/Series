@@ -25,5 +25,9 @@ public class Common {
     final public static String NOTIFICACION="notificacion";
     final public static String TELEFONO_USUARIO_FINAL="telefono_usuario_final";
     final public static String SERIE="serie";
+    final public static String COMENTARIO="comentario";
+    final public static String LIKE="Like";
+    final public static String NOTIFY="notify";
+
 
 }

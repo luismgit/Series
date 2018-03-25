@@ -33,19 +33,21 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.i("prueba","hola -> " );
         String mensaje="";
         if(remoteMessage.getData().size()>0){
             Map<String,String> data = remoteMessage.getData();
             String telefono=data.get(Common.TELEFONO);
+            String comentario=data.get(Common.COMENTARIO);
+            if(comentario.length()>=19){
+                comentario=comentario.substring(0,20)+"..., ";
+            }
             String telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
             String serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);
-            Log.i("prueba","contactoAgenda -> " + contactoAgenda);
             if(contactoAgenda.equals("")){
-                mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario en" + " " + serie;
+                mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario:" + comentario  + " en " + serie;
             }else{
-               mensaje="A " + contactoAgenda + " " + "le ha gustado tu comentario en" + " " + serie;
+               mensaje="A " + contactoAgenda + " " + "le ha gustado tu comentario:" + comentario + "en" + " " + serie;
             }
             Bitmap bitmap=null;
             try {
@@ -70,7 +72,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
-                    .setContentTitle("Like")
+                    .setContentTitle(Common.LIKE)
                     .setContentText(contactoAgenda)
                     .setAutoCancel(true)
                     .setPriority(Notification.PRIORITY_HIGH)
@@ -82,7 +84,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.notify(m,builder.build());
             SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean("notify",true);
+            editor.putBoolean(Common.NOTIFY,true);
             editor.commit();
 
 
@@ -95,11 +97,9 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
     public String loadContactFromTlf(String telefono) {
         ContentResolver contentResolver=this.getContentResolver();
         String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
-        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
         String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
-        //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
         Cursor cursor=this.getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
         while(cursor.moveToNext()){
             String name=cursor.getString(0);
@@ -108,22 +108,12 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                 phoneNumber=phoneNumber.replaceAll("\\s","");
                 if(phoneNumber.substring(0,3).equals("+34")){
                     phoneNumber=phoneNumber.substring(3,phoneNumber.length());
-                    //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
-
                 }
-                //nombreContactosTelefono.add(name);
-                // contactosTelefono.add(phoneNumber);
-                Log.i("contactos","Nombre: " + name);
-                Log.i("contactos","Numero: " + phoneNumber);
+
                 if(phoneNumber.equals(telefono)){
                     return name;
                 }
             }
-
-            //Log.i("contactos","Identificador: " + cursor.getString(0));
-
-
-            //Log.i("contactos","Tipo: " + cursor.getString(3));
         }
         cursor.close();
         return "";

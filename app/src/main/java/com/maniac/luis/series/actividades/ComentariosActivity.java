@@ -55,6 +55,8 @@ public class ComentariosActivity extends AppCompatActivity {
     ImageView imagenSerieComentarios;
     TextView textoSerieComentarios;
     Map<String,String> agenda;
+    DatabaseReference referenceABorrar;
+    ValueEventListener listener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -71,6 +73,19 @@ public class ComentariosActivity extends AppCompatActivity {
         txtSinComentarios.setVisibility(View.GONE);
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         imagenSerieComentarios=findViewById(R.id.imagenSerieComentarios);
+        referenceABorrar = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
+                .child(ComunicarCurrentUser.getPhoneNumberUser()).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
+         listener=referenceABorrar.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                referenceABorrar.setValue(0);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         DatabaseReference r = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie);
         r.child(FirebaseReferences.IMAGEN_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -123,20 +138,18 @@ public class ComentariosActivity extends AppCompatActivity {
                 for(DataSnapshot snapshot:
                         dataSnapshot.getChildren()){
                     Comentario com = snapshot.getValue(Comentario.class);
-                    Log.i("comentario",com.getAvatarUsuario());
-                    /*if(contactosPhoneNumber.contains(com.getPhoneNumberUsuario())){
+                    if(contactosPhoneNumber.contains(com.getPhoneNumberUsuario()) && com.getSerie().equals(nombreSerie)
+                            && com.getLiked().containsKey(ComunicarCurrentUser.getPhoneNumberUser())){
                         comentarios.add(com);
-                    }*/
+                        com.setTipo(Comentario.ComentarioType.OTHER_USERS);
+                        }
+
+
                     if(com.getPhoneNumberUsuario().equals(ComunicarCurrentUser.getPhoneNumberUser())){
                         com.setTipo(Comentario.ComentarioType.USER_PROP);
-                    }else{
-                        com.setTipo(Comentario.ComentarioType.OTHER_USERS);
-                    }
-                    if(com.getSerie().equals(nombreSerie)){
-
                         comentarios.add(com);
-
                     }
+
 
                 }
                 if(comentarios.size()==0){
@@ -155,6 +168,11 @@ public class ComentariosActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        referenceABorrar.removeEventListener(listener);
+    }
 
     public void enviarNuevoComentario(View view) {
         String coment=nuevoComentario.getText().toString().trim();
@@ -169,9 +187,12 @@ public class ComentariosActivity extends AppCompatActivity {
                 liked.put(numeroContactos.get(i),false);
             }
             liked.put("prueba",false);
-            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS);
+            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"");
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
-            databaseReference.push().setValue(comentario);
+            String key = databaseReference.push().getKey();
+            databaseReference.child(key).setValue(comentario);
+            DatabaseReference refdata=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(key).child("keyFB");
+            refdata.setValue(key);
             nuevoComentario.setText("");
             final DatabaseReference dtRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE);
             dtRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -235,6 +256,8 @@ public class ComentariosActivity extends AppCompatActivity {
         }
         cursor.close();
     }
+
+
 
 
 }
