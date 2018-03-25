@@ -112,9 +112,9 @@ public class ComentariosActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this,agenda);
         rv.setAdapter(adaptadorComentarios);
-        Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
+        /*Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
         com.maniac.luis.series.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.DividerItemDecoration(dividerDrawable);
-        rv.addItemDecoration(dividerItemDecoration);
+        rv.addItemDecoration(dividerItemDecoration);*/
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override

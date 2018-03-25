@@ -83,19 +83,22 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 .centerCrop()
                 .fitCenter()
                 .into(holder.avatarComentario);
-        String texto=contacto + ": " + comentario.getComentario();
-        Spannable spannable = new SpannableString(texto);
-        spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
+       // String texto=contacto + ": " + comentario.getComentario();
+        holder.textUserName.setText(contacto);
+        //Spannable spannable = new SpannableString(texto);
+       // spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
+        holder.editTextComentario.setText(comentario.getComentario());
         holder.setOnclickListener();
     }
 
     private void iniLayoutUser(ComentariosViewHolderUser holder, int position) {
         Comentario comentario= comentarios.get(position);
-        String texto="Yo: " + comentario.getComentario();
+        /*String texto="Yo: " + comentario.getComentario();
         Spannable spannable = new SpannableString(texto);
         spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
+        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);*/
+        holder.editTextComentario.setText(comentario.getComentario());
     }
 
     @Override
@@ -130,12 +133,14 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         Dialog miDialogo;
         List<Comentario> comentarios=new ArrayList<>();
         LikeButton botonMegusta;
+        TextView textUserName;
         String claveUsuarioActual="";
 
         public ComentariosViewHolder(View itemView,Context context,List comentarios) {
             super(itemView);
             this.context=context;
             editTextComentario=itemView.findViewById(R.id.editTextComentario);
+            textUserName=itemView.findViewById(R.id.text_message_name);
             avatarComentario=itemView.findViewById(R.id.avatarComentario);
             this.comentarios=comentarios;
             botonMegusta=itemView.findViewById(R.id.botonMegusta);

@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#e1d0d0">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="60dp"
@@ -33,13 +34,13 @@
 
     </LinearLayout>
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/dividerdrawable"
+        android:background="#9f9b9b"
         android:layout_marginBottom="5dp"
-        />
+        />-->
 
 
 
@@ -63,10 +64,11 @@
 
     <android.support.v7.widget.RecyclerView
 
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerComentarios"
         android:layout_weight="5"
+        android:background="#e1d0d0"
         >
 
     </android.support.v7.widget.RecyclerView>
@@ -74,7 +76,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        android:background="#e1d0d0">
 
         <EditText
             android:layout_width="match_parent"
