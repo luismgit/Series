@@ -3,9 +3,14 @@ package com.maniac.luis.series.actividades;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -51,6 +56,7 @@ public class ComentariosActivity extends AppCompatActivity {
     TextView textoSerieComentarios;
     Map<String,String> agenda;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +103,6 @@ public class ComentariosActivity extends AppCompatActivity {
 
         nuevoComentario=findViewById(R.id.nuevoComentario);
         rv=findViewById(R.id.recyclerComentarios);
-
         comentarios=new ArrayList<>();
         contactosPhoneNumber=new ArrayList<>();
         contactosPhoneNumber= ComunicarContactosPhoneNumber.getPhoneNumbers();
@@ -107,6 +112,9 @@ public class ComentariosActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this,agenda);
         rv.setAdapter(adaptadorComentarios);
+        Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
+        com.maniac.luis.series.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.DividerItemDecoration(dividerDrawable);
+        rv.addItemDecoration(dividerItemDecoration);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override

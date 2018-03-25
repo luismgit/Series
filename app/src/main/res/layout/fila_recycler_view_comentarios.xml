@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="10dp">
+    android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="45dp"
@@ -36,16 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Me gusta"
-       android:layout_alignBottom="@id/barraSep"
         android:layout_marginBottom="18dp"
         android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@id/botonMegusta"
+
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#d4d4d4"
-        android:layout_below="@id/botonMegusta"
-        android:id="@+id/barraSep"
-        />
+
 
 </RelativeLayout>
