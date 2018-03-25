@@ -178,7 +178,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (final DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         String claveUsuarioActual = childSnapshot.getKey();
-                        Log.i("CorreoEl", claveUsuarioActual);
                         ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual);
                         databaseReference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
