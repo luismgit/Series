@@ -13,6 +13,7 @@ public class Comentario {
     private String keyFB;
     private Map<String,Boolean> liked=new HashMap<>();
     private ComentarioType tipo;
+    private Long numLikes;
 
     public enum ComentarioType {
             USER_PROP,OTHER_USERS;
@@ -21,7 +22,8 @@ public class Comentario {
     public Comentario(){
 
     }
-    public Comentario(String comentario, String avatarUsuario,String serie,String phoneNumberUsuario,Map<String,Boolean> liked,ComentarioType type,String keyFB) {
+    public Comentario(String comentario, String avatarUsuario,String serie,String phoneNumberUsuario
+            ,Map<String,Boolean> liked,ComentarioType type,String keyFB,Long numlikes) {
         this.comentario = comentario;
         this.avatarUsuario = avatarUsuario;
         this.serie=serie;
@@ -29,6 +31,15 @@ public class Comentario {
         this.liked=liked;
         this.tipo=tipo;
         this.keyFB=keyFB;
+        this.numLikes=numlikes;
+    }
+
+    public Long getNumLikes() {
+        return numLikes;
+    }
+
+    public void setNumLikes(Long numLikes) {
+        this.numLikes = numLikes;
     }
 
     public String getKeyFB() {

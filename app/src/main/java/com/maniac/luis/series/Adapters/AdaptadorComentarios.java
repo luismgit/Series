@@ -88,6 +88,12 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 .into(holder.avatarComentario);
        // String texto=contacto + ": " + comentario.getComentario();
         holder.textUserName.setText(contacto);
+        if(comentario.getNumLikes()!=0){
+            holder.numeroMeGustan.setText("("+comentario.getNumLikes()+")");
+        }else{
+            holder.numeroMeGustan.setText("");
+        }
+
         //Spannable spannable = new SpannableString(texto);
        // spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         //holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
@@ -145,6 +151,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         LikeButton botonMegusta;
         TextView textUserName;
         String claveUsuarioActual="";
+        TextView numeroMeGustan;
 
         public ComentariosViewHolder(View itemView,Context context,List comentarios) {
             super(itemView);
@@ -154,6 +161,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
             avatarComentario=itemView.findViewById(R.id.avatarComentario);
             this.comentarios=comentarios;
             botonMegusta=itemView.findViewById(R.id.botonMegusta);
+            numeroMeGustan=itemView.findViewById(R.id.numeroMegusta);
         }
         public void setOnclickListener(){
             avatarComentario.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +213,21 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
 
                         }
                     });
+                    final DatabaseReference refD=FirebaseDatabase.getInstance().getReference(FirebaseReferences.COMENTARIOS).child(comentario.getKeyFB())
+                            .child(FirebaseReferences.NUM_LIKES);
+                    refD.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Long num= (Long) dataSnapshot.getValue();
+                            num++;
+                            refD.setValue(num);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -214,6 +237,21 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                     DatabaseReference re=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
                             .child(comentario.getKeyFB()).child("liked").child(ComunicarCurrentUser.getPhoneNumberUser());
                     re.setValue(false);
+                    final DatabaseReference refD=FirebaseDatabase.getInstance().getReference(FirebaseReferences.COMENTARIOS).child(comentario.getKeyFB())
+                            .child(FirebaseReferences.NUM_LIKES);
+                    refD.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Long num= (Long) dataSnapshot.getValue();
+                            num--;
+                            refD.setValue(num);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
             });

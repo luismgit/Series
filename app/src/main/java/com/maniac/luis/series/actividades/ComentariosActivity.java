@@ -145,7 +145,7 @@ public class ComentariosActivity extends AppCompatActivity {
                         }
 
 
-                    if(com.getPhoneNumberUsuario().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                    if(com.getPhoneNumberUsuario().equals(ComunicarCurrentUser.getPhoneNumberUser()) && com.getSerie().equals(nombreSerie)){
                         com.setTipo(Comentario.ComentarioType.USER_PROP);
                         comentarios.add(com);
                     }
@@ -187,7 +187,8 @@ public class ComentariosActivity extends AppCompatActivity {
                 liked.put(numeroContactos.get(i),false);
             }
             liked.put("prueba",false);
-            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario(),nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"");
+            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario()
+                    ,nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"", (long) 0);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
             String key = databaseReference.push().getKey();
             databaseReference.child(key).setValue(comentario);
