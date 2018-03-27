@@ -9,7 +9,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 
 public class MiFirebaseInstanceIdService extends FirebaseInstanceIdService{
-    String TAG="Firebase_token";
 
     @Override
     public void onTokenRefresh() {

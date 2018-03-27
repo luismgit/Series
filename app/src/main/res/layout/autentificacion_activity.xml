@@ -127,15 +127,27 @@
         android:indeterminate="false"
         android:max="100"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/texto_cargando"
+        android:layout_gravity="center"
+        android:textColor="#07ff6e"
+        android:textSize="17sp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"
+        android:id="@+id/mensajeCargando"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="En caso de problemas en el registro pulse"
+            android:text="@string/texto_ayuda"
             android:textColor="#000000"
             android:textSize="17dp"
             android:paddingHorizontal="16dp"
             android:layout_gravity="center"
+            android:visibility="gone"
+            android:id="@+id/mensajeAyuda"
             />
         <TextView
             android:layout_width="match_parent"
@@ -147,6 +159,7 @@
             android:onClick="ayuda"
             android:shadowColor="#000000"
             android:id="@+id/ayudaTexto"
+            android:visibility="gone"
             />
 
 

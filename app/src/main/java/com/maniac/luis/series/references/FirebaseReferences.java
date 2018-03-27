@@ -38,4 +38,7 @@ public class FirebaseReferences {
     final public static String IMAGEN_SERIE="imagen";
     final public static String NOMBRE_SERIE="nombre";
     final public static String NUM_LIKES="numLikes";
+    final public static String TELEFONO="telefono";
+    final public static String NOTIFICATIONS="notifications";
+    final public static String LIKED="liked";
 }

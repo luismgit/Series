@@ -317,11 +317,13 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                          //POR CADA VUELTA DEL FOR CONSEGUIMOS UN USUARIO DE LA BB.DD
                          Usuario usuario = snapshot.getValue(Usuario.class);
 
-
-                         if (usuario.getNick().equals(nick)) {
-                             textViewError.setText(R.string.msg_registro_uso_email);
-                             error = true;
+                         if(usuario!=null){
+                             if (usuario.getNick().equals(nick)) {
+                                 textViewError.setText(R.string.msg_registro_uso_email);
+                                 error = true;
+                             }
                          }
+
 
                      }
 

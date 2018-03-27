@@ -52,7 +52,6 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
        this.comentarios=comentarios;
        this.context=context;
        this.agenda=agenda;
-       Log.i("constructor","entra a constructor");
     }
 
     @Override
@@ -103,9 +102,6 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         holder.editTextComentario.setText(comentario.getComentario());
         Map<String,Boolean> liked = comentario.getLiked();
         Boolean isLiked=liked.get(ComunicarCurrentUser.getPhoneNumberUser());
-        Log.i("Liked","comentario -> " + comentario.getComentario());
-        Log.i("Liked","numero -> " + ComunicarCurrentUser.getPhoneNumberUser());
-        Log.i("Liked","isliked -> " + isLiked);
 
         holder.botonMegusta.setLiked(isLiked);
         holder.setOnclickListener();
@@ -193,20 +189,18 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void liked(LikeButton likeButton) {
                     final Comentario comentario=comentarios.get(getAdapterPosition());
-                    Log.i("LIKED","LIKE");
                     DatabaseReference re=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
                             .child(comentario.getKeyFB()).child("liked").child(ComunicarCurrentUser.getPhoneNumberUser());
                     re.setValue(true);
                     DatabaseReference dr= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
-                    dr.orderByChild("telefono").equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    dr.orderByChild(FirebaseReferences.TELEFONO).equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                 Usuario usuario = childSnapshot.getValue(Usuario.class);
-                                Log.i("prueba",usuario.getTelefono());
                                 if(!usuario.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
                                     Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie(),usuario.getTelefono(),comentario.getComentario());
-                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.NOTIFICATIONS);
                                     ref.push().setValue(not);
                                 }
 
@@ -238,9 +232,8 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void unLiked(LikeButton likeButton) {
                     Comentario comentario=comentarios.get(getAdapterPosition());
-                    Log.i("LIKED","LIKE");
                     DatabaseReference re=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
-                            .child(comentario.getKeyFB()).child("liked").child(ComunicarCurrentUser.getPhoneNumberUser());
+                            .child(comentario.getKeyFB()).child(FirebaseReferences.LIKED).child(ComunicarCurrentUser.getPhoneNumberUser());
                     re.setValue(false);
                     final DatabaseReference refD=FirebaseDatabase.getInstance().getReference(FirebaseReferences.COMENTARIOS).child(comentario.getKeyFB())
                             .child(FirebaseReferences.NUM_LIKES);

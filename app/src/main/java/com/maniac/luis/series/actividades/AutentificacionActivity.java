@@ -93,6 +93,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     Session session;
     EditText editTextMensajeAyuda;
     EditText correoUsuAyuda;
+    TextView mensajeCargando;
+    TextView mensajeAyuda;
     int contador=0;
     List<String> listaFondos;
     @Override
@@ -152,6 +154,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                     etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
                     etxtPhoneCode.setOnEditorActionListener(AutentificacionActivity.this);
                     progressBarCircular=findViewById(R.id.progressBarCircular);
+                    mensajeCargando=findViewById(R.id.mensajeCargando);
+                    mensajeAyuda=findViewById(R.id.mensajeAyuda);
+
                 }
             }
         };
@@ -216,6 +221,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         }
         //HACEMOS EL PROGESSBAR VISIBLE Y EVITAMOS EL USUARIO PUEDA VOLVER A PULSAR LOS BOTONES DEL LAYOUT
         progressBarCircular.setVisibility(View.VISIBLE);
+        ayudaTexto.setVisibility(View.GONE);
+        mensajeAyuda.setVisibility(View.GONE);
+        mensajeCargando.setVisibility(View.VISIBLE);
         botonSMS.setClickable(false);
         botonSIGIN.setClickable(false);
         Log.i("SESION", "1----");
@@ -235,8 +243,11 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 Toast.makeText(AutentificacionActivity.this,getString(R.string.error_verif) + e.getMessage(),Toast.LENGTH_LONG).show();
                 Log.i("SESION", "telefono incorrecto,codigo de verificacion o emulador...");
                 progressBarCircular.setVisibility(View.INVISIBLE);
+                mensajeCargando.setVisibility(View.GONE);
                 botonSMS.setClickable(true);
                 botonSIGIN.setClickable(true);
+                ayudaTexto.setVisibility(View.VISIBLE);
+                mensajeAyuda.setVisibility(View.VISIBLE);
             }
 
             //ESTE MÉTODO SE EJECUTARÁ CUANDO EL CÓDIGO HAYA SIDO ENVIADO , GUARDAMOS EL CÓDIGO EN mVerificationId
@@ -254,6 +265,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                 Toast.makeText(AutentificacionActivity.this,getString(R.string.time_out_code) + mVerificationId,Toast.LENGTH_LONG).show();
                 Log.i("SESION", "se ha acabado el tiempo y el codigo de verficacion no se ha enviado");
                 progressBarCircular.setVisibility(View.INVISIBLE);
+                mensajeCargando.setVisibility(View.GONE);
                 botonSMS.setClickable(true);
                 botonSIGIN.setClickable(true);
             }
@@ -274,6 +286,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                             Toast.makeText(AutentificacionActivity.this,getString(R.string.error_log) + task.getException().getMessage(),Toast.LENGTH_LONG).show();
                             Log.i("SESION", "On complete() -> task.isSuccessful() , fallo al loguearse");
                             progressBarCircular.setVisibility(View.INVISIBLE);
+                            mensajeCargando.setVisibility(View.GONE);
                             botonSMS.setClickable(true);
                             botonSIGIN.setClickable(true);
                         }
@@ -336,6 +349,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             Toast.makeText(AutentificacionActivity.this, R.string.introd_cod_sms,Toast.LENGTH_LONG).show();
             Log.i("SESION", "Debe introducir el código recibido pos SMS");
             progressBarCircular.setVisibility(View.INVISIBLE);
+            mensajeCargando.setVisibility(View.GONE);
             botonSMS.setClickable(true);
             botonSIGIN.setClickable(true);
             return;
@@ -346,6 +360,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             Log.i("SESION", "Codigo incorrecto");
             Toast.makeText(AutentificacionActivity.this, R.string.error_cod_verif,Toast.LENGTH_LONG).show();
             progressBarCircular.setVisibility(View.INVISIBLE);
+            mensajeCargando.setVisibility(View.GONE);
             botonSMS.setClickable(true);
             botonSIGIN.setClickable(true);
         }
