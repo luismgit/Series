@@ -50,6 +50,7 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
        // holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(contexto)
                 .load(suscripcion.getImagen())
+                .error(R.drawable.sin_conexion)
                 .into(holder.avatarSerie);
         //AL TEXTVIEW NOTA LE APLICAMOS LA NOTA QUE EL USUARIO ELEGIDO LE HA PUESTO SOBRE 10
         if(suscripcion.getVotada().equals("si")){

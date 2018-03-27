@@ -57,6 +57,7 @@ private int [] avatares;
                 .load(getIntent().getStringExtra(Common.AVATAR))
                 .fitCenter()
                 .centerCrop()
+                .error(R.drawable.sin_conexion)
                 .into(avatarUsuario);
 
         //RECOGEMOS EL TELÉFONO DEL USUARIO SELECCIONADO

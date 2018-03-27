@@ -2,6 +2,8 @@ package com.maniac.luis.series.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -64,6 +66,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 .load(serie.getImagen())
                 .fitCenter()
                 .centerCrop()
+                .error(R.drawable.sin_conexion)
                 .into(holder.iconoSerie);
        // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());

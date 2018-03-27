@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -79,7 +81,9 @@ public class Perfil extends AppCompatActivity {
                 .load(user.getAvatar())
                 .fitCenter()
                 .centerCrop()
+                .error(R.drawable.sin_conexion)
                 .into(imagenUsuario);
+
         editTextEmailUsuario.setText(user.getCorreo());
         editTextEmailUsuario.setSelection(editTextEmailUsuario.getText().length());
         imagenUsuario.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +162,7 @@ public class Perfil extends AppCompatActivity {
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
+                        .error(R.drawable.sin_conexion)
                         .into(imagenUsuario);
                // stream = new ByteArrayOutputStream();
                // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -174,6 +179,7 @@ public class Perfil extends AppCompatActivity {
                         .load(data.getData())
                         .centerCrop()
                         .fitCenter()
+                        .error(R.drawable.sin_conexion)
                         .into(imagenUsuario);
             }
         }

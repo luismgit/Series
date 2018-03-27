@@ -97,6 +97,7 @@ public class ComentariosActivity extends AppCompatActivity {
                         .load(url)
                         .centerCrop()
                         .fitCenter()
+                        .error(R.drawable.sin_conexion)
                         .into(imagenSerieComentarios);
             }
 

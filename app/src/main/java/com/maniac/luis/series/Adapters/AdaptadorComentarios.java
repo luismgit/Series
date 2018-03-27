@@ -178,6 +178,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                             .load(comentario.getAvatarUsuario())
                             .fitCenter()
                             .centerCrop()
+                            .error(R.drawable.sin_conexion)
                             .into(imagen);
                     miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     miDialogo.show();

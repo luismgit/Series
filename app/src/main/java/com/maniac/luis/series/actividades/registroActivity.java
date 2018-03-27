@@ -99,6 +99,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         avatarIcono=findViewById(R.id.avatarIcono);
         Glide.with(this)
                 .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
+                .error(R.drawable.sin_conexion)
                 .into(avatarIcono);
         avatarIcono.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,6 +235,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
+                        .error(R.drawable.sin_conexion)
                         .into(avatarIcono);
                 //stream = new ByteArrayOutputStream();
                 //bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -250,6 +252,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         .load(data.getData())
                         .centerCrop()
                         .fitCenter()
+                        .error(R.drawable.sin_conexion)
                         .into(avatarIcono);
             }
         }

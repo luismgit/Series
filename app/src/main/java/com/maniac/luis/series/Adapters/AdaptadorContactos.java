@@ -116,6 +116,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
                             .load(usuario.getAvatar())
                             .fitCenter()
                             .centerCrop()
+                            .error(R.drawable.sin_conexion)
                             .into(imagen);
                     miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     miDialogo.show();

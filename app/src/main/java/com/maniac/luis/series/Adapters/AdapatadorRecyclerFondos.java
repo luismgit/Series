@@ -6,8 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Imagenes;
 
@@ -35,10 +39,27 @@ public class AdapatadorRecyclerFondos extends RecyclerView.Adapter<AdapatadorRec
     }
 
     @Override
-    public void onBindViewHolder(FondosViewHolderRecycler holder, int position) {
+    public void onBindViewHolder(final FondosViewHolderRecycler holder, int position) {
 
         Glide.with(contexto)
                 .load(listaFondos.get(position))
+                .error(R.drawable.sin_conexion)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        holder.fondo.setImageResource(R.drawable.sin_conexion);
+                        holder.carga.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        holder.carga.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .centerCrop()
+                .fitCenter()
                 .into(holder.fondo);
     }
 
@@ -60,9 +81,11 @@ public class AdapatadorRecyclerFondos extends RecyclerView.Adapter<AdapatadorRec
     public class FondosViewHolderRecycler extends RecyclerView.ViewHolder {
 
         ImageView fondo;
+        ProgressBar carga;
         public FondosViewHolderRecycler(View itemView) {
             super(itemView);
             fondo=itemView.findViewById(R.id.fondoImagenSerie);
+            carga=itemView.findViewById(R.id.carga);
         }
 
 

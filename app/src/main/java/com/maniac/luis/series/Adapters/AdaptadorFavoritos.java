@@ -64,6 +64,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                 .load(suscripcion.getImagen())
                 .fitCenter()
                 .centerCrop()
+                .error(R.drawable.sin_conexion)
                 .into(holder.imagenSerie);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.ratingBarFavoritos.setAnimation(holder.myRotation);
