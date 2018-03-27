@@ -70,6 +70,7 @@
     <string name="sin_contactos">Sin contactos,añade a tu agenda contactos que tengan la aplicación</string>
     <string name="esta_serie_no_tiene_comentarios_se_el_primero_en_comentarla">Esta serie no tiene comentarios , se el primero en comentarla.</string>
     <string name="me_gusta">Me gusta</string>
+    <string name="hoy_a_las">Hoy a las</string>
 
 
 </resources>

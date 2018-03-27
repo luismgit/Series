@@ -37,7 +37,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
 import com.sun.mail.imap.protocol.Item;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,7 +190,7 @@ public class ComentariosActivity extends AppCompatActivity {
             }
             liked.put("prueba",false);
             Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario()
-                    ,nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"", (long) 0);
+                    ,nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"", (long) 0,getFecha());
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
             String key = databaseReference.push().getKey();
             databaseReference.child(key).setValue(comentario);
@@ -233,6 +235,13 @@ public class ComentariosActivity extends AppCompatActivity {
         }
 
     }
+
+    private String getFecha(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
+        return sdf.format(date);
+    }
+
 
     public void loadContactFromTlf() {
         ContentResolver contentResolver=this.getContentResolver();

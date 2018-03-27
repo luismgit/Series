@@ -38,16 +38,16 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             Map<String,String> data = remoteMessage.getData();
             String telefono=data.get(Common.TELEFONO);
             String comentario=data.get(Common.COMENTARIO);
-            if(comentario.length()>=19){
+            if(comentario.length()>=20){
                 comentario=comentario.substring(0,20)+"..., ";
             }
             String telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
             String serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);
             if(contactoAgenda.equals("")){
-                mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario:" + comentario  + " en " + serie;
+                mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario:" + comentario  + " " + "en" + " " + serie + ".";
             }else{
-               mensaje="A " + contactoAgenda + " " + "le ha gustado tu comentario:" + comentario + "en" + " " + serie;
+               mensaje="A " + contactoAgenda + " " + "le ha gustado tu comentario:" + comentario + " " + "en" + " " + serie + ".";
             }
             Bitmap bitmap=null;
             try {
@@ -72,7 +72,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
-                    .setContentTitle(Common.LIKE)
+                    .setContentTitle(Common.LIKE + " | " + contactoAgenda + " | " + serie)
                     .setContentText(contactoAgenda)
                     .setAutoCancel(true)
                     .setPriority(Notification.PRIORITY_HIGH)

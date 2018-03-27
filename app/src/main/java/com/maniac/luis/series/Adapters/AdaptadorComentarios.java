@@ -32,7 +32,9 @@ import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -93,6 +95,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         }else{
             holder.numeroMeGustan.setText("");
         }
+        holder.fechaComentario.setText(getFechaComentarioFormateada(comentario.getFecha()));
 
         //Spannable spannable = new SpannableString(texto);
        // spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -152,6 +155,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         TextView textUserName;
         String claveUsuarioActual="";
         TextView numeroMeGustan;
+        TextView fechaComentario;
 
         public ComentariosViewHolder(View itemView,Context context,List comentarios) {
             super(itemView);
@@ -162,6 +166,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
             this.comentarios=comentarios;
             botonMegusta=itemView.findViewById(R.id.botonMegusta);
             numeroMeGustan=itemView.findViewById(R.id.numeroMegusta);
+            fechaComentario=itemView.findViewById(R.id.fechaComentario);
         }
         public void setOnclickListener(){
             avatarComentario.setOnClickListener(new View.OnClickListener() {
@@ -256,42 +261,24 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-
-          /*  botonMegusta.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    final Comentario comentario= comentarios.get(position);
-                    DatabaseReference dr= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
-                    dr.orderByChild("telefono").equalTo(comentario.getPhoneNumberUsuario()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                Usuario usuario = childSnapshot.getValue(Usuario.class);
-                                Log.i("prueba",usuario.getTelefono());
-                                if(!usuario.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
-                                    Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie(),usuario.getTelefono());
-                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
-                                    ref.push().setValue(not);
-                                }
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-            });*/
-
-
         }
     }
 
+    private String getFechaComentarioFormateada(String fechaConexion) {
+        String fechaActual=getFecha();
+        String fechaUltimaConexion=fechaConexion;
+        if(fechaActual.substring(0,4).equals(fechaUltimaConexion.substring(0,4))){
+            return context.getString(R.string.hoy_a_las) + " " + fechaUltimaConexion.substring(6,fechaUltimaConexion.length());
+        }else{
+            return fechaUltimaConexion;
+        }
+    }
 
+    private String getFecha(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
+        return sdf.format(date);
+    }
 
 
 }
