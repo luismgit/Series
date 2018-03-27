@@ -66,7 +66,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 .load(serie.getImagen())
                 .fitCenter()
                 .centerCrop()
-                .error(R.drawable.sin_conexion)
                 .into(holder.iconoSerie);
        // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());

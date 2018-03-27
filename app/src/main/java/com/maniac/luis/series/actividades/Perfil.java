@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -21,9 +22,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -45,6 +50,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static java.lang.Thread.sleep;
+
 public class Perfil extends AppCompatActivity {
 
     ImageView imagenUsuario;
@@ -63,6 +70,8 @@ public class Perfil extends AppCompatActivity {
     private  final String CARPETA_RAIZ="Series/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"series";
     String miPath;
+    ProgressBar cargaFotoPerfil;
+    ProgressBar cargaPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +84,32 @@ public class Perfil extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         imagenUsuario = findViewById(R.id.fotoPerfil);
         editTextEmailUsuario = findViewById(R.id.editTextEmail);
+        cargaFotoPerfil=findViewById(R.id.cargaFotoPerfil);
+        cargaPerfil=findViewById(R.id.cargaPerfil);
         user = (Usuario) getIntent().getSerializableExtra("usuario");
         Log.i("avatar", "-> " + user.getAvatar());
         Glide.with(this)
                 .load(user.getAvatar())
                 .fitCenter()
                 .centerCrop()
-                .error(R.drawable.sin_conexion)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        cargaFotoPerfil.setVisibility(View.GONE);
+                        Glide.with(Perfil.this)
+                                .load(user.getAvatar())
+                                .fitCenter()
+                                .centerCrop()
+                                .into(imagenUsuario);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        cargaFotoPerfil.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .into(imagenUsuario);
 
         editTextEmailUsuario.setText(user.getCorreo());
@@ -188,6 +216,7 @@ public class Perfil extends AppCompatActivity {
 
     public void modificarPerfil(View view) {
         botonModificar.setClickable(false);
+        cargaPerfil.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
         animation.setDuration(1000);
         botonModificar.setAnimation(animation);
@@ -235,6 +264,7 @@ public class Perfil extends AppCompatActivity {
                 }
             });
         } else {
+            cargaPerfil.setVisibility(View.GONE);
             Toast.makeText(this, R.string.perfil_mod, Toast.LENGTH_SHORT).show();
             cambios = false;
             botonModificar.setClickable(true);
@@ -262,6 +292,7 @@ public class Perfil extends AppCompatActivity {
                 .child(FirebaseReferences.AVATAR);
         refef.setValue(enlaceFotoFirebase.toString());
         ComunicarAvatarUsuario.setAvatarUsuario(enlaceFotoFirebase.toString());
+        cargaPerfil.setVisibility(View.GONE);
         Toast.makeText(Perfil.this,  R.string.perfil_mod, Toast.LENGTH_SHORT).show();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
                 databaseReference.orderByChild(FirebaseReferences.COMENTARIO_PHONE_NUMBER).equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -324,7 +355,7 @@ public class Perfil extends AppCompatActivity {
                             dialogo1.setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogo1, int id) {
                                     modificarPerfil(null);
-                                    finish();
+                                    new Esperar().execute();
                                 }
                             });
                             dialogo1.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -375,7 +406,7 @@ public class Perfil extends AppCompatActivity {
                             dialogo1.setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogo1, int id) {
                                     modificarPerfil(null);
-                                    finish();
+                                    new Esperar().execute();
                                 }
                             });
                             dialogo1.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -395,5 +426,25 @@ public class Perfil extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private class Esperar extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            cargaPerfil.setVisibility(View.VISIBLE);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            finish();
+        }
     }
 }
