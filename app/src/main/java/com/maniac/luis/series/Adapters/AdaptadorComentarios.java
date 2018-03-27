@@ -279,7 +279,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
         return sdf.format(date);
     }
-    //
+
 
 
 }
