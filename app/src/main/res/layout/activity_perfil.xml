@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.maniac.luis.series.actividades.Perfil"
-    android:background="@drawable/degradado_registro"
+    android:background="#d2cdcd"
     android:padding="25dp">
 
 
@@ -16,6 +16,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="30dp"
             android:src="@drawable/series_back"
+            android:background="#d2cdcd"
             />
         <ProgressBar
             android:layout_width="30dp"

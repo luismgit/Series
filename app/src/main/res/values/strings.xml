@@ -73,6 +73,9 @@
     <string name="hoy_a_las">Hoy a las</string>
     <string name="texto_cargando">Cargando...Espere por favor</string>
     <string name="texto_ayuda">En caso de problemas en el registro pulse</string>
+    <string name="cambiar_fondo">Cambiar fondo</string>
+    <string name="a_adir_a_favoritos">Añadir a favoritos</string>
+    <string name="ir_a_filmaffinity">Ir a Filmaffinity</string>
 
 
 </resources>

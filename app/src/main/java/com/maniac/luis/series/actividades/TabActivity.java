@@ -32,6 +32,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.database.ChildEventListener;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCorreoUsuario;
 import com.maniac.luis.series.Objetos.Usuario;
@@ -267,12 +269,41 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 }
             }
 
+        DatabaseReference referenc = FirebaseDatabase.getInstance().getReference();
+        referenc.child(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:
+                        dataSnapshot.getChildren()){
+                    Series serie = snapshot.getValue(Series.class);
+                    final DatabaseReference fiRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+                            .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
+                    fiRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                           Long leidos= (Long) dataSnapshot.getValue();
+                           if(leidos==null) {
+                               fiRef.setValue(0);
+                           }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         }
-
-
-
-
 
 
     @Override

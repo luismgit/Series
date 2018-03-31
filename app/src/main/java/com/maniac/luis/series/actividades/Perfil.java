@@ -190,7 +190,6 @@ public class Perfil extends AppCompatActivity {
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
-                        .error(R.drawable.sin_conexion)
                         .into(imagenUsuario);
                // stream = new ByteArrayOutputStream();
                // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -207,7 +206,6 @@ public class Perfil extends AppCompatActivity {
                         .load(data.getData())
                         .centerCrop()
                         .fitCenter()
-                        .error(R.drawable.sin_conexion)
                         .into(imagenUsuario);
             }
         }
@@ -215,6 +213,7 @@ public class Perfil extends AppCompatActivity {
 
 
     public void modificarPerfil(View view) {
+
         botonModificar.setClickable(false);
         cargaPerfil.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
@@ -270,6 +269,7 @@ public class Perfil extends AppCompatActivity {
             botonModificar.setClickable(true);
             //finish();
         }
+
     }
 
     private void modificarFotoPerfil() {

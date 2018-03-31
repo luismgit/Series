@@ -41,4 +41,5 @@ public class FirebaseReferences {
     final public static String TELEFONO="telefono";
     final public static String NOTIFICATIONS="notifications";
     final public static String LIKED="liked";
+    final public static String FOTO_FONDO_SERIE_COMENT="foto_fondo_serie_coment";
 }

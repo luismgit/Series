@@ -235,7 +235,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
-                        .error(R.drawable.sin_conexion)
                         .into(avatarIcono);
                 //stream = new ByteArrayOutputStream();
                 //bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -252,7 +251,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         .load(data.getData())
                         .centerCrop()
                         .fitCenter()
-                        .error(R.drawable.sin_conexion)
                         .into(avatarIcono);
             }
         }
@@ -460,10 +458,12 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                 for(DataSnapshot snapshot:
                         dataSnapshot.getChildren()){
                     Series serie = snapshot.getValue(Series.class);
-                    Log.i("ComentariosLeidosSerie","Serie -> " + serie.getNombre());
-                    DatabaseReference fiRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(phoneNumber)
+                    DatabaseReference fiRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
                             .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
                     fiRef.setValue(0);
+                    DatabaseReference fiRefe = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+                            .child(serie.getNombre()).child("foto_fondo_comentario");
+                    fiRefe.setValue("");
                 }
             }
 

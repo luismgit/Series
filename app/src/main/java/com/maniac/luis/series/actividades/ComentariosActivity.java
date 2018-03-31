@@ -1,27 +1,58 @@
 package com.maniac.luis.series.actividades;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.cache.MemoryCacheAdapter;
+import com.bumptech.glide.load.resource.bitmap.StreamBitmapDecoder;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.maniac.luis.series.Adapters.AdaptadorComentarios;
+import com.maniac.luis.series.LinearLayoutTarget;
 import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -35,8 +66,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
+import com.squareup.picasso.Picasso;
 import com.sun.mail.imap.protocol.Item;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +94,10 @@ public class ComentariosActivity extends AppCompatActivity {
     Map<String,String> agenda;
     DatabaseReference referenceABorrar;
     ValueEventListener listener;
+    TextView textViewOptionsComent;
+    LinearLayout linearLayout;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -69,11 +108,15 @@ public class ComentariosActivity extends AppCompatActivity {
         contactos=new ArrayList<>();
         agenda=new HashMap<>();
         loadContactFromTlf();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        linearLayout=findViewById(R.id.linearLayoutComentarios);
+        nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
+        textViewOptionsComent=findViewById(R.id.menuFondosComent);
         textoSerieComentarios=findViewById(R.id.textoSerieComentarios);
         txtSinComentarios.setVisibility(View.GONE);
-        nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
         imagenSerieComentarios=findViewById(R.id.imagenSerieComentarios);
         referenceABorrar = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
                 .child(ComunicarCurrentUser.getPhoneNumberUser()).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
@@ -97,7 +140,6 @@ public class ComentariosActivity extends AppCompatActivity {
                         .load(url)
                         .centerCrop()
                         .fitCenter()
-                        .error(R.drawable.sin_conexion)
                         .into(imagenSerieComentarios);
             }
 
@@ -269,6 +311,24 @@ public class ComentariosActivity extends AppCompatActivity {
     }
 
 
+    public void menuCambiaFondo(View view) {
+        PopupMenu popupMenu = new PopupMenu(this,textViewOptionsComent);
+        popupMenu.inflate(R.menu.option_menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.menu_item_fondo_coment:
+                        abrirPopMenuElegirFondo();
+                        break;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
 
+    private void abrirPopMenuElegirFondo() {
 
+    }
 }
