@@ -9,9 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
-
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +20,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name="com.maniac.luis.series.actividades.AutentificacionActivity"
+            android:name=".actividades.AutentificacionActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,43 +29,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.maniac.luis.series.actividades.registroActivity"
+            android:name=".actividades.registroActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.maniac.luis.series.actividades.TabActivity"
+            android:name=".actividades.TabActivity"
             android:label=""
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:launchMode = "singleTask"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.maniac.luis.series.actividades.ListaFondos"
+            android:name=".actividades.ListaFondos"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.maniac.luis.series.actividades.InfoContactoActivity"
+            android:name=".actividades.InfoContactoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.maniac.luis.series.actividades.Perfil"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.maniac.luis.series.actividades.ComentariosActivity"
-            android:screenOrientation="portrait"
-           ></activity>
+        <activity
+            android:name=".actividades.Perfil"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".actividades.ComentariosActivity"
+            android:screenOrientation="portrait" />
 
-        <service
-            android:name="com.maniac.luis.series.MiFirebaseInstanceIdService">
+        <service android:name=".utilidades.MiFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".utilidades.MiFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name="com.maniac.luis.series.MiFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
-
-
-
+        <activity android:name=".actividades.ListaFondosColorSolido"></activity>
     </application>
 
 </manifest>

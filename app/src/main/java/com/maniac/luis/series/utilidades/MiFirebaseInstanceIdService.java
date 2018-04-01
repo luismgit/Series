@@ -1,4 +1,4 @@
-package com.maniac.luis.series;
+package com.maniac.luis.series.utilidades;
 
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;

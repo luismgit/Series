@@ -1,4 +1,4 @@
-package com.maniac.luis.series;
+package com.maniac.luis.series.utilidades;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -19,6 +19,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.utilidades.Common;
 import com.google.firebase.messaging.FirebaseMessagingService;

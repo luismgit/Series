@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#fdfdfd">
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/images"
-            android:id="@+id/iconoColorSolido"
+            android:id="@+id/iconoGaleriaFondos"
             android:layout_weight="5"
             app:civ_border_color="@color/colorPrimaryDark"
 
@@ -37,7 +37,7 @@
             android:layout_height="48dp"
             android:src="@drawable/color_solido"
             android:layout_weight="5"
-            android:id="@+id/iconoGaleriaFondos"
+            android:id="@+id/iconoColorSolido"
             />
     </LinearLayout>
 

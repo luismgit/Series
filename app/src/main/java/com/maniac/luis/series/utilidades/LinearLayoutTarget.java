@@ -1,4 +1,4 @@
-package com.maniac.luis.series;
+package com.maniac.luis.series.utilidades;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,6 +6,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.widget.LinearLayout;
+
+import com.maniac.luis.series.utilidades.ViewGroupTarget;
 
 public class LinearLayoutTarget extends ViewGroupTarget<Bitmap> {
 

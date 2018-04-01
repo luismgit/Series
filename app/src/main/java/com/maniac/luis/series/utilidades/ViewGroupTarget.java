@@ -1,4 +1,4 @@
-package com.maniac.luis.series;
+package com.maniac.luis.series.utilidades;
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;

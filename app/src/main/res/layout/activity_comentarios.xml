@@ -7,7 +7,7 @@
     tools:context="com.maniac.luis.series.actividades.ComentariosActivity"
     android:orientation="vertical"
     android:id="@+id/linearLayoutComentarios"
-    android:background="#f9edcb"
+    android:background="#ffffff"
     >
 
 
@@ -46,6 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
             android:textSize="30dp"
             android:text="&#8942;"
             android:textAppearance="?android:textAppearanceLarge"
@@ -54,8 +55,10 @@
             android:id="@+id/menuFondosComent"
             android:layout_marginTop="5dp"
             android:onClick="menuCambiaFondo"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="20dp"
+            android:textStyle="bold"
             />
+
 
 
     </RelativeLayout>

@@ -166,13 +166,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 telefono = telefono.substring(3, telefono.length());
             }
         }
-            //CARGAMOS EN LA VARIABLE user EL NÚMERO DE TELÉFONO DEL USUARIO Y LE QUITAMOS SI TUVIERA ESPACIOS Y EL +34
-       /* FirebaseUser user = ComunicarCurrentUser.getUser();
-        String phoneNumber=user.getPhoneNumber();
-        phoneNumber.replaceAll("\\s","");
-        if(phoneNumber.substring(0,3).equals("+34")){
-            phoneNumber=phoneNumber.substring(3,phoneNumber.length());
-        }*/
 
             //LISTENER QUE GUARDA EN NUESTRA CLASE ComunicarClaveUsuarioActual EL TELÉFONO DEL USUARIO ACTUAL PARA ACCEDER A ÉL EN LAS DEMÁS ACTIVIDADES
 
@@ -292,7 +285,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
                         }
                     });
-
 
                 }
             }

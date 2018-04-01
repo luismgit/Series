@@ -12,13 +12,14 @@ public class Usuario implements Serializable{
     String nivel;
     Long numSuscripciones;
     String token;
+    String fondoComentario;
 
 
 
     public Usuario() {
     }
 
-    public Usuario(String nick,String telefono,String correo,String avatar,String conectado,String nivel,Long numSuscripciones,String token) {
+    public Usuario(String nick,String telefono,String correo,String avatar,String conectado,String nivel,Long numSuscripciones,String token,String fondoComentario) {
         this.correo = correo;
         this.telefono=telefono;
         this.nick=nick;
@@ -27,7 +28,7 @@ public class Usuario implements Serializable{
         this.nivel=nivel;
         this.numSuscripciones=numSuscripciones;
         this.token=token;
-
+        this.fondoComentario=fondoComentario;
 
     }
 

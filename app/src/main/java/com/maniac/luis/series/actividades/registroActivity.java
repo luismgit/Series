@@ -337,7 +337,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                              //byte[] data = stream.toByteArray();
                              avatarIcono.setDrawingCacheEnabled(true);
                              avatarIcono.buildDrawingCache();
-                             avatarIcono.setBackgroundResource(R.drawable.degradado_registro);
                              Bitmap bitmap = avatarIcono.getDrawingCache();
                              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                              bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -373,6 +372,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                              enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88");
                              registro();
                          }
+                         avatarIcono.setBackgroundResource(R.drawable.degradado_registro);
 
                      }
 
@@ -447,7 +447,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0, FirebaseInstanceId.getInstance().getToken());
+        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0, FirebaseInstanceId.getInstance().getToken(),"#ffffff");
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)
@@ -462,9 +462,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                     DatabaseReference fiRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
                             .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
                     fiRef.setValue(0);
-                    DatabaseReference fiRefe = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
-                            .child(serie.getNombre()).child("foto_fondo_comentario");
-                    fiRefe.setValue("");
+
                 }
             }
 

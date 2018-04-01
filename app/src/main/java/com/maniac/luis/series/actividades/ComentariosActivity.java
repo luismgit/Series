@@ -1,39 +1,22 @@
 package com.maniac.luis.series.actividades;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,24 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.cache.MemoryCacheAdapter;
-import com.bumptech.glide.load.resource.bitmap.StreamBitmapDecoder;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.maniac.luis.series.Adapters.AdaptadorComentarios;
-import com.maniac.luis.series.LinearLayoutTarget;
 import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
+import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.database.DataSnapshot;
@@ -67,13 +39,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
-import com.squareup.picasso.Picasso;
-import com.sun.mail.imap.protocol.Item;
+import com.maniac.luis.series.utilidades.ImagenesColoresSolidos;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,6 +50,7 @@ import java.util.Map;
 
 public class ComentariosActivity extends AppCompatActivity {
 
+    private static final int COLORES_SOLIDOS = 1;
     RecyclerView rv;
     List<Comentario> comentarios;
     List<String> contactosPhoneNumber;
@@ -99,6 +67,7 @@ public class ComentariosActivity extends AppCompatActivity {
     TextView textViewOptionsComent;
     LinearLayout linearLayout;
     Dialog myDialog;
+    String [] coloresSolidos;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -107,13 +76,30 @@ public class ComentariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
+        nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+
+        DatabaseReference referencebbdd=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                .child(FirebaseReferences.FONDO_COMENTARIO);
+        referencebbdd.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String fondo = (String) dataSnapshot.getValue();
+                //linearLayout.setBackgroundColor(Color.parseColor(fondo));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         contactos=new ArrayList<>();
         agenda=new HashMap<>();
         loadContactFromTlf();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+        coloresSolidos=ImagenesColoresSolidos.getListaColores();
         linearLayout=findViewById(R.id.linearLayoutComentarios);
-        nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+
         myDialog=new Dialog(this);
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
@@ -176,7 +162,7 @@ public class ComentariosActivity extends AppCompatActivity {
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this,agenda);
         rv.setAdapter(adaptadorComentarios);
         /*Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
-        com.maniac.luis.series.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.DividerItemDecoration(dividerDrawable);
+        com.maniac.luis.series.utilidades.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.utilidades.DividerItemDecoration(dividerDrawable);
         rv.addItemDecoration(dividerItemDecoration);*/
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
@@ -339,7 +325,8 @@ public class ComentariosActivity extends AppCompatActivity {
         iconoColorSolido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ComentariosActivity.this,ListaFondosColorSolido.class);
+                startActivityForResult(intent,COLORES_SOLIDOS);
             }
         });
         iconoGaleria.setOnClickListener(new View.OnClickListener() {
@@ -350,5 +337,28 @@ public class ComentariosActivity extends AppCompatActivity {
         });
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+
+            case COLORES_SOLIDOS:
+                myDialog.dismiss();
+                if(data != null && resultCode == RESULT_OK){
+                    int numFondo = data.getIntExtra(Common.FONDO_SELECCIONADO,-1);
+
+                    if(numFondo != -1){
+                        linearLayout.setBackgroundColor(Color.parseColor(coloresSolidos[numFondo]));
+                        DatabaseReference referenceBBDD=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                                .child(FirebaseReferences.FONDO_COMENTARIO);
+                        referenceBBDD.setValue(coloresSolidos[numFondo]);
+                    }
+                }
+                break;
+
+
+        }
     }
 }
