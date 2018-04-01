@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:layout_gravity="bottom">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fdfdfd">
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,16 +17,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:id="@+id/linearIconos"
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/avatar3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/images"
+            android:id="@+id/iconoColorSolido"
+            android:layout_weight="5"
+            app:civ_border_color="@color/colorPrimaryDark"
+
+
             />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/color_solido"
+            android:layout_weight="5"
+            android:id="@+id/iconoGaleriaFondos"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearIconos"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Galería de fondos"
+            android:textSize="10sp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color sólido"
+            android:textSize="10sp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:textStyle="bold" />
 
     </LinearLayout>
+
 
 
 

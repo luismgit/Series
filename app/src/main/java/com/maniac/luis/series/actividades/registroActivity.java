@@ -337,6 +337,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                              //byte[] data = stream.toByteArray();
                              avatarIcono.setDrawingCacheEnabled(true);
                              avatarIcono.buildDrawingCache();
+                             avatarIcono.setBackgroundResource(R.drawable.degradado_registro);
                              Bitmap bitmap = avatarIcono.getDrawingCache();
                              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                              bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);

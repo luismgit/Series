@@ -1,6 +1,7 @@
 package com.maniac.luis.series.actividades;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,7 +98,7 @@ public class ComentariosActivity extends AppCompatActivity {
     ValueEventListener listener;
     TextView textViewOptionsComent;
     LinearLayout linearLayout;
-
+    Dialog myDialog;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -112,6 +114,7 @@ public class ComentariosActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builder.build());
         linearLayout=findViewById(R.id.linearLayoutComentarios);
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+        myDialog=new Dialog(this);
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
         textViewOptionsComent=findViewById(R.id.menuFondosComent);
@@ -313,7 +316,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
     public void menuCambiaFondo(View view) {
         PopupMenu popupMenu = new PopupMenu(this,textViewOptionsComent);
-        popupMenu.inflate(R.menu.option_menu);
+        popupMenu.inflate(R.menu.menu_comentarios);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -329,6 +332,23 @@ public class ComentariosActivity extends AppCompatActivity {
     }
 
     private void abrirPopMenuElegirFondo() {
+        ImageView iconoColorSolido,iconoGaleria;
+        myDialog.setContentView(R.layout.elegir_fondo_pop_up);
+        iconoColorSolido=(ImageView) myDialog.findViewById(R.id.iconoColorSolido);
+        iconoGaleria=(ImageView)myDialog.findViewById(R.id.iconoGaleriaFondos);
+        iconoColorSolido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+        iconoGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
     }
 }
