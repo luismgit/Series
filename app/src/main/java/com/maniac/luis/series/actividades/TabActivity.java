@@ -45,6 +45,8 @@ import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
+import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.Imagenes;
 import com.maniac.luis.series.utilidades.Utilities;
 import com.google.firebase.database.DataSnapshot;
@@ -91,6 +93,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     String emailAyuda;
     String passwordAyuda;
     List<String> listaFondos;
+    List<String> listaFondosGaleriaComentarios;
     private static final int PERFIL=1;
     private static final int LISTA_FONDOS=2;
     public static final String EMAIL_USUARIO="emailUsuario";
@@ -116,6 +119,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         fondo.setImageResource(R.drawable.series_back);
         Log.i("TOKEN", "token -> " + FirebaseInstanceId.getInstance().getToken());
         listaFondos = new ArrayList<>();
+
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
         FirebaseDatabase datab = FirebaseDatabase.getInstance();
         datab.getReference(FirebaseReferences.COMMON).child(FirebaseReferences.FONDOS_SERIES).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -142,6 +146,24 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
+        listaFondosGaleriaComentarios=new ArrayList<>();
+        FirebaseDatabase databa = FirebaseDatabase.getInstance();
+        databa.getReference(FirebaseReferences.COMMON).child(FirebaseReferences.FONDOS_GALERIA_COMENTARIOS).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot :
+                        dataSnapshot.getChildren()){
+                    String fondo = (String) snapshot.getValue();
+                    listaFondosGaleriaComentarios.add(fondo);
+                }
+                FondosGaleriaComentarios.setFondos(listaFondosGaleriaComentarios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         //SELECCIONAMOS UN FONDO DE PANTALLA ALEATORIO Y LO APLICAMOS
         //int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
@@ -177,6 +199,21 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     for (final DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         String claveUsuarioActual = childSnapshot.getKey();
                         ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
+                        DatabaseReference referencebbdd=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                                .child(FirebaseReferences.FONDO_COMENTARIO);
+                        referencebbdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String fondo = (String) dataSnapshot.getValue();
+                                Log.i("FONDO","FONDO -> " + fondo);
+                                ComunicarFondoComentarios.setFondo(fondo);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual);
                         databaseReference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
                         DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual)
@@ -249,16 +286,45 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             Log.i("compruebaNotif", "accion -> " + accion);
             if (accion != null) {
                 if (accion.equals(Common.NOTIFICACION)) {
-               /* SharedPreferences sharedPreferences = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-                SharedPreferences.Editor editorr = sharedPreferences.edit();
-                editorr.putBoolean("notify",false);
-                editorr.commit();*/
                     Log.i("compruebaNotif", "llega a tabActivity con una notificacion NORMAL");
                     mViewPager.setCurrentItem(1);
-                    String nombreSerie = getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
-                    Intent intent = new Intent(this, ComentariosActivity.class);
-                    intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS, nombreSerie);
-                    startActivity(intent);
+                    FirebaseDatabase databas = FirebaseDatabase.getInstance();
+                    DatabaseReference roote = databas.getReference();
+                    roote.child(FirebaseReferences.USUARIOS_REFERENCE).orderByChild(FirebaseReferences.PHONE_REFERENCE).equalTo(telefono).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (final DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                String claveUsuarioActual = childSnapshot.getKey();
+                                ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
+                                DatabaseReference referencebbdd=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                                        .child(FirebaseReferences.FONDO_COMENTARIO);
+                                referencebbdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String fondo = (String) dataSnapshot.getValue();
+                                        Log.i("FONDO","FONDO -> " + fondo);
+                                        ComunicarFondoComentarios.setFondo(fondo);
+                                        String nombreSerie = getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
+                                        Intent intent = new Intent(TabActivity.this, ComentariosActivity.class);
+                                        intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS, nombreSerie);
+
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
 

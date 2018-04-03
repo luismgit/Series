@@ -8,27 +8,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.maniac.luis.series.Adapters.AdaptadorColorSolido;
+import com.maniac.luis.series.AdaptadorFondosGaleria;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
 
-public class ListaFondosColorSolido extends AppCompatActivity {
+public class ListaFondosGaleria extends AppCompatActivity {
 
-    RecyclerView rv;
-    private AdaptadorColorSolido adapter;
+    private RecyclerView rv;
+    private AdaptadorFondosGaleria adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_fondos_color_solido);
+        setContentView(R.layout.activity_lista_fondos_galeria);
         FirebaseDatabase.getInstance().goOnline();
-        rv=findViewById(R.id.listaFondosColorSolido);
-        adapter=new AdaptadorColorSolido(this);
+        rv=findViewById(R.id.listaFondosGaleriaRV);
+        adapter=new AdaptadorFondosGaleria(this);
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int posicion=rv.getChildLayoutPosition(view);
+               int posicion=rv.getChildLayoutPosition(view);
                 devolverNumeroFondo(posicion);
             }
         });

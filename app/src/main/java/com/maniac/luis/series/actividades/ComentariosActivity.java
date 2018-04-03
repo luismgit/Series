@@ -4,8 +4,11 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
@@ -25,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.maniac.luis.series.Adapters.AdaptadorComentarios;
 import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.R;
@@ -39,7 +44,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
+import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.ImagenesColoresSolidos;
+import com.maniac.luis.series.utilidades.LinearLayoutTarget;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +59,7 @@ import java.util.Map;
 public class ComentariosActivity extends AppCompatActivity {
 
     private static final int COLORES_SOLIDOS = 1;
+    private static final int FONDOS_GALERIA = 2;
     RecyclerView rv;
     List<Comentario> comentarios;
     List<String> contactosPhoneNumber;
@@ -68,7 +77,7 @@ public class ComentariosActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     Dialog myDialog;
     String [] coloresSolidos;
-
+    List<String> listaFondosGaleria;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -76,30 +85,28 @@ public class ComentariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
+        Log.i("FONDO","FONDOjj -> " + ComunicarFondoComentarios.getFondo());
+        linearLayout=findViewById(R.id.linearLayoutComentarios);
+        String fondoComentario=ComunicarFondoComentarios.getFondo();
+
+
+            if(fondoComentario.length()>10){
+                Glide.with(this)
+                        .load(fondoComentario)
+                        .asBitmap()
+                        .into(new LinearLayoutTarget(this.getApplicationContext(),linearLayout));
+            }else{
+                linearLayout.setBackgroundColor(Color.parseColor(ComunicarFondoComentarios.getFondo()));
+            }
+
         nombreSerie=getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
-
-        DatabaseReference referencebbdd=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
-                .child(FirebaseReferences.FONDO_COMENTARIO);
-        referencebbdd.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String fondo = (String) dataSnapshot.getValue();
-                //linearLayout.setBackgroundColor(Color.parseColor(fondo));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         contactos=new ArrayList<>();
         agenda=new HashMap<>();
         loadContactFromTlf();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         coloresSolidos=ImagenesColoresSolidos.getListaColores();
-        linearLayout=findViewById(R.id.linearLayoutComentarios);
-
+        listaFondosGaleria= FondosGaleriaComentarios.getFondos();
         myDialog=new Dialog(this);
         contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
         txtSinComentarios=findViewById(R.id.mensajeSinComentarios);
@@ -332,7 +339,8 @@ public class ComentariosActivity extends AppCompatActivity {
         iconoGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ComentariosActivity.this,ListaFondosGaleria.class);
+                startActivityForResult(intent,FONDOS_GALERIA);
             }
         });
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -351,6 +359,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
                     if(numFondo != -1){
                         linearLayout.setBackgroundColor(Color.parseColor(coloresSolidos[numFondo]));
+                        ComunicarFondoComentarios.setFondo(coloresSolidos[numFondo]);
                         DatabaseReference referenceBBDD=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
                                 .child(FirebaseReferences.FONDO_COMENTARIO);
                         referenceBBDD.setValue(coloresSolidos[numFondo]);
@@ -358,6 +367,23 @@ public class ComentariosActivity extends AppCompatActivity {
                 }
                 break;
 
+            case FONDOS_GALERIA:
+                myDialog.dismiss();
+                if(data != null && resultCode == RESULT_OK){
+                    int numFondo = data.getIntExtra(Common.FONDO_SELECCIONADO,-1);
+
+                    if(numFondo != -1){
+                        Glide.with(this)
+                                .load(listaFondosGaleria.get(numFondo))
+                                .asBitmap()
+                                .into(new LinearLayoutTarget(this.getApplicationContext(),linearLayout));
+                        ComunicarFondoComentarios.setFondo(listaFondosGaleria.get(numFondo));
+                        DatabaseReference referenceBBDD=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                                .child(FirebaseReferences.FONDO_COMENTARIO);
+                        referenceBBDD.setValue(listaFondosGaleria.get(numFondo));
+                    }
+                }
+                break;
 
         }
     }

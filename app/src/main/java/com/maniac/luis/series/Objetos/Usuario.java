@@ -32,6 +32,14 @@ public class Usuario implements Serializable{
 
     }
 
+    public String getFondoComentario() {
+        return fondoComentario;
+    }
+
+    public void setFondoComentario(String fondoComentario) {
+        this.fondoComentario = fondoComentario;
+    }
+
     public String getConectado() {
         return conectado;
     }
