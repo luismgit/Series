@@ -80,12 +80,17 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                  Log.i("sinleer","sinleer -> " + sinleer);
                 Log.i("sinleer","sinleer -> " + serie.getNombre());
                 Log.i("sinleer","sinleer -> " + ComunicarCurrentUser.getPhoneNumberUser());
-                 if(sinleer==0){
-                     holder.numComentarios.setVisibility(View.INVISIBLE);
-                 }else{
-                     holder.numComentarios.setText(String.valueOf(sinleer));
-                     holder.numComentarios.setVisibility(View.VISIBLE);
-                 }
+                try{
+                    if(sinleer==0){
+                        holder.numComentarios.setVisibility(View.INVISIBLE);
+                    }else{
+                        holder.numComentarios.setText(String.valueOf(sinleer));
+                        holder.numComentarios.setVisibility(View.VISIBLE);
+                    }
+                }catch(Exception e){
+                    Log.i("Excepcion","excepcion -> ");
+                }
+
             }
 
             @Override
