@@ -1,10 +1,14 @@
 package com.maniac.luis.series.actividades;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +37,9 @@ private int [] avatares;
     private AdaptadorInfoContactos adaptadorInfoContactos;
     private String telefonoUsuarioSeleccionado;
     private TextView sinFavoritos;
+    private ImageView imagenContacto;
+    private Dialog miDialogo;
+    String imagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ private int [] avatares;
         nombreUsuario=findViewById(R.id.nombreContacto);
         avatarUsuario=findViewById(R.id.avatarContacto);
         sinFavoritos=findViewById(R.id.sinFavoritos);
+        imagenContacto=findViewById(R.id.avatarContacto);
+
 
         //RECOGEMOS EL NOMBRE DEL CONTACTO QUE QUEREMOS VISUALIZAR
         /*String contact=getIntent().getStringExtra(Common.CONTACTO);
@@ -53,13 +62,29 @@ private int [] avatares;
 
         //LE ASIGNAMOS SU AVATAR
         //avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);
+        imagen=getIntent().getStringExtra(Common.AVATAR);
         Glide.with(this)
-                .load(getIntent().getStringExtra(Common.AVATAR))
+                .load(imagen)
                 .fitCenter()
                 .centerCrop()
                 .error(R.drawable.sin_conexion)
                 .into(avatarUsuario);
-
+        imagenContacto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                miDialogo=new Dialog(InfoContactoActivity.this);
+                ImageView imagenC;
+                miDialogo.setContentView(R.layout.image_pop_up);
+                imagenC=miDialogo.findViewById(R.id.imagenAmpliada);
+                Glide.with(InfoContactoActivity.this)
+                        .load(imagen)
+                        .fitCenter()
+                        .centerCrop()
+                        .into(imagenC);
+                miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                miDialogo.show();
+            }
+        });
         //RECOGEMOS EL TELÉFONO DEL USUARIO SELECCIONADO
         telefonoUsuarioSeleccionado=getIntent().getStringExtra(Common.TELEFONO);
         rv=findViewById(R.id.recyclerInfoContacto);

@@ -243,7 +243,7 @@ public class ComentariosActivity extends AppCompatActivity {
                     contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
                     for(DataSnapshot snapshot:
                             dataSnapshot.getChildren()){
-                       String phoneNumber = snapshot.getKey();
+                       final String phoneNumber = snapshot.getKey();
                        Log.i("snapshot.getKey()",phoneNumber);
                         if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber)){
                             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
@@ -251,6 +251,8 @@ public class ComentariosActivity extends AppCompatActivity {
                             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Log.i("com_leidos","phone -> " + phoneNumber);
+                                    Log.i("com_leidos","serie -> " + nombreSerie);
                                     Long sinLeer= (Long) dataSnapshot.getValue();
                                     sinLeer++;
                                     ref.setValue(sinLeer);

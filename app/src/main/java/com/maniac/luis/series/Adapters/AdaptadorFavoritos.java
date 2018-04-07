@@ -1,7 +1,10 @@
 package com.maniac.luis.series.Adapters;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -31,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.FavoritosViewHolder>{
@@ -50,7 +55,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     @Override
     public FavoritosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_favoritos,parent,false);
-        FavoritosViewHolder holder = new FavoritosViewHolder(v);
+        FavoritosViewHolder holder = new FavoritosViewHolder(v,suscripciones);
         return holder;
     }
 
@@ -92,8 +97,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         String nombreSerie;
         Animation myRotation;
         RelativeLayout miVista;
+        Dialog miDialogo;
+        List<Suscripcion> suscripciones=new ArrayList<>();
 
-        public FavoritosViewHolder(View itemView) {
+        public FavoritosViewHolder(View itemView,List suscripciones) {
             super(itemView);
             context=itemView.getContext();
             imagenSerie=itemView.findViewById(R.id.imagenSerieFavoritos);
@@ -101,12 +108,31 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
             menuFavoritos=itemView.findViewById(R.id.textViewMenuFavoritos);
             botonVoto=itemView.findViewById(R.id.botonVoto);
+            this.suscripciones=suscripciones;
         }
 
 
 
         public void setOnclickListener(){
             menuFavoritos.setOnClickListener(this);
+            imagenSerie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    miDialogo=new Dialog(context);
+                    ImageView imagen;
+                    miDialogo.setContentView(R.layout.image_pop_up);
+                    imagen=miDialogo.findViewById(R.id.imagenAmpliada);
+                    int position = getAdapterPosition();
+                    Suscripcion suscripcion = suscripciones.get(position);
+                    Glide.with(context)
+                            .load(suscripcion.getImagen())
+                            .fitCenter()
+                            .centerCrop()
+                            .into(imagen);
+                    miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    miDialogo.show();
+                }
+            });
 
             //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL BOTÓN DE VOTAR DE CADA VISTA
             botonVoto.setOnClickListener(new View.OnClickListener() {

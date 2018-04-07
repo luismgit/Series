@@ -29,10 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.google.firebase.database.ChildEventListener;
+import com.github.arturogutierrez.Badges;
+import com.github.arturogutierrez.BadgesNotSupportedException;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCorreoUsuario;
@@ -68,6 +66,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
 SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener{
 
@@ -100,6 +100,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     public static final String FOTO_USUARIO="fotoUsuario";
      int contador=0;
      int aleatorio=0;
+     Long comentariosTotales;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +116,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        comentariosTotales= Long.valueOf(0);
         fondo = findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
         Log.i("TOKEN", "token -> " + FirebaseInstanceId.getInstance().getToken());
@@ -188,6 +190,44 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 telefono = telefono.substring(3, telefono.length());
             }
         }
+
+        final DatabaseReference fiDa = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser());
+        fiDa.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                comentariosTotales= Long.valueOf(0);
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Long com = (Long) snapshot.child(FirebaseReferences.COM_LEIDOS).getValue();
+                    comentariosTotales=comentariosTotales+com;
+                }
+                Log.i("batch","comentariosTotales -> " + comentariosTotales);
+                if(comentariosTotales!=0){
+                    try{
+                        ShortcutBadger.applyCount(TabActivity.this, (int) (long) comentariosTotales); //for 1.1.4+
+                    }catch (Exception e){
+
+                    }
+
+
+                }else{
+                    try{
+                        ShortcutBadger.removeCount(TabActivity.this); //for 1.1.4+
+                    }catch (Exception e){
+
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
 
             //LISTENER QUE GUARDA EN NUESTRA CLASE ComunicarClaveUsuarioActual EL TELÉFONO DEL USUARIO ACTUAL PARA ACCEDER A ÉL EN LAS DEMÁS ACTIVIDADES
 

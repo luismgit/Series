@@ -14,14 +14,6 @@
         android:paddingHorizontal="10dp"
         android:paddingBottom="5dp">
 
-    <!--   <ImageView
-           android:layout_width="?android:attr/listPreferredItemHeight"
-           android:layout_height="?android:attr/listPreferredItemHeight"
-           android:layout_toLeftOf="@id/nombreContacto"
-           android:id="@+id/avatarContacto"
-           android:src="@drawable/avatar2"
-
-           />-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="90dp"
             android:layout_height="90dp"

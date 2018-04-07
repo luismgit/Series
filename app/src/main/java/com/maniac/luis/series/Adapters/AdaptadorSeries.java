@@ -1,5 +1,6 @@
 package com.maniac.luis.series.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
+import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.ComentariosActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -33,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -54,7 +57,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     @Override
     public SeriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_series,parent,false);
-        SeriesViewHolder holder = new SeriesViewHolder(v);
+        SeriesViewHolder holder = new SeriesViewHolder(v,series);
         return holder;
     }
 
@@ -131,10 +134,14 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         TextView textComentarios;
         ImageView iconoComentarios;
         TextView numComentarios;
+        Dialog miDialogo;
+        Context contexto;
+        List<Series> series=new ArrayList<>();
 
-        public SeriesViewHolder(View itemView) {
+        public SeriesViewHolder(View itemView,List series) {
             super(itemView);
             context=itemView.getContext();
+            this.series=series;
             relativeLayout=itemView.findViewById(R.id.relativeLayout);
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
             numLikes=itemView.findViewById(R.id.numLikes);
@@ -162,6 +169,24 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 @Override
                 public void onClick(View view) {
                     irAComentarios();
+                }
+            });
+            iconoSerie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    miDialogo=new Dialog(context);
+                    ImageView imagen;
+                    miDialogo.setContentView(R.layout.image_pop_up);
+                    imagen=miDialogo.findViewById(R.id.imagenAmpliada);
+                    int position = getAdapterPosition();
+                    Series serie = series.get(position);
+                    Glide.with(context)
+                            .load(serie.getImagen())
+                            .fitCenter()
+                            .centerCrop()
+                            .into(imagen);
+                    miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    miDialogo.show();
                 }
             });
 

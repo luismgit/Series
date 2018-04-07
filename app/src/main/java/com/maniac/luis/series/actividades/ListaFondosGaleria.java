@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.maniac.luis.series.AdaptadorFondosGaleria;
+import com.maniac.luis.series.Adapters.AdaptadorFondosGaleria;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
 

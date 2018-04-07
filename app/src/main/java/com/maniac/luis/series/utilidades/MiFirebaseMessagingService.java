@@ -17,10 +17,14 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
+import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -29,8 +33,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 
 public class MiFirebaseMessagingService extends FirebaseMessagingService {
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -87,6 +94,8 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Common.NOTIFY,true);
             editor.commit();
+
+
 
 
         }

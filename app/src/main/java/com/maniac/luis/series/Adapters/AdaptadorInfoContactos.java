@@ -1,9 +1,11 @@
 package com.maniac.luis.series.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -23,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoContactos.ContactosViewHolder>{
@@ -38,7 +42,7 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     @Override
     public ContactosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_infocontactos,parent,false);
-        ContactosViewHolder holder = new ContactosViewHolder(view);
+        ContactosViewHolder holder = new ContactosViewHolder(view,suscripcionesContactos);
         holder.setOnclickListener();
         return holder;
     }
@@ -86,10 +90,13 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         TextView textViewNota;
         ImageView filmaffinityLink;
         Context context;
+        List<Suscripcion> suscripcionesContactos=new ArrayList<>();
+        Dialog miDialogo;
 
-        public ContactosViewHolder(View itemView) {
+        public ContactosViewHolder(View itemView,List suscripcionesContactos) {
             super(itemView);
             context=itemView.getContext();
+            this.suscripcionesContactos=suscripcionesContactos;
             avatarSerie=itemView.findViewById(R.id.imagenSerieContactosInfo);
             nombreSerie=itemView.findViewById(R.id.nombreSerieFavoritos);
             barNota=itemView.findViewById(R.id.progressBarNota);
@@ -98,6 +105,24 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         }
 
         public void setOnclickListener(){
+            avatarSerie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    miDialogo=new Dialog(context);
+                    ImageView imagen;
+                    miDialogo.setContentView(R.layout.image_pop_up);
+                    imagen=miDialogo.findViewById(R.id.imagenAmpliada);
+                    int position = getAdapterPosition();
+                    Suscripcion suscripcion = suscripcionesContactos.get(position);
+                    Glide.with(context)
+                            .load(suscripcion.getImagen())
+                            .fitCenter()
+                            .centerCrop()
+                            .into(imagen);
+                    miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    miDialogo.show();
+                }
+            });
             filmaffinityLink.setOnClickListener(this);
         }
         @Override

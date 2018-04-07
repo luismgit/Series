@@ -41,6 +41,8 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'com.android.volley:volley:1.1.0'
     compile 'com.android.support:percent:26.1.0'
+    compile 'com.github.arturogutierrez:badges:1.0.5@aar'
+    compile "me.leolin:ShortcutBadger:1.1.21@aar"
     //compile 'com.android.support:design:26.0.2'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'

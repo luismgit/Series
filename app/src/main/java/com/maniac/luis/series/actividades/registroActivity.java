@@ -447,7 +447,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         botonAvatar.setClickable(false);
         botonRegistro.setClickable(false);
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
-        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE, (long) 0, FirebaseInstanceId.getInstance().getToken(),"#ffffff");
+        Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE,
+                (long) 0, FirebaseInstanceId.getInstance().getToken(),
+                "https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/fondos_comentarios%2Fcielo.png?alt=media&token=da05397a-d53b-4e29-acc8-9097399d19a0");
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)
