@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="155dp"
+    android:layout_height="175dp"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
     android:id="@+id/relativeLayoutFavoritos"
@@ -12,25 +12,20 @@
 
     >
 
-   <!-- <ImageView
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/imagenSerieFavoritos"
-        />-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/imagenSerieFavoritos"
         android:layout_alignParentLeft="true"
+        android:src="@drawable/series_back"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nombreSerieFavoritos"
-        android:text="Breaking Bad"
+        android:text="American Horror Story"
         android:layout_toRightOf="@id/imagenSerieFavoritos"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="15dp"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -68,10 +63,9 @@
         android:text="Vota"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_below="@id/estrellasFav"
-        android:layout_toRightOf="@id/imagenSerieFavoritos"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_below="@id/imagenSerieFavoritos"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="13dp"
         android:layout_marginRight="5dp"/>
 
 
@@ -85,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textoVota"
-        android:layout_below="@id/estrellasFav"
+        android:layout_below="@id/imagenSerieFavoritos"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"
         android:src="@drawable/ic_action_voto"
@@ -95,7 +89,43 @@
         app:rippleColor="@android:color/background_dark"
         android:clickable="true"
         android:id="@+id/botonVoto"
+        android:layout_marginTop="7dp"
         />
+
+ <ImageView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_toLeftOf="@id/textComentarios"
+     android:layout_below="@+id/imagenSerieFavoritos"
+     android:layout_marginLeft="30dp"
+     android:layout_marginTop="7dp"
+     android:src="@drawable/comment_edit"
+     android:id="@+id/iconComentarios"
+
+     />
+ <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/imagenSerieFavoritos"
+     android:layout_alignParentRight="true"
+     android:layout_marginRight="23dp"
+     android:layout_marginTop="15dp"
+     android:text="Comentarios"
+     android:textStyle="bold"
+     android:id="@+id/textComentarios"
+     />
+ <TextView
+     android:id="@+id/numerComentarios"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/imagenSerieFavoritos"
+     android:layout_alignLeft="@id/iconComentarios"
+     android:textColor="#FFF"
+     android:textSize="13sp"
+     android:textStyle="bold"
+     android:background="@drawable/circulo_num_comentarios"/>
+
+
 
 
 

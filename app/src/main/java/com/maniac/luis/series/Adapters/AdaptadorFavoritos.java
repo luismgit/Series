@@ -3,6 +3,7 @@ package com.maniac.luis.series.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.ComentariosActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
@@ -60,11 +62,15 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     }
 
     @Override
-    public void onBindViewHolder(FavoritosViewHolder holder, int position) {
+    public void onBindViewHolder(final FavoritosViewHolder holder, int position) {
 
-        Suscripcion suscripcion = suscripciones.get(position);
+        final Suscripcion suscripcion = suscripciones.get(position);
+        if(suscripcion.getSerie().length()>16){
+            holder.textViewNombre.setTextSize(17);
+        }else{
+            holder.textViewNombre.setTextSize(20);
+        }
         holder.textViewNombre.setText(suscripcion.getSerie());
-       // holder.imagenSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(mContext)
                 .load(suscripcion.getImagen())
                 .fitCenter()
@@ -72,6 +78,31 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                 .into(holder.imagenSerie);
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.ratingBarFavoritos.setAnimation(holder.myRotation);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+                .child(suscripcion.getSerie()).child(FirebaseReferences.COM_LEIDOS);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long sinleer= (Long) dataSnapshot.getValue();
+                try{
+                    if(sinleer==0){
+                        holder.numComentarios.setVisibility(View.INVISIBLE);
+                    }else{
+                        holder.numComentarios.setText(String.valueOf(sinleer));
+                        holder.numComentarios.setVisibility(View.VISIBLE);
+                    }
+                }catch(Exception e){
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         holder.setOnclickListener();
 
     }
@@ -99,6 +130,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         RelativeLayout miVista;
         Dialog miDialogo;
         List<Suscripcion> suscripciones=new ArrayList<>();
+        ImageView iconoComentarios;
+        TextView numComentarios;
+        TextView textComentarios;
 
         public FavoritosViewHolder(View itemView,List suscripciones) {
             super(itemView);
@@ -108,6 +142,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
             menuFavoritos=itemView.findViewById(R.id.textViewMenuFavoritos);
             botonVoto=itemView.findViewById(R.id.botonVoto);
+            iconoComentarios=itemView.findViewById(R.id.iconComentarios);
+            numComentarios=itemView.findViewById(R.id.numerComentarios);
+            textComentarios=itemView.findViewById(R.id.textComentarios);
             this.suscripciones=suscripciones;
         }
 
@@ -115,6 +152,19 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
         public void setOnclickListener(){
             menuFavoritos.setOnClickListener(this);
+            textComentarios.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    irAComentarios();
+                }
+
+            });
+            iconoComentarios.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    irAComentarios();
+                }
+            });
             imagenSerie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -140,11 +190,11 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                 public void onClick( View view) {
 
                     //COGEMOS EL ELEMENTO RATINBAR Y LE APLICAMOS UNA ANIMACIÓN
-                    miVista= (RelativeLayout) view.getParent();
+                    /*miVista= (RelativeLayout) view.getParent();
                     View vista = miVista.findViewById(R.id.estrellasFav);
                     myRotation = AnimationUtils.loadAnimation(vista.getContext(), R.anim.rotator);
                     myRotation.setRepeatCount(0);
-                    vista.startAnimation(myRotation);
+                    vista.startAnimation(myRotation);*/
 
 
                     nombreSerie=textViewNombre.getText().toString();
@@ -173,11 +223,16 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                        double estrellas =  childSnapshot.child(FirebaseReferences.ESTRELLAS_USUARIO).getValue(Double.class);
-                                        Log.i("Puntuacion","Estrellas -> " + estrellas);
-                                        contador++;
-                                        totalEstrellas+=estrellas;
-                                        Log.i("Puntuacion","totalEstrellas -> " + totalEstrellas);
+                                        String votada = (String) childSnapshot.child("votada").getValue();
+                                        Log.i("Puntuacion","Votada -> " + votada);
+                                        if(votada.equalsIgnoreCase("si")){
+                                            double estrellas =  childSnapshot.child(FirebaseReferences.ESTRELLAS_USUARIO).getValue(Double.class);
+                                            Log.i("Puntuacion","Estrellas -> " + estrellas);
+                                            contador++;
+                                            totalEstrellas+=estrellas;
+                                            Log.i("Puntuacion","totalEstrellas -> " + totalEstrellas);
+                                        }
+
                                     }
                                     Log.i("Puntuacion","contador " + contador);
                                     Log.i("Puntuacion","total estrellas " + totalEstrellas);
@@ -309,6 +364,12 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             });
             //MUESTRA EL POPMENÚ
             popupMenu.show();
+        }
+
+        private void irAComentarios() {
+            Intent intent = new Intent(context, ComentariosActivity.class);
+            intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,textViewNombre.getText().toString());
+            context.startActivity(intent);
         }
     }
 

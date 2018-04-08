@@ -47,7 +47,11 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
     @Override
     public void onBindViewHolder(UsuariosviewHolder holder, int position) {
         Usuario usuario = usuarios.get(position);
-
+        if(usuario.getNick().length()>17){
+            holder.textViewNick.setTextSize(14);
+        }else{
+            holder.textViewNick.setTextSize(17);
+        }
         holder.textViewNick.setText(usuario.getNick());
         Log.i("avatar","-> " + usuario.getAvatar());
         Glide.with(context)

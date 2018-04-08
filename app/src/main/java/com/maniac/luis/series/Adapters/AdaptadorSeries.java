@@ -46,7 +46,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     private Context mContext;
     private Hashtable<String,String> contactos;
     Series serie;
-    //private int [] iconos = Imagenes.getIconosSeries();
 
     public AdaptadorSeries(List<Series> series,Context mContext) {
         this.series = series;
@@ -64,17 +63,21 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     @Override
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
          serie = series.get(position);
+         if(serie.getNombre().length()>16){
+             holder.textViewNombre.setTextSize(17);
+         }else{
+             holder.textViewNombre.setTextSize(20);
+         }
         holder.textViewNombre.setText(serie.getNombre());
         Glide.with(mContext)
                 .load(serie.getImagen())
                 .fitCenter()
                 .centerCrop()
                 .into(holder.iconoSerie);
-       // holder.iconoSerie.setImageResource(iconos[serie.getImagen()]);
         holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
+     /*   DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
                 .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,7 +103,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
         holder.setOnclickListener();
 
@@ -150,15 +153,15 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
-            textComentarios=itemView.findViewById(R.id.textoComentarios);
-            iconoComentarios=itemView.findViewById(R.id.iconoComentarios);
-            numComentarios=itemView.findViewById(R.id.numComentarios);
+           // textComentarios=itemView.findViewById(R.id.textoComentarios);
+           // iconoComentarios=itemView.findViewById(R.id.iconoComentarios);
+           // numComentarios=itemView.findViewById(R.id.numComentarios);
 
         }
 
         public void setOnclickListener(){
             textViewOptions.setOnClickListener(this);
-            textComentarios.setOnClickListener(new View.OnClickListener() {
+           /* textComentarios.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                    irAComentarios();
@@ -170,7 +173,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 public void onClick(View view) {
                     irAComentarios();
                 }
-            });
+            });*/
             iconoSerie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -350,11 +353,11 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             context.startActivity(intent);
         }
 
-        private void irAComentarios() {
+     /*   private void irAComentarios() {
            Intent intent = new Intent(context, ComentariosActivity.class);
            intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,textViewNombre.getText().toString());
            context.startActivity(intent);
-        }
+        }*/
 
 
     }

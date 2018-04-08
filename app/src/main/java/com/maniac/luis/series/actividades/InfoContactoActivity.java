@@ -58,7 +58,13 @@ private int [] avatares;
             contact=contact.substring(0,10);
             contact=contact+"...";
         }*/
-        nombreUsuario.setText(getIntent().getStringExtra(Common.CONTACTO));
+        String contact = getIntent().getStringExtra(Common.CONTACTO);
+        if(contact.length()>20){
+            nombreUsuario.setTextSize(18);
+        }else{
+            nombreUsuario.setTextSize(22);
+        }
+        nombreUsuario.setText(contact);
 
         //LE ASIGNAMOS SU AVATAR
         //avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);

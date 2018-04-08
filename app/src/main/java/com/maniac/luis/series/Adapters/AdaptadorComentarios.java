@@ -113,7 +113,13 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         Spannable spannable = new SpannableString(texto);
         spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);*/
+        if(comentario.getNumLikes()!=0){
+            holder.numMeGustan.setText("("+comentario.getNumLikes()+")");
+        }else{
+            holder.numMeGustan.setText("");
+        }
         holder.editTextComentario.setText(comentario.getComentario());
+        holder.fechaComentUsu.setText(getFechaComentarioFormateada(comentario.getFecha()));
     }
 
     @Override
@@ -134,9 +140,13 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
     public static class ComentariosViewHolderUser extends RecyclerView.ViewHolder{
 
         TextView editTextComentario;
+        TextView numMeGustan;
+        TextView fechaComentUsu;
         public ComentariosViewHolderUser(View itemView) {
             super(itemView);
             editTextComentario=itemView.findViewById(R.id.editTextComentario);
+            numMeGustan=itemView.findViewById(R.id.numerodeMegusta);
+            fechaComentUsu=itemView.findViewById(R.id.fechaComentarioUsu);
         }
     }
 

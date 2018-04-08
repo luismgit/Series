@@ -50,6 +50,11 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     @Override
     public void onBindViewHolder(ContactosViewHolder holder, int position) {
         Suscripcion suscripcion = suscripcionesContactos.get(position);
+        if(suscripcion.getSerie().length()>21){
+            holder.nombreSerie.setTextSize(18);
+        }else{
+            holder.nombreSerie.setTextSize(20);
+        }
         holder.nombreSerie.setText(suscripcion.getSerie());
        // holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(contexto)

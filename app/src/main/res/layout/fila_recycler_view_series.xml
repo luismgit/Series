@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
@@ -15,14 +15,15 @@
         android:layout_height="110dp"
         android:id="@+id/imagenSerie"
         android:layout_alignParentLeft="true"
+        android:src="@drawable/series_back"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nombreSerie"
-        android:text="Breaking Bad"
+        android:text="American Horror Story"
         android:layout_toRightOf="@id/imagenSerie"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="15dp"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -87,7 +88,7 @@
         android:layout_alignParentBottom="true"
         android:background="#d4d4d4"
         />
-    <ImageView
+    <!--<ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/numLikes"
@@ -116,11 +117,6 @@
         android:textColor="#FFF"
         android:textSize="13sp"
         android:textStyle="bold"
-        android:background="@drawable/circulo_num_comentarios"/>
-
-
-
-
-
+        android:background="@drawable/circulo_num_comentarios"/>-->
 
 </RelativeLayout>

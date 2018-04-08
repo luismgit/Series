@@ -32,6 +32,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.maniac.luis.series.Adapters.AdaptadorComentarios;
 import com.maniac.luis.series.Objetos.Comentario;
+import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
@@ -78,6 +79,7 @@ public class ComentariosActivity extends AppCompatActivity {
     Dialog myDialog;
     String [] coloresSolidos;
     List<String> listaFondosGaleria;
+    String url;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -131,12 +133,28 @@ public class ComentariosActivity extends AppCompatActivity {
         r.child(FirebaseReferences.IMAGEN_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String url= (String) dataSnapshot.getValue();
+                 url= (String) dataSnapshot.getValue();
                 Glide.with(ComentariosActivity.this)
                         .load(url)
                         .centerCrop()
                         .fitCenter()
                         .into(imagenSerieComentarios);
+                imagenSerieComentarios.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dialog miDialogo=new Dialog(ComentariosActivity.this);
+                        ImageView imagen;
+                        miDialogo.setContentView(R.layout.image_pop_up);
+                        imagen=miDialogo.findViewById(R.id.imagenAmpliada);
+                        Glide.with(ComentariosActivity.this)
+                                .load(url)
+                                .fitCenter()
+                                .centerCrop()
+                                .into(imagen);
+                        miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        miDialogo.show();
+                    }
+                });
             }
 
             @Override
@@ -144,6 +162,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
             }
         });
+
         r.child(FirebaseReferences.NOMBRE_SERIE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
