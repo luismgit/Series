@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
@@ -39,8 +40,15 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class MiFirebaseMessagingService extends FirebaseMessagingService {
 
+    NotificationManager notificationManager;
+    String telefono_usuario_final;
+    String serie;
+    int notificationId;
+    NotificationCompat.Builder builder;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
         super.onMessageReceived(remoteMessage);
         String mensaje="";
         if(remoteMessage.getData().size()>0){
@@ -50,9 +58,11 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             if(comentario.length()>=20){
                 comentario=comentario.substring(0,20)+"..., ";
             }
-            String telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
-            String serie=data.get(Common.SERIE);
+            telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
+            serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);
+
+
             if(contactoAgenda.equals("")){
                 mensaje="Un usuario con tu número en su agenda le ha gustado tu comentario:" + comentario  + " " + "en" + " " + serie + ".";
             }else{
@@ -78,8 +88,8 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
             Uri sonido = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            int notificationId = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);;
+            notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationId = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);;
             String channelId = "channel-01";
             String channelName = "Channel Name";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -90,7 +100,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(mChannel);
             }
 
-            NotificationCompat.Builder builder=new NotificationCompat.Builder(this,channelId)
+             builder=new NotificationCompat.Builder(this,channelId)
                     .setSmallIcon(R.drawable.icon_notif)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
@@ -102,11 +112,29 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                     .setSound(sonido)
                     .setContentIntent(pendingIntent);
 
-            notificationManager.notify(notificationId,builder.build());
-            SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Common.NOTIFY,true);
-            editor.commit();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot:
+                            dataSnapshot.getChildren()){
+                        Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
+                        if(suscripcion.getTelefono().equals(telefono_usuario_final) &&
+                                suscripcion.getSerie().equalsIgnoreCase(serie)){
+                            mandarNotificacion();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
 
 
 
@@ -115,6 +143,14 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
+    }
+
+    private void mandarNotificacion() {
+        notificationManager.notify(notificationId,builder.build());
+        SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(Common.NOTIFY,true);
+        editor.commit();
     }
 
     public String loadContactFromTlf(String telefono) {

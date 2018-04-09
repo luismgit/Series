@@ -167,6 +167,11 @@ public class ComentariosActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String nombreSerie= (String) dataSnapshot.getValue();
+                if(nombreSerie.length()>=20){
+                    textoSerieComentarios.setTextSize(15);
+                }else{
+                    textoSerieComentarios.setTextSize(20);
+                }
                 textoSerieComentarios.setText(nombreSerie);
             }
 
