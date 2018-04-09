@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.github.arturogutierrez.Badges;
 import com.github.arturogutierrez.BadgesNotSupportedException;
 import com.maniac.luis.series.Objetos.Series;
+import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCorreoUsuario;
 import com.maniac.luis.series.Objetos.Usuario;
@@ -101,6 +102,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
      int contador=0;
      int aleatorio=0;
      Long comentariosTotales;
+     List<String> suscripcionesUsuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +119,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         comentariosTotales= Long.valueOf(0);
+        suscripcionesUsuario=new ArrayList<>();
         fondo = findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
         Log.i("TOKEN", "token -> " + FirebaseInstanceId.getInstance().getToken());
@@ -191,32 +194,63 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         }
 
-        final DatabaseReference fiDa = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser());
-        fiDa.addValueEventListener(new ValueEventListener() {
+        DatabaseReference re = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
+        re.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                comentariosTotales= Long.valueOf(0);
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    Long com = (Long) snapshot.child(FirebaseReferences.COM_LEIDOS).getValue();
-                    comentariosTotales=comentariosTotales+com;
+
+                for(DataSnapshot snapshot:
+                        dataSnapshot.getChildren()){
+                    Suscripcion suscripcion=  snapshot.getValue(Suscripcion.class);
+                    if(suscripcion.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+
+                        suscripcionesUsuario.add(suscripcion.getSerie());
+                        Log.i("batch","suscripcion -> " + suscripcion.getSerie());
+                    }
                 }
-                Log.i("batch","comentariosTotales -> " + comentariosTotales);
-                if(comentariosTotales!=0){
-                    try{
-                        ShortcutBadger.applyCount(TabActivity.this, (int) (long) comentariosTotales); //for 1.1.4+
-                    }catch (Exception e){
+
+                final DatabaseReference fiDa = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser());
+                fiDa.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        comentariosTotales= Long.valueOf(0);
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            String key = snapshot.getKey();
+                            if(suscripcionesUsuario.contains(key)){
+
+                                Long com = (Long) snapshot.child(FirebaseReferences.COM_LEIDOS).getValue();
+                                comentariosTotales=comentariosTotales+com;
+                                Log.i("batch","comentario -> " + com);
+                            }
+
+                        }
+                        Log.i("batch","comentariosTotales -> " + comentariosTotales);
+                        if(comentariosTotales!=0){
+                            try{
+                                ShortcutBadger.applyCount(TabActivity.this, (int) (long) comentariosTotales); //for 1.1.4+
+                            }catch (Exception e){
+
+                            }
+
+
+                        }else{
+                            try{
+                                ShortcutBadger.removeCount(TabActivity.this); //for 1.1.4+
+                            }catch (Exception e){
+
+                            }
+
+                        }
+
 
                     }
 
-
-                }else{
-                    try{
-                        ShortcutBadger.removeCount(TabActivity.this); //for 1.1.4+
-                    }catch (Exception e){
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
 
-                }
+                });
 
 
             }
@@ -225,8 +259,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
+
+
 
 
             //LISTENER QUE GUARDA EN NUESTRA CLASE ComunicarClaveUsuarioActual EL TELÉFONO DEL USUARIO ACTUAL PARA ACCEDER A ÉL EN LAS DEMÁS ACTIVIDADES

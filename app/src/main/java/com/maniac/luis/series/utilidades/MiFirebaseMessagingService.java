@@ -1,6 +1,7 @@
 package com.maniac.luis.series.utilidades;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -76,8 +77,21 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra(Common.TELEFONO,telefono_usuario_final);
             PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
             Uri sonido = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            NotificationCompat.Builder builder=new NotificationCompat.Builder(this)
-            .setSmallIcon(R.mipmap.ic_launcher)
+
+            NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int notificationId = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);;
+            String channelId = "channel-01";
+            String channelName = "Channel Name";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel mChannel = new NotificationChannel(
+                        channelId, channelName, importance);
+                notificationManager.createNotificationChannel(mChannel);
+            }
+
+            NotificationCompat.Builder builder=new NotificationCompat.Builder(this,channelId)
+                    .setSmallIcon(R.drawable.icon_notif)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
                     .setContentTitle(Common.LIKE + " | " + contactoAgenda + " | " + serie)
@@ -87,9 +101,8 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(mensaje))
                     .setSound(sonido)
                     .setContentIntent(pendingIntent);
-            NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-            notificationManager.notify(m,builder.build());
+
+            notificationManager.notify(notificationId,builder.build());
             SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Common.NOTIFY,true);

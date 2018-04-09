@@ -71,8 +71,9 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
             holder.textViewNota.setText(nota);
         }else{
             holder.textViewNota.setTypeface(null, Typeface.NORMAL);
-            holder.textViewNota.setTextColor(Color.GRAY);
-            holder.textViewNota.setText("Sin valorar");
+            holder.textViewNota.setTextColor(Color.RED);
+            holder.textViewNota.setTextSize(16);
+            holder.textViewNota.setText(R.string.sin_valorar);
             holder.barNota.setVisibility(View.INVISIBLE);
 
         }
