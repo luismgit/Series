@@ -34,6 +34,19 @@
             android:textSize="25sp"
             android:id="@+id/textoEmail"
             android:textColor="#ffffff"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/fotoPerfil"
+            android:layout_marginLeft="20dp"
+            android:text="@string/error_email_format"
+            android:textColor="#ffffff"
+            android:layout_marginTop="9dp"
+            android:id="@+id/textoEmailIncorrecto"
+            android:visibility="gone"
+            />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

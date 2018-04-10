@@ -101,7 +101,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
             }
 
              builder=new NotificationCompat.Builder(this,channelId)
-                    .setSmallIcon(R.drawable.icon_notif)
+                    .setSmallIcon(R.drawable.ic_stat_name)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
                     .setContentTitle(Common.LIKE + " | " + contactoAgenda + " | " + serie)

@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.maniac.luis.series.utilidades.Utilities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,6 +74,7 @@ public class Perfil extends AppCompatActivity {
     String miPath;
     ProgressBar cargaFotoPerfil;
     ProgressBar cargaPerfil;
+    TextView textoEmailIncorrecto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class Perfil extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         imagenUsuario = findViewById(R.id.fotoPerfil);
         editTextEmailUsuario = findViewById(R.id.editTextEmail);
+        textoEmailIncorrecto=findViewById(R.id.textoEmailIncorrecto);
         cargaFotoPerfil=findViewById(R.id.cargaFotoPerfil);
         cargaPerfil=findViewById(R.id.cargaPerfil);
         user = (Usuario) getIntent().getSerializableExtra("usuario");
@@ -214,61 +218,67 @@ public class Perfil extends AppCompatActivity {
 
     public void modificarPerfil(View view) {
 
-        botonModificar.setClickable(false);
-        cargaPerfil.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
-        animation.setDuration(1000);
-        botonModificar.setAnimation(animation);
-        filePath = storageReference.child(FirebaseReferences.FOTO_PERFIL_USUARIO + "/" + editTextEmailUsuario.getText().toString() + "_" + getFecha());
+        if(Utilities.validateEmail(editTextEmailUsuario.getText().toString())){
+            textoEmailIncorrecto.setVisibility(View.GONE);
+            botonModificar.setClickable(false);
+            cargaPerfil.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
+            animation.setDuration(1000);
+            botonModificar.setAnimation(animation);
+            filePath = storageReference.child(FirebaseReferences.FOTO_PERFIL_USUARIO + "/" + editTextEmailUsuario.getText().toString() + "_" + getFecha());
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
-                .child(FirebaseReferences.CORREO_USUARIO);
-        ref.setValue(editTextEmailUsuario.getText().toString());
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave())
+                    .child(FirebaseReferences.CORREO_USUARIO);
+            ref.setValue(editTextEmailUsuario.getText().toString());
 
-        if (camara) {
-            Log.i("perfil ", "entra camara");
-           // byte[] data = stream.toByteArray();
-            imagenUsuario.setDrawingCacheEnabled(true);
-            imagenUsuario.buildDrawingCache();
-            Bitmap bitmap = imagenUsuario.getDrawingCache();
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] data = byteArrayOutputStream.toByteArray();
-            UploadTask uploadTask = filePath.putBytes(data);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
-                    Log.i("Perfil", "foto subida de camara con el enlace " + enlaceFotoFirebase.toString());
-                    modificarFotoPerfil();
-                }
-            });
+            if (camara) {
+                Log.i("perfil ", "entra camara");
+                // byte[] data = stream.toByteArray();
+                imagenUsuario.setDrawingCacheEnabled(true);
+                imagenUsuario.buildDrawingCache();
+                Bitmap bitmap = imagenUsuario.getDrawingCache();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] data = byteArrayOutputStream.toByteArray();
+                UploadTask uploadTask = filePath.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
+                        Log.i("Perfil", "foto subida de camara con el enlace " + enlaceFotoFirebase.toString());
+                        modificarFotoPerfil();
+                    }
+                });
 
-        } else if (galeria) {
-            Log.i("perfil ", "entra galeria");
-            imagenUsuario.setDrawingCacheEnabled(true);
-            imagenUsuario.buildDrawingCache();
-            Bitmap bitmap = imagenUsuario.getDrawingCache();
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] data = byteArrayOutputStream.toByteArray();
-            UploadTask uploadTask = filePath.putBytes(data);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
-                    Log.i("Perfil", "foto subida de la galeria con el enlace " + enlaceFotoFirebase.toString());
-                    modificarFotoPerfil();
-                }
-            });
-        } else {
-            cargaPerfil.setVisibility(View.GONE);
-            Toast.makeText(this, R.string.perfil_mod, Toast.LENGTH_SHORT).show();
-            cambios = false;
-            botonModificar.setClickable(true);
-            //finish();
+            } else if (galeria) {
+                Log.i("perfil ", "entra galeria");
+                imagenUsuario.setDrawingCacheEnabled(true);
+                imagenUsuario.buildDrawingCache();
+                Bitmap bitmap = imagenUsuario.getDrawingCache();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] data = byteArrayOutputStream.toByteArray();
+                UploadTask uploadTask = filePath.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
+                        Log.i("Perfil", "foto subida de la galeria con el enlace " + enlaceFotoFirebase.toString());
+                        modificarFotoPerfil();
+                    }
+                });
+            } else {
+                cargaPerfil.setVisibility(View.GONE);
+                Toast.makeText(this, R.string.perfil_mod, Toast.LENGTH_SHORT).show();
+                cambios = false;
+                botonModificar.setClickable(true);
+                //finish();
+            }
+        }else{
+            textoEmailIncorrecto.setVisibility(View.VISIBLE);
         }
+
 
     }
 
@@ -354,8 +364,14 @@ public class Perfil extends AppCompatActivity {
                             dialogo1.setCancelable(false);
                             dialogo1.setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogo1, int id) {
-                                    modificarPerfil(null);
-                                    new Esperar().execute();
+                                    if(Utilities.validateEmail(editTextEmailUsuario.getText().toString())){
+                                        textoEmailIncorrecto.setVisibility(View.GONE);
+                                        modificarPerfil(null);
+                                        new Esperar().execute();
+                                    }else{
+                                        Log.i("modifcorreo","incorrecto!!");
+                                        textoEmailIncorrecto.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             });
                             dialogo1.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -405,8 +421,14 @@ public class Perfil extends AppCompatActivity {
                             dialogo1.setCancelable(false);
                             dialogo1.setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogo1, int id) {
-                                    modificarPerfil(null);
-                                    new Esperar().execute();
+                                    if(Utilities.validateEmail(editTextEmailUsuario.getText().toString())){
+                                        textoEmailIncorrecto.setVisibility(View.GONE);
+                                        modificarPerfil(null);
+                                        new Esperar().execute();
+                                    }else{
+                                        textoEmailIncorrecto.setVisibility(View.VISIBLE);
+                                    }
+
                                 }
                             });
                             dialogo1.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {

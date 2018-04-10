@@ -18,8 +18,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,6 +84,8 @@ public class ComentariosActivity extends AppCompatActivity {
     String [] coloresSolidos;
     List<String> listaFondosGaleria;
     String url;
+    LinearLayoutManager manager;
+    List<String> serie_telefono_suscripciones=new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -189,9 +195,18 @@ public class ComentariosActivity extends AppCompatActivity {
         DatabaseReference fbref=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
                 .child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
         fbref.setValue(0);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        manager = new LinearLayoutManager(this);
+        rv.setLayoutManager(manager);
         adaptadorComentarios=new AdaptadorComentarios(comentarios,this,agenda);
         rv.setAdapter(adaptadorComentarios);
+        rv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) scrollToBottom();
+            }
+        });
+
+
         /*Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
         com.maniac.luis.series.utilidades.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.utilidades.DividerItemDecoration(dividerDrawable);
         rv.addItemDecoration(dividerItemDecoration);*/
@@ -224,6 +239,7 @@ public class ComentariosActivity extends AppCompatActivity {
                 }
 
                 adaptadorComentarios.notifyDataSetChanged();
+                rv.scrollToPosition(comentarios.size()-1);
             }
 
             @Override
@@ -240,64 +256,89 @@ public class ComentariosActivity extends AppCompatActivity {
     }
 
     public void enviarNuevoComentario(View view) {
-        String coment=nuevoComentario.getText().toString().trim();
-        if(coment.equals("")){
-            Toast.makeText(this, R.string.debe_comentar,Toast.LENGTH_SHORT).show();
-        }else{
-            Map<String,Boolean> liked = new HashMap<>();
-            List<String> numeroContactos=new ArrayList<>();
-            numeroContactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
-            for (int i = 0; i < numeroContactos.size(); i++) {
-                Log.i("liked","numeros -> " + numeroContactos.get(i));
-                liked.put(numeroContactos.get(i),false);
-            }
-            liked.put("prueba",false);
-            Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario()
-                    ,nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"", (long) 0,getFecha());
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
-            String key = databaseReference.push().getKey();
-            databaseReference.child(key).setValue(comentario);
-            DatabaseReference refdata=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(key).child("keyFB");
-            refdata.setValue(key);
-            nuevoComentario.setText("");
-            final DatabaseReference dtRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE);
-            dtRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
-                    for(DataSnapshot snapshot:
-                            dataSnapshot.getChildren()){
-                       final String phoneNumber = snapshot.getKey();
-                       Log.i("snapshot.getKey()",phoneNumber);
-                        if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber)){
-                            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
-                                    .child(phoneNumber).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
-                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Log.i("com_leidos","phone -> " + phoneNumber);
-                                    Log.i("com_leidos","serie -> " + nombreSerie);
-                                    Long sinLeer= (Long) dataSnapshot.getValue();
-                                    sinLeer++;
-                                    ref.setValue(sinLeer);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
+        DatabaseReference drefF= FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
+        drefF.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:
+                        dataSnapshot.getChildren()){
+                    Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
+                    serie_telefono_suscripciones.add(suscripcion.getTlf_serie());
+                }
+                String coment=nuevoComentario.getText().toString().trim();
+                if(coment.equals("")){
+                    Toast.makeText(ComentariosActivity.this, R.string.debe_comentar,Toast.LENGTH_SHORT).show();
+                }else{
+                    Map<String,Boolean> liked = new HashMap<>();
+                    List<String> numeroContactos=new ArrayList<>();
+                    numeroContactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
+                    for (int i = 0; i < numeroContactos.size(); i++) {
+                        Log.i("liked","numeros -> " + numeroContactos.get(i));
+                        liked.put(numeroContactos.get(i),false);
                     }
+                    liked.put("prueba",false);
+                    Comentario comentario = new Comentario(nuevoComentario.getText().toString(), ComunicarAvatarUsuario.getAvatarUsuario()
+                            ,nombreSerie, ComunicarCurrentUser.getPhoneNumberUser(),liked,Comentario.ComentarioType.OTHER_USERS,"", (long) 0,getFecha());
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+                    String key = databaseReference.push().getKey();
+                    databaseReference.child(key).setValue(comentario);
+                    DatabaseReference refdata=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(key).child("keyFB");
+                    refdata.setValue(key);
+                    nuevoComentario.setText("");
+                    rv.scrollToPosition(comentarios.size()-1);
+                    esconderTeclado();
+                    final DatabaseReference dtRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE);
+                    dtRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            contactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
+                            for(DataSnapshot snapshot:
+                                    dataSnapshot.getChildren()){
+                                final String phoneNumber = snapshot.getKey();
+                                Log.i("snapshot.getKey()",phoneNumber);
+
+                                if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber) &&
+                                        serie_telefono_suscripciones.contains(phoneNumber+"_"+nombreSerie)){
+                                    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
+                                            .child(phoneNumber).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
+                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Log.i("com_leidos","phone -> " + phoneNumber);
+                                            Log.i("com_leidos","serie -> " + nombreSerie);
+                                            Long sinLeer= (Long) dataSnapshot.getValue();
+
+                                            sinLeer++;
+                                            ref.setValue(sinLeer);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        }
+            }
+        });
+
+
+
 
     }
 
@@ -412,5 +453,17 @@ public class ComentariosActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+
+    //MÉTODO QUE ESCONDE EL TECLADO
+    private void esconderTeclado(){
+
+        InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        teclado.hideSoftInputFromWindow(nuevoComentario.getWindowToken(), 0);
+    }
+
+    private void scrollToBottom() {
+        manager.smoothScrollToPosition(rv, null, adaptadorComentarios.getItemCount());
     }
 }
