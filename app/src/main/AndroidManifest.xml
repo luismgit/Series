@@ -72,8 +72,13 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".actividades.ListaFondosColorSolido" />
-        <activity android:name=".actividades.ListaFondosGaleria"></activity>
+        <activity android:name=".actividades.ListaFondosColorSolido"
+            android:screenOrientation="portrait" />
+        <activity android:name=".actividades.ListaFondosGaleria"
+            android:screenOrientation="portrait"></activity>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
     </application>
 
 </manifest>

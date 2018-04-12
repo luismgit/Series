@@ -77,6 +77,7 @@
     <string name="a_adir_a_favoritos">Añadir a favoritos</string>
     <string name="ir_a_filmaffinity">Ir a Filmaffinity</string>
     <string name="sin_valorar">Sin valorar</string>
+    <string name="default_notification_channel_id">Channel Name</string>
 
 
 </resources>

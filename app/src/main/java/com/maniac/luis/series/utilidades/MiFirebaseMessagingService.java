@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -90,13 +91,15 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
 
             notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationId = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);;
-            String channelId = "channel-01";
+            String channelId = getString(R.string.default_notification_channel_id);
             String channelName = "Channel Name";
             int importance = NotificationManager.IMPORTANCE_HIGH;
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
                 NotificationChannel mChannel = new NotificationChannel(
                         channelId, channelName, importance);
+                mChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
                 notificationManager.createNotificationChannel(mChannel);
             }
 
@@ -104,6 +107,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
                     .setSmallIcon(R.drawable.ic_stat_name)
                     .setColor(Color.RED)
                     .setLargeIcon(bitmap)
+                     .setChannelId(channelId)
                     .setContentTitle(Common.LIKE + " | " + contactoAgenda + " | " + serie)
                     .setContentText(contactoAgenda)
                     .setAutoCancel(true)
