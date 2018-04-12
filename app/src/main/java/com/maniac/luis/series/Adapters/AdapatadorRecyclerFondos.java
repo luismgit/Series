@@ -47,8 +47,7 @@ public class AdapatadorRecyclerFondos extends RecyclerView.Adapter<AdapatadorRec
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        holder.fondo.setImageResource(R.drawable.sin_conexion);
-                        holder.carga.setVisibility(View.GONE);
+                        holder.carga.setVisibility(View.VISIBLE);
                         return false;
                     }
 

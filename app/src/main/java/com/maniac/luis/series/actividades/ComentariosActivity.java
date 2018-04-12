@@ -86,6 +86,7 @@ public class ComentariosActivity extends AppCompatActivity {
     String url;
     LinearLayoutManager manager;
     List<String> serie_telefono_suscripciones=new ArrayList<>();
+    boolean primeraCargaRv=true;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -239,7 +240,11 @@ public class ComentariosActivity extends AppCompatActivity {
                 }
 
                 adaptadorComentarios.notifyDataSetChanged();
-                rv.scrollToPosition(comentarios.size()-1);
+                if(primeraCargaRv){
+                    rv.scrollToPosition(comentarios.size()-1);
+                    primeraCargaRv=false;
+                }
+
             }
 
             @Override

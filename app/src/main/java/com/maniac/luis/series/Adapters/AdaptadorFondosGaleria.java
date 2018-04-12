@@ -44,8 +44,8 @@ public class AdaptadorFondosGaleria extends RecyclerView.Adapter<AdaptadorFondos
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        holder.fondo.setImageResource(R.drawable.sin_conexion);
-                        holder.cargaFondos.setVisibility(View.GONE);
+
+                        holder.cargaFondos.setVisibility(View.VISIBLE);
                         return false;
                     }
 
