@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/appBarLayout">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapse_toolbar"
@@ -18,8 +19,9 @@
             app:titleEnabled="false"
             android:layout_height="270dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="exitUntilCollapsed">
+            app:contentScrim="@color/menuBarAbajo"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:background="@color/menuBarAbajo">
             <!--si ponemos : app:layout_scrollFlags="scroll|exitUntilCollapsed  al hacer scroll la foto desaparece...
              pero da problemas al cambiar de tabs">-->
 
@@ -39,8 +41,10 @@
                 android:gravity="top"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:titleMarginTop="15dp" />
+                app:titleMarginTop="15dp"
+
+
+                />
 
             <android.support.design.widget.TabLayout
 

@@ -49,16 +49,21 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
+        Log.i("recibido","comentario recibido");
         super.onMessageReceived(remoteMessage);
         String mensaje="";
         if(remoteMessage.getData().size()>0){
             Map<String,String> data = remoteMessage.getData();
             String telefono=data.get(Common.TELEFONO);
             String comentario=data.get(Common.COMENTARIO);
-            if(comentario.length()>=20){
-                comentario=comentario.substring(0,20)+"..., ";
+            if(comentario!=null){
+                if(comentario.length()>=20){
+                    comentario=comentario.substring(0,20)+"..., ";
+                }
+            }else{
+                comentario="";
             }
+
             telefono_usuario_final=data.get(Common.TELEFONO_USUARIO_FINAL);
             serie=data.get(Common.SERIE);
             String contactoAgenda=loadContactFromTlf(telefono);

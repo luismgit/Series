@@ -29,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
         android:textColor="#000000"
+        android:textStyle="bold"
         />
 
     <TextView
@@ -83,6 +84,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/textoMeGusta"
         android:textStyle="bold"
+        android:textColor="@color/negro"
         />
 
     <TextView
@@ -94,7 +96,8 @@
         android:layout_marginLeft="4dp"
         app:layout_constraintLeft_toRightOf="@id/textoMeGusta"
         android:textStyle="bold"
-        android:id="@+id/numeroMegusta"/>
+        android:id="@+id/numeroMegusta"
+        android:textColor="@color/negro"/>
 
 
 

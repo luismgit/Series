@@ -1,14 +1,25 @@
 package com.maniac.luis.series.actividades;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.StrictMode;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -16,21 +27,30 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.github.arturogutierrez.Badges;
-import com.github.arturogutierrez.BadgesNotSupportedException;
+import com.google.firebase.database.ChildEventListener;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
@@ -70,7 +90,7 @@ import javax.mail.internet.MimeMessage;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class TabActivity extends AppCompatActivity implements ContactosFragment.OnFragmentInteractionListener,
-SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener{
+SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -82,9 +102,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+
     private ViewPager mViewPager;
     private int [] fondos;
     ImageView fondo;
@@ -103,6 +121,11 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
      int aleatorio=0;
      Long comentariosTotales;
      List<String> suscripcionesUsuario;
+    SearchView searchView = null;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    AppBarLayout appBarLayout;
+    public  String search;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +141,8 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        collapsingToolbarLayout=findViewById(R.id.collapse_toolbar);
+        appBarLayout=findViewById(R.id.appBarLayout);
         comentariosTotales= Long.valueOf(0);
         suscripcionesUsuario=new ArrayList<>();
         fondo = findViewById(R.id.header);
@@ -436,21 +461,130 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
+        DatabaseReference databaseReferences = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE);
+        databaseReferences.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.i("onChildChanged","dataSnapshot.key -> " + dataSnapshot.getKey());
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
+                {
+                    //  Collapsed
+                       Window window = getWindow();
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setStatusBarColor(getResources().getColor(R.color.menuBarArriba));
+                    //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.menuBar)));
+
+                }
+                    Log.i("collapsed","true");
+                }
+                else
+                {
+                    //Expanded
+                    Window window = getWindow();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+                        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.menuBar)));
+
+                    }
+                    Log.i("collapsed","false");
+
+                }
+            }
+        });
+
+
         }
 
 
-    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         Log.i("actividades","onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tab, menu);
-        return true;
+        MenuItem item = menu.findItem(R.id.search);
+        searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Busca");
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search=query;
+                //Log.i("fragmenttt","query submit -> " + search);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Log.i("fragmenttt","query change -> " + newText);
+                return false;
+            }
+        });
+        final EditText searchEditText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                collapseAppBarLayout(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+
+                collapseAppBarLayout(true);
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }*/
+
+
+
+    public void collapseAppBarLayout(boolean contraer){
+        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        appBarLayout.setLayoutParams(params);
+        appBarLayout.setExpanded(contraer);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i("actividades","onOptionsItemSelected");
         int id = item.getItemId();
+
+
 
         //SI EL USUARIO PULSA EL EL MENÚ DE CONTACTO
         if (id == R.id.contacto) {
@@ -467,7 +601,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             editTextMensajeAyuda=miVista.findViewById(R.id.editTextAyuda);
             correoUsuAyuda=miVista.findViewById(R.id.userEmail);
             correoUsuAyuda.setText(ComunicarCorreoUsuario.getCorreoUsuario());
-
             builder.setPositiveButton(R.string.btn_enviar_ayuda, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -476,13 +609,14 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
                 }
             });
-
             builder.setNegativeButton(R.string.btn_cancelar_ayuda,null);
             builder.setCancelable(false);
             final AlertDialog dialog =builder.create();
             dialog.show();
 
             //IMPLEMENTA UN LISTENER SOBRE EL BOTON DE ACEPTAR QUE EN CASO DE QUE EL CORREO INTRODUCIDO POR EL USUARIO SEA VALIDO ENVIA UN MENSAJE A UNA CUENTA DE CORREO
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.negro));
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.negro));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -668,6 +802,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
+
 
     /**
      * A placeholder fragment containing a simple view.

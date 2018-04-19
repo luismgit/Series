@@ -9,15 +9,22 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.maniac.luis.series.Adapters.AdaptadorContactos;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarContactosPhoneNumber;
@@ -64,6 +71,7 @@ public class ContactosFragment extends Fragment {
     String phoneNumberUser;
     FirebaseUser user;
     TextView mensajeSinContactos;
+    SearchView searchView = null;
 
     public ContactosFragment() {
         // Required empty public constructor
@@ -98,6 +106,7 @@ public class ContactosFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
 
     }
 
@@ -307,5 +316,70 @@ public class ContactosFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
+        Log.i("actividades","onCreateOptionsMenu");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_tab, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Busca");
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("fragmenttt","query submit -> " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("fragmenttt","query change -> " + newText);
+                try{
+                    List<Usuario>listaFiltrada=filter(usuarios,newText);
+                    adapter.setFilter(listaFiltrada);
+                }catch (Exception e){
+
+                }
+                return false;
+            }
+        });
+        final EditText searchEditText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                ((TabActivity)getActivity()).collapseAppBarLayout(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                adapter.setFilter(usuarios);
+                ((TabActivity)getActivity()).collapseAppBarLayout(true);
+                return true;
+            }
+        });
+
+    }
+
+    private List<Usuario> filter(List<Usuario> usuarios,String texto){
+        List<Usuario> listaFiltrada=new ArrayList<>();
+        try{
+            texto=texto.toLowerCase();
+
+            for(Usuario usuario: usuarios){
+                String usuario2=usuario.getNick().toLowerCase();
+                if(usuario2.contains(texto)){
+                    listaFiltrada.add(usuario);
+                }
+            }
+        }catch (Exception e){
+
+        }
+        return listaFiltrada;
     }
 }

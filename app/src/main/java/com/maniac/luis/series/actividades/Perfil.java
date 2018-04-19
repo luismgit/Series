@@ -125,6 +125,7 @@ public class Perfil extends AppCompatActivity {
 
                 final CharSequence[] items = {getString(R.string.camara),getString(R.string.galeria),getString(R.string.cancelar)};
                 AlertDialog.Builder builder = new AlertDialog.Builder(Perfil.this);
+
                 builder.setTitle(R.string.selec_accion);
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override

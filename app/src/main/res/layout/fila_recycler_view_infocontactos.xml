@@ -30,7 +30,8 @@
         android:layout_toRightOf="@+id/imagenSerieContactosInfo"
         android:text="Breaking Bad"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/negro"/>
 
     <ProgressBar
         android:id="@+id/progressBarNota"

@@ -32,7 +32,8 @@
         app:layout_constraintRight_toLeftOf="@id/editTextComentario"
         android:layout_marginRight="10dp"
         android:paddingTop="0dp"
-        android:id="@+id/numerodeMegusta"/>
+        android:id="@+id/numerodeMegusta"
+        android:textColor="@color/negro"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
         android:paddingTop="0dp"
         android:layout_marginRight="5dp"
         android:id="@+id/tMegusta"
+        android:textColor="@color/negro"
         />
     <TextView
         android:layout_width="wrap_content"

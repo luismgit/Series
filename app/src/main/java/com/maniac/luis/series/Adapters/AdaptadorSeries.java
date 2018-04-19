@@ -117,6 +117,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
 
 
+
+
     public static class SeriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         RatingBar ratingBar;
@@ -207,7 +209,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-
                     switch (menuItem.getItemId()){
                         //EN EL CASO DE QUE SE PULSE AÑADIR A FAVORITOS
                         case R.id.menu_item_favoritos:
@@ -343,6 +344,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                     return false;
                 }
             });
+
             popupMenu.show();
         }
 
@@ -362,5 +364,9 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     }
 
-
+    public void setFilter(List<Series> listaSeries){
+        this.series=new ArrayList<>();
+        this.series.addAll(listaSeries);
+        notifyDataSetChanged();
+    }
 }

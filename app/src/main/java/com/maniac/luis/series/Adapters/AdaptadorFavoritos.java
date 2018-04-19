@@ -372,5 +372,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             context.startActivity(intent);
         }
     }
+    public void setFilter(List<Suscripcion> listaFavoritos){
+        this.suscripciones=new ArrayList<>();
+        this.suscripciones.addAll(listaFavoritos);
+        notifyDataSetChanged();
+    }
 
 }

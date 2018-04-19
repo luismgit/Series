@@ -6,14 +6,21 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.maniac.luis.series.Adapters.AdaptadorFavoritos;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
@@ -48,6 +55,7 @@ public class FavoritosFragment extends Fragment {
     RecyclerView rv;
     AdaptadorFavoritos adaptadorFavoritos;
     List<Suscripcion> suscripciones;
+    SearchView searchView = null;
 
     public FavoritosFragment() {
         // Required empty public constructor
@@ -78,6 +86,7 @@ public class FavoritosFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -158,5 +167,70 @@ public class FavoritosFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
+        Log.i("actividades","onCreateOptionsMenu");
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_tab, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Busca");
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("fragmenttt","query submit -> " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("fragmenttt","query change -> " + newText);
+                try{
+                    List<Suscripcion>listaFiltrada=filter(suscripciones,newText);
+                    adaptadorFavoritos.setFilter(listaFiltrada);
+                }catch (Exception e){
+
+                }
+                return false;
+            }
+        });
+        final EditText searchEditText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                ((TabActivity)getActivity()).collapseAppBarLayout(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                adaptadorFavoritos.setFilter(suscripciones);
+                ((TabActivity)getActivity()).collapseAppBarLayout(true);
+                return true;
+            }
+        });
+
+    }
+
+    private List<Suscripcion> filter(List<Suscripcion> suscripciones,String texto){
+        List<Suscripcion> listaFiltrada=new ArrayList<>();
+        try{
+            texto=texto.toLowerCase();
+
+            for(Suscripcion suscripcion: suscripciones){
+                String suscripciones2=suscripcion.getSerie().toLowerCase();
+                if(suscripciones2.contains(texto)){
+                    listaFiltrada.add(suscripcion);
+                }
+            }
+        }catch (Exception e){
+
+        }
+        return listaFiltrada;
     }
 }

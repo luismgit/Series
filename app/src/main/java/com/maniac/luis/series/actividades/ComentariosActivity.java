@@ -37,6 +37,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.maniac.luis.series.Adapters.AdaptadorComentarios;
 import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.Objetos.Suscripcion;
+import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
@@ -87,6 +88,7 @@ public class ComentariosActivity extends AppCompatActivity {
     LinearLayoutManager manager;
     List<String> serie_telefono_suscripciones=new ArrayList<>();
     boolean primeraCargaRv=true;
+    Long sLeer;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -304,6 +306,7 @@ public class ComentariosActivity extends AppCompatActivity {
 
                                 if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber) &&
                                         serie_telefono_suscripciones.contains(phoneNumber+"_"+nombreSerie)){
+
                                     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE)
                                             .child(phoneNumber).child(nombreSerie).child(FirebaseReferences.COM_LEIDOS);
                                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -312,15 +315,32 @@ public class ComentariosActivity extends AppCompatActivity {
                                             Log.i("com_leidos","phone -> " + phoneNumber);
                                             Log.i("com_leidos","serie -> " + nombreSerie);
                                             Long sinLeer= (Long) dataSnapshot.getValue();
-
                                             sinLeer++;
                                             ref.setValue(sinLeer);
+                                            DatabaseReference refDarta = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE);
+                                                   refDarta .orderByChild(FirebaseReferences.TELEFONO).equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                       @Override
+                                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                                           for(DataSnapshot snapshot1:
+                                                                   dataSnapshot.getChildren()){
+                                                               Usuario user = snapshot1.getValue(Usuario.class);
+                                                               Log.i("snapshot1.getValue",user.getToken());
+                                                               Log.i("snapshot1.getValue",user.getNick());
+                                                           }
+                                                       }
+
+                                                       @Override
+                                                       public void onCancelled(DatabaseError databaseError) {
+
+                                                       }
+                                                   });
                                         }
 
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
 
                                         }
+
                                     });
                                 }
                             }

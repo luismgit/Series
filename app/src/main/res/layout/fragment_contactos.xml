@@ -21,6 +21,7 @@
         android:textAlignment="center"
         android:visibility="gone"
         android:id="@+id/mensajeSinContactos"
+        android:textColor="@color/negro"
         />
 
 

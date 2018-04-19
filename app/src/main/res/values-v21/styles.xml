@@ -1,4 +1,24 @@
 <resources>
 
-    <style name="miTema" parent="android:Theme.Material" />
+    <style name="miTema" parent="android:Theme.Material" >
+
+
+
+    </style>
+
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/menuBarAbajo</item>
+        <item name="colorPrimaryDark">@color/menuBarAbajo</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@color/menuColorTexto</item>
+        <item name="android:itemBackground">@color/menuback</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+    </style>
+
+
+
 </resources>

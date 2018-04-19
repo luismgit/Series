@@ -15,7 +15,9 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Email" />
+        android:hint="Email"
+        android:textColor="@color/negro"
+        android:textColorHint="@color/negro"/>
 
 
 
@@ -28,6 +30,7 @@
            android:ems="10"
            android:inputType="textMultiLine"
              android:gravity="left|top"
+             android:textColor="@color/negro"
            />
 
 

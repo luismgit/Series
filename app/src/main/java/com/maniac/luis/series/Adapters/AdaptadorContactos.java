@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.InfoContactoActivity;
@@ -158,4 +159,12 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
         return sdf.format(date);
     }
+
+    public void setFilter(List<Usuario> listaUsuarios){
+        this.usuarios=new ArrayList<>();
+        this.usuarios.addAll(listaUsuarios);
+        notifyDataSetChanged();
+    }
+
+
 }
