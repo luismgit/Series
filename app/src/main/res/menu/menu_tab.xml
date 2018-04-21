@@ -1,32 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.maniac.luis.series.actividades.TabActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    >
+
+
     <item android:id="@+id/search"
         android:title="Buscar"
-        android:orderInCategory="2"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:icon="@drawable/ic_search_black_24dp"
-
-        />
+        android:icon="@drawable/ic_search_black_24dp"/>
 
     <item
-        android:id="@+id/contacto"
-        android:orderInCategory="100"
-        android:title="@string/contacto_settings"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/item_cambiar_fondo"
-        android:orderInCategory="100"
-        android:title="@string/cambiar_fondo_de_pantalla"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/item_cambiar_avatar"
-        android:orderInCategory="100"
-        android:title="Perfil"
-        app:showAsAction="never" />
-
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/contacto"
+                android:icon="@drawable/ic_contact_mail_black_24dp"
+                android:title="@string/contacto_settings"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/item_cambiar_fondo"
+                android:icon="@drawable/ic_wallpaper_black_24dp"
+                android:title="@string/cambiar_fondo_de_pantalla"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/item_cambiar_avatar"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="@string/perfil"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
 
 </menu>

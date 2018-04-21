@@ -1,11 +1,5 @@
 <resources>
 
-    <style name="miTema" parent="android:Theme.Material" >
-
-
-
-    </style>
-
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/menuBarAbajo</item>
@@ -15,9 +9,31 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">@color/menuColorTexto</item>
         <item name="android:itemBackground">@color/menuback</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/menuBarArriba</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="listPopupWindowStyle">@style/PopupMenu</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_black_24dp</item>
+        <item name="listMenuViewStyle">@style/PopupMenu</item>
 
     </style>
+
+
+
+    <style name="PopupMenu" parent="Widget.AppCompat.ListPopupWindow">
+        <item name="android:popupBackground">@android:color/transparent</item>
+    </style>
+
+
+
+    <style name="ThemeOverlay.MyTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/menuback</item>
+        <item name="android:textColor">@color/negro</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
+
 
 
 

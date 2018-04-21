@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    >
 
-    <item android:id="@+id/menu_item_favoritos" android:title="@string/a_adir_a_favoritos"></item>
-    <item android:id="@+id/menu_item_filmaffinity" android:title="@string/ir_a_filmaffinity"></item>
+    <item android:id="@+id/menu_item_favoritos"
+        android:title="@string/a_adir_a_favoritos"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        app:showAsAction="never"
+        ></item>
+
+    <item android:id="@+id/menu_item_filmaffinity"
+        android:title="@string/ir_a_filmaffinity"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_local_movies_black_24dp">
+    </item>
 
 </menu>

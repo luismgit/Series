@@ -1,11 +1,15 @@
 package com.maniac.luis.series.Adapters;
 
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,28 +17,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.maniac.luis.series.Objetos.Series;
-import com.maniac.luis.series.Objetos.Suscripcion;
-import com.maniac.luis.series.Objetos.Usuario;
-import com.maniac.luis.series.R;
-import com.maniac.luis.series.actividades.ComentariosActivity;
-import com.maniac.luis.series.references.FirebaseReferences;
-import com.maniac.luis.series.utilidades.Common;
-import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
-import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.Objetos.Series;
+import com.maniac.luis.series.Objetos.Suscripcion;
+import com.maniac.luis.series.R;
+import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -199,13 +202,36 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
 
         //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL MENÚ DE CADA VISTA
+
         @Override
         public void onClick(View view) {
-
+            @SuppressLint("RestrictedApi") Context wrapper = new ContextThemeWrapper(context, R.style.ThemeOverlay_MyTheme);
             Log.i("HOLDER", "pulsado " );
             repetidoFavorito=false;
-            PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
+            PopupMenu popupMenu = new PopupMenu(wrapper, textViewOptions);
             popupMenu.inflate(R.menu.option_menu);
+
+            try {
+                Field[] fields = popupMenu.getClass().getDeclaredFields();
+                for (Field field : fields) {
+                    if ("mPopup".equals(field.getName())) {
+                        field.setAccessible(true);
+                        Object menuPopupHelper = field.get(popupMenu);
+                        Class<?> classPopupHelper = Class.forName(menuPopupHelper
+                                .getClass().getName());
+                        Method setForceIcons = classPopupHelper.getMethod(
+                                "setForceShowIcon", boolean.class);
+                        setForceIcons.invoke(menuPopupHelper, true);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+           /* popupMenu.show();
+            PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
+            popupMenu.inflate(R.menu.option_menu);*/
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
@@ -267,7 +293,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                             numSuscripciones++;
                                                                             String nivel;
                                                                             if(numSuscripciones>=5 && numSuscripciones<10){
-                                                                                nivel=Common.INTERMEDIO;
+                                                                                nivel= Common.INTERMEDIO;
                                                                             }else if(numSuscripciones>=10){
                                                                                 nivel=Common.AVANZADO;
                                                                             }else{
@@ -346,6 +372,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             });
 
             popupMenu.show();
+
+
         }
 
         public void irAFilmAffinity(String web){

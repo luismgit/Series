@@ -42,7 +42,7 @@
                 android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:titleMarginTop="15dp"
-
+                app:popupTheme="@style/ThemeOverlay.MyTheme"
 
                 />
 
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                app:tabTextColor="@color/blanco"
+                app:tabTextColor="@color/white"
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>

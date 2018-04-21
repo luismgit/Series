@@ -78,6 +78,7 @@
     <string name="ir_a_filmaffinity">Ir a Filmaffinity</string>
     <string name="sin_valorar">Sin valorar</string>
     <string name="default_notification_channel_id">Channel Name</string>
+    <string name="perfil">Perfil</string>
 
 
 </resources>

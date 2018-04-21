@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3d3a60</color>
+    <color name="colorPrimary">#276c3b</color>
     <color name="colorPrimaryDark">#3d3a60</color>
     <color name="colorAccent">#f45c8f</color>
     <color name="colorPrimaryText">#050505</color>
-    <color name="blanco">#ffffff</color>
     <color name="negro">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="transp">#7d807c7c</color>
-    <color name="menuback">#ece4a9</color>
+    <color name="menuback">#8ed4d0d0</color>
     <color name="menuColorTexto">#000000</color>
     <color name="menuBarArriba">#212123</color>
     <color name="menuBarAbajo">#363638</color>
