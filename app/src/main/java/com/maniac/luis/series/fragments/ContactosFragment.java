@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,8 +21,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorContactos;
-import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
@@ -30,12 +36,6 @@ import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -117,6 +117,7 @@ public class ContactosFragment extends Fragment {
                 "                             Bundle savedInstanceState) ");
 
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
+        ViewPager vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recycler);
         contactos = new Hashtable<String, String>();
         usuarios=new ArrayList<>();
@@ -135,7 +136,7 @@ public class ContactosFragment extends Fragment {
         loadContactFromTlf();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //INSTANCIAMOS NUESTRO ADAPTADOR PASÁNDOLE EL ARRAYLIST DE USUARIOS Y LA PROPIA CLASE
-        adapter=new AdaptadorContactos(usuarios,this.getContext());
+        adapter=new AdaptadorContactos(usuarios,this.getContext(),vp);
         //LE APLICAMOS EL ADAPTADOR AL RECYCLERVIEW
         rv.setAdapter(adapter);
 

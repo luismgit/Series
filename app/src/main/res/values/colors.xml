@@ -6,7 +6,8 @@
     <color name="colorPrimaryText">#050505</color>
     <color name="negro">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="menuback">#8ed4d0d0</color>
+    <color name="menuback">#7dd4d0d0</color>
+    <color name="menubackReserva">#8eeae7e7</color>
     <color name="menuColorTexto">#000000</color>
     <color name="menuBarArriba">#212123</color>
     <color name="menuBarAbajo">#363638</color>

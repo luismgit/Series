@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     private static final int PERMISSIONS_REQUEST_CAMERA = 500;
     private boolean registroCerrado;
     TextView ayudaTexto;
+    CheckBox checkBoxPolitica;
     String emailAyuda;
     String passwordAyuda;
     Session session;
@@ -150,6 +152,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                     ayudaTexto.setText(content);
                     botonSIGIN=findViewById(R.id.botonSIGIN);
                     etxtPhone=findViewById(R.id.etxtPhone);
+                    checkBoxPolitica=findViewById(R.id.checkBoxPolitica);
                     etxtPhone.setOnEditorActionListener(AutentificacionActivity.this);
                     etxtPhoneCode=findViewById(R.id.etxtPhoneCode);
                     etxtPhoneCode.setOnEditorActionListener(AutentificacionActivity.this);
@@ -217,6 +220,10 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         if(TextUtils.isEmpty(phoneNumber)){
             Toast.makeText(AutentificacionActivity.this, R.string.req_num_telef,Toast.LENGTH_LONG).show();
             Log.i("SESION", "Debe introducir el número de telefono");
+            return;
+        }
+        if(!checkBoxPolitica.isChecked()){
+            Toast.makeText(AutentificacionActivity.this,"Debe aceptar la pólitica de privacidad para continuar.",Toast.LENGTH_LONG).show();
             return;
         }
         //HACEMOS EL PROGESSBAR VISIBLE Y EVITAMOS EL USUARIO PUEDA VOLVER A PULSAR LOS BOTONES DEL LAYOUT
@@ -501,6 +508,13 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         EditText edit=editText;
         InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         teclado.hideSoftInputFromWindow(edit.getWindowToken(), 0);
+    }
+
+    public void aceptarPolitica(View view){
+        String webIubenda="";
+        Uri uri = Uri.parse(webIubenda);
+        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        this.startActivity(intent);
     }
 
     //MÉTODO QUE CREA UN DIÁLOGO DE AYUDA POR SI NO LE LLEGA EL CÓDIGO DE VERFICACIÓN

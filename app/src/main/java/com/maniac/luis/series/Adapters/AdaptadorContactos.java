@@ -1,11 +1,14 @@
 package com.maniac.luis.series.Adapters;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.maniac.luis.series.Objetos.Series;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.InfoContactoActivity;
@@ -30,10 +34,16 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
 
     List<Usuario> usuarios=new ArrayList<>();
     Context context;
+    ShowcaseView showcaseView;
+    boolean primeraVez=true;
+    boolean isShowedToturial;
+    ViewPager vp;
+    SharedPreferences sharedPref;
 
-    public AdaptadorContactos(List usuarios, Context context) {
+    public AdaptadorContactos(List usuarios, Context context, ViewPager vp) {
         this.usuarios = usuarios;
         this.context=context;
+        this.vp=vp;
     }
 
     //MÉTODO QUE SE EJECUTA CUANDO NUESTRO RECYCLER NECESITA UN NUEVO UsuariosviewHolder PARA REPRESENTAR UN ELEMENTO
@@ -47,6 +57,31 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
     //MÉTODO QUE MUESTRA LOS DATOS DE LA POSICION DE LA VARIABLE position, Y MODIFICA EL CONTENIDO DE LA VISTA
     @Override
     public void onBindViewHolder(UsuariosviewHolder holder, int position) {
+        sharedPref = context.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+        isShowedToturial=sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true);
+        if(position==0 && isShowedToturial){
+            Log.i("isShowedToturial","OnBind -> " + isShowedToturial);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(Common.TUTORIAL_CONTACTOS,false);
+            editor.commit();
+            ViewTarget target = new ViewTarget(holder.textViewNick);
+            showcaseView = new ShowcaseView.Builder((Activity) context)
+                    .setTarget(target)
+                    .setContentTitle("Contactos")
+                    .setStyle(R.style.CustomShowcaseTheme3)
+                    .setContentText("Haz click en un contacto para ver sus series favoritas")
+                   .setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           showcaseView.hide();
+                           vp.setCurrentItem(1);
+                       }
+                   })
+                    .build();
+
+        }
+
+
         Usuario usuario = usuarios.get(position);
         if(usuario.getNick().length()>17){
             holder.textViewNick.setTextSize(14);

@@ -1,60 +1,47 @@
 package com.maniac.luis.series.actividades;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
-import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
-import com.maniac.luis.series.utilidades.ComunicarCorreoUsuario;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.fragments.ContactosFragment;
@@ -62,18 +49,14 @@ import com.maniac.luis.series.fragments.FavoritosFragment;
 import com.maniac.luis.series.fragments.SeriesFragment;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.maniac.luis.series.utilidades.ComunicarCorreoUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
 import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.Imagenes;
 import com.maniac.luis.series.utilidades.Utilities;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +107,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     SearchView searchView = null;
     CollapsingToolbarLayout collapsingToolbarLayout;
     AppBarLayout appBarLayout;
-    public  String search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -522,6 +504,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         });
 
 
+
         }
 
 
@@ -676,6 +659,14 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             seleccionarAvatar();
         }
 
+        if(id==R.id.item_tutorial){
+            SharedPreferences sharedPref = this.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("pulsado_tutorial",true);
+            editor.commit();
+            Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_LONG).show();
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -739,7 +730,30 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences preferences = this.getSharedPreferences(Common.TUTORIAL_PREF,getApplicationContext().MODE_PRIVATE);
+        /*SharedPreferences.Editor editorr = preferences.edit();
+        editorr.putBoolean("pulsado_tutorial",false);
+        editorr.commit();*/
+        boolean pulsadoTutorial = preferences.getBoolean("pulsado_tutorial",false);
 
+        if(pulsadoTutorial){
+            Log.i("isShowedToturial","OnDestroy -> SI se ha pulsado mostrar el tutorial" );
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(Common.TUTORIAL_CONTACTOS,true);
+            editor.putBoolean(Common.TUTORIAL_SERIES,true);
+            editor.putBoolean("pulsado_tutorial",false);
+            editor.commit();
+        }else{
+            Log.i("isShowedToturial","OnDestroy -> NO se ha pulsado mostrar el tutorial" );
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("pulsado_tutorial",false);
+            editor.commit();
+        }
+
+    }
 
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE CAMBIO DE PERFIL
     public void seleccionarAvatar() {
@@ -770,6 +784,12 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     }
                 });
 
+    }
+    //MÉTODO QUE ESCONDE EL TECLADO
+    public void esconderTeclado(View vista){
+
+        InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        teclado.hideSoftInputFromWindow(vista.getWindowToken(), 0);
     }
 
     //MÉTODO QUE SE EJECUTARÁ CUANDO CERREMOS LA PANTALLA DE ListaFondos

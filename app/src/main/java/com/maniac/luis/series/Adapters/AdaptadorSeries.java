@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -49,22 +50,28 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     private Context mContext;
     private Hashtable<String,String> contactos;
     Series serie;
+    ViewPager vp;
 
-    public AdaptadorSeries(List<Series> series,Context mContext) {
+    public AdaptadorSeries(List<Series> series,Context mContext,ViewPager vp) {
         this.series = series;
         this.mContext=mContext;
+        this.vp=vp;
 
     }
 
     @Override
     public SeriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_series,parent,false);
-        SeriesViewHolder holder = new SeriesViewHolder(v,series);
+        SeriesViewHolder holder = new SeriesViewHolder(v,series,vp);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
+
+        if(position==0){
+            Log.i("SeriesViewHolder","ejecuta");
+        }
          serie = series.get(position);
          if(serie.getNombre().length()>16){
              holder.textViewNombre.setTextSize(17);
@@ -145,11 +152,13 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         Dialog miDialogo;
         Context contexto;
         List<Series> series=new ArrayList<>();
+        ViewPager vp;
 
-        public SeriesViewHolder(View itemView,List series) {
+        public SeriesViewHolder(View itemView,List series,ViewPager vp) {
             super(itemView);
             context=itemView.getContext();
             this.series=series;
+            this.vp=vp;
             relativeLayout=itemView.findViewById(R.id.relativeLayout);
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
             numLikes=itemView.findViewById(R.id.numLikes);
@@ -311,6 +320,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
                                                                         }
                                                                     });
+
+                                                                    vp.setCurrentItem(2);
                                                                     Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
                                                                 }
                                                             }

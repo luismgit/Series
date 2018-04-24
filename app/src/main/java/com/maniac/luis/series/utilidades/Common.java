@@ -28,6 +28,9 @@ public class Common {
     final public static String COMENTARIO="comentario";
     final public static String LIKE="Like";
     final public static String NOTIFY="notify";
+    final public static String TUTORIAL_PREF="tutorial_preferencias";
+    final public static String TUTORIAL_CONTACTOS="tutorial_contactos";
+    final public static String TUTORIAL_SERIES="tutorial_series";
 
 
 }
