@@ -1,9 +1,5 @@
 package com.maniac.luis.series.utilidades;
 
-/**
- * Created by Luis on 11/02/2018.
- */
-
 public class Common {
     final public static String CONTACTO="contacto";
     final public static String AVATAR="avatar";
@@ -31,6 +27,6 @@ public class Common {
     final public static String TUTORIAL_PREF="tutorial_preferencias";
     final public static String TUTORIAL_CONTACTOS="tutorial_contactos";
     final public static String TUTORIAL_SERIES="tutorial_series";
-
+    final public static String TUTORIAL_FAVORITOS="tutorial_favoritos";
 
 }

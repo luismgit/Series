@@ -6,10 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +18,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.maniac.luis.series.Objetos.Comentario;
 import com.maniac.luis.series.Objetos.Notification;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
-import com.like.LikeButton;
-import com.like.OnLikeListener;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
@@ -35,8 +31,6 @@ import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +167,7 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
             botonMegusta=itemView.findViewById(R.id.botonMegusta);
             numeroMeGustan=itemView.findViewById(R.id.numeroMegusta);
             fechaComentario=itemView.findViewById(R.id.fechaComentario);
+
         }
         public void setOnclickListener(){
             avatarComentario.setOnClickListener(new View.OnClickListener() {

@@ -54,6 +54,8 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         return holder;
     }
 
+
+
     //MÉTODO QUE MUESTRA LOS DATOS DE LA POSICION DE LA VARIABLE position, Y MODIFICA EL CONTENIDO DE LA VISTA
     @Override
     public void onBindViewHolder(UsuariosviewHolder holder, int position) {
@@ -64,10 +66,13 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Common.TUTORIAL_CONTACTOS,false);
             editor.commit();
-            ViewTarget target = new ViewTarget(holder.textViewNick);
+
+            ViewTarget target = new ViewTarget(holder.estado);
+            Log.i("isShowedToturial","circulo ");
             showcaseView = new ShowcaseView.Builder((Activity) context)
                     .setTarget(target)
                     .setContentTitle("Contactos")
+                    .hideOnTouchOutside()
                     .setStyle(R.style.CustomShowcaseTheme3)
                     .setContentText("Haz click en un contacto para ver sus series favoritas")
                    .setOnClickListener(new View.OnClickListener() {

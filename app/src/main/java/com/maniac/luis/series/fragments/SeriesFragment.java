@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorSeries;
-import com.maniac.luis.series.CustomViewTarget;
+import com.maniac.luis.series.utilidades.CustomViewTarget;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
@@ -59,13 +58,12 @@ public class SeriesFragment extends Fragment{
     AdaptadorSeries adaptadorSeries;
     List<Series> series;
     SearchView searchView = null;
-    ViewPager vp;
-    Toolbar toolbar;
-    Menu menuToolbar;
+    ViewPager vp;;
     ShowcaseView showcaseView;
     boolean isShowedTuturial;
     SharedPreferences sharedPref;
     EditText searchEditText;
+
     public SeriesFragment() {
         // Required empty public constructor
     }
@@ -123,7 +121,7 @@ public class SeriesFragment extends Fragment{
                     editor.commit();
                     isShowedTuturial=false;
                      showcaseView = new ShowcaseView.Builder(getActivity())
-                            .setTarget(new CustomViewTarget(R.id.toolbar, 300, -100, getActivity()))
+                            .setTarget(new CustomViewTarget(R.id.toolbar, 280, -100, getActivity()))
                             .setContentTitle("Series")
                             .setStyle(R.style.CustomShowcaseTheme2)
                             .setContentText("Busca una serie")

@@ -744,6 +744,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(Common.TUTORIAL_CONTACTOS,true);
             editor.putBoolean(Common.TUTORIAL_SERIES,true);
+            editor.putBoolean(Common.TUTORIAL_FAVORITOS,true);
             editor.putBoolean("pulsado_tutorial",false);
             editor.commit();
         }else{

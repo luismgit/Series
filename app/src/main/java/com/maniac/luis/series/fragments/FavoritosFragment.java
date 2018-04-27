@@ -1,9 +1,11 @@
 package com.maniac.luis.series.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -16,18 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorFavoritos;
-import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,10 @@ public class FavoritosFragment extends Fragment {
     AdaptadorFavoritos adaptadorFavoritos;
     List<Suscripcion> suscripciones;
     SearchView searchView = null;
+    ViewPager vp;;
+    ShowcaseView showcaseView;
+    boolean isShowedTuturial;
+    SharedPreferences sharedPref;
 
     public FavoritosFragment() {
         // Required empty public constructor
@@ -95,10 +101,11 @@ public class FavoritosFragment extends Fragment {
 
         //INFLA EL LAYOUT PARA ESTE FRAGMENT
         View vista = inflater.inflate(R.layout.fragment_favoritos, container, false);
+        vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recyclerSeriesFavoritos);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         suscripciones=new ArrayList<>();
-        adaptadorFavoritos=new AdaptadorFavoritos(suscripciones,this.getContext());
+        adaptadorFavoritos=new AdaptadorFavoritos(suscripciones,this.getContext(),vp);
         rv.setAdapter(adaptadorFavoritos);
         FirebaseDatabase database=FirebaseDatabase.getInstance();
 
@@ -127,7 +134,7 @@ public class FavoritosFragment extends Fragment {
 
             }
         });
-                return vista;
+        return vista;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -233,4 +240,7 @@ public class FavoritosFragment extends Fragment {
         }
         return listaFiltrada;
     }
+
+
+
 }

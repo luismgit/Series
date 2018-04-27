@@ -2,12 +2,15 @@ package com.maniac.luis.series.Adapters;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +41,7 @@ import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.CustomViewTarget;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,13 +53,32 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     public List<Suscripcion> suscripciones;
     boolean flag=false;
     private Context mContext;
-    //private int [] iconos = Imagenes.getIconosSeries();
+    private ViewPager vp;
+    SharedPreferences sharedPref;
+    boolean isShowedToturial;
+    ShowcaseView showcaseView;
 
-    public AdaptadorFavoritos(List<Suscripcion> suscripciones,Context context){
+    public AdaptadorFavoritos(List<Suscripcion> suscripciones,Context context,ViewPager vp){
         this.suscripciones=suscripciones;
         this.mContext=context;
+        this.vp=vp;
     }
 
+    public void mostrarSegundoShowCase(){
+        showcaseView=new ShowcaseView.Builder((Activity)mContext)
+                .setTarget(new CustomViewTarget(R.id.iconComentarios, 100, 0, (Activity) mContext))
+                .setContentTitle("Favoritos")
+                .setStyle(R.style.CustomShowcaseTheme4)
+                .hideOnTouchOutside()
+                .setContentText("Y acceder a un foro donde podrás compartir tus opiniones solo con tus contactos.")
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showcaseView.hide();
+                    }
+                })
+                .build();
+    }
 
 
     @Override
@@ -65,7 +90,48 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
     @Override
     public void onBindViewHolder(final FavoritosViewHolder holder, int position) {
+        sharedPref = mContext.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+        isShowedToturial=sharedPref.getBoolean(Common.TUTORIAL_FAVORITOS,true);
+        if(position==0 && isShowedToturial) {
+            vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 2 && isShowedToturial) {
+                        isShowedToturial = false;
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putBoolean(Common.TUTORIAL_FAVORITOS, false);
+                        editor.commit();
+                        ViewTarget target1 = new ViewTarget(holder.botonVoto);
+                        ViewTarget target2 = new ViewTarget(holder.imagenSerie);
+                        showcaseView=new ShowcaseView.Builder((Activity)mContext)
+                                .setTarget(new CustomViewTarget(R.id.botonVoto, -125, 0, (Activity) mContext))
+                                .setContentTitle("Favoritos")
+                                .setStyle(R.style.CustomShowcaseTheme3)
+                                .setContentText("Podrás votar la serie.")
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        showcaseView.hide();
+                                        mostrarSegundoShowCase();
+                                    }
+                                })
+                                .build();
+
+                    }
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        }
         final Suscripcion suscripcion = suscripciones.get(position);
         if(suscripcion.getSerie().length()>16){
             holder.textViewNombre.setTextSize(17);
@@ -197,6 +263,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                     myRotation = AnimationUtils.loadAnimation(vista.getContext(), R.anim.rotator);
                     myRotation.setRepeatCount(0);
                     vista.startAnimation(myRotation);*/
+
 
 
                     nombreSerie=textViewNombre.getText().toString();
@@ -398,5 +465,8 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         this.suscripciones.addAll(listaFavoritos);
         notifyDataSetChanged();
     }
+
+
+
 
 }

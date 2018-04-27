@@ -11,6 +11,6 @@
     <color name="menuColorTexto">#000000</color>
     <color name="menuBarArriba">#212123</color>
     <color name="menuBarAbajo">#363638</color>
-
+    <color name="custom_showcase_bg">#67000000</color>
 
 </resources>
