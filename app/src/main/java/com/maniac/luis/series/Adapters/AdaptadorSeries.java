@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -320,8 +321,10 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
                                                                         }
                                                                     });
-
-                                                                    vp.setCurrentItem(2);
+                                                                    SharedPreferences sp = context.getSharedPreferences(Common.TUTORIAL_PREF,context.getApplicationContext().MODE_PRIVATE);
+                                                                    if(sp.getBoolean(Common.TUTORIAL_FAVORITOS,true)){
+                                                                        vp.setCurrentItem(2);
+                                                                    }
                                                                     Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
                                                                 }
                                                             }

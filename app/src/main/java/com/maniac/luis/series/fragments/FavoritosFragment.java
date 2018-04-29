@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.firebase.database.DataSnapshot;
@@ -62,6 +63,7 @@ public class FavoritosFragment extends Fragment {
     ShowcaseView showcaseView;
     boolean isShowedTuturial;
     SharedPreferences sharedPref;
+    TextView mensajeSinFavoritos;
 
     public FavoritosFragment() {
         // Required empty public constructor
@@ -102,6 +104,7 @@ public class FavoritosFragment extends Fragment {
         //INFLA EL LAYOUT PARA ESTE FRAGMENT
         View vista = inflater.inflate(R.layout.fragment_favoritos, container, false);
         vp = getActivity().findViewById(R.id.container);
+        mensajeSinFavoritos=vista.findViewById(R.id.mensajeSinFavoritos);
         rv=vista.findViewById(R.id.recyclerSeriesFavoritos);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         suscripciones=new ArrayList<>();
@@ -125,6 +128,11 @@ public class FavoritosFragment extends Fragment {
                         suscripciones.add(suscripcion);
                     }
 
+                }
+                if(suscripciones.size()==0){
+                    mensajeSinFavoritos.setVisibility(View.VISIBLE);
+                }else{
+                    mensajeSinFavoritos.setVisibility(View.GONE);
                 }
                 adaptadorFavoritos.notifyDataSetChanged();
             }

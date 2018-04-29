@@ -67,10 +67,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     public void mostrarSegundoShowCase(){
         showcaseView=new ShowcaseView.Builder((Activity)mContext)
                 .setTarget(new CustomViewTarget(R.id.iconComentarios, 100, 0, (Activity) mContext))
-                .setContentTitle("Favoritos")
+                .setContentTitle(mContext.getString(R.string.favoritos_showcase))
                 .setStyle(R.style.CustomShowcaseTheme4)
                 .hideOnTouchOutside()
-                .setContentText("Y acceder a un foro donde podrás compartir tus opiniones solo con tus contactos.")
+                .setContentText(mContext.getString(R.string.texto_showcase_fav2))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -110,7 +110,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                         ViewTarget target2 = new ViewTarget(holder.imagenSerie);
                         showcaseView=new ShowcaseView.Builder((Activity)mContext)
                                 .setTarget(new CustomViewTarget(R.id.botonVoto, -125, 0, (Activity) mContext))
-                                .setContentTitle("Favoritos")
+                                .setContentTitle(mContext.getString(R.string.favoritos_showcase))
                                 .setStyle(R.style.CustomShowcaseTheme3)
                                 .setContentText("Podrás votar la serie.")
                                 .setOnClickListener(new View.OnClickListener() {

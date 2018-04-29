@@ -129,10 +129,6 @@ public class ContactosFragment extends Fragment {
                 "                             Bundle savedInstanceState) ");
 
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
-        /*Suscripcion s1 = new Suscripcion("-LBC2X2Y3yPDDsY1ziBS","Sons of anarchy", (float) 2,"000000000","https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/iconos_series%2Fanarchy.jpg?alt=media&token=a28260a3-a9df-4eef-bca4-18fef1001f9e"
-                ,"000000000"+"_"+ "Sons of anarchy" ,"si");
-        DatabaseReference jkhsk = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
-        jkhsk.push().setValue(s1);*/
         vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recycler);
         contactos = new Hashtable<String, String>();
@@ -178,9 +174,6 @@ public class ContactosFragment extends Fragment {
                     String phoneNumber = usuario.getTelefono();
                     if(contactos.containsKey(phoneNumber)){
                         if(!phoneNumber.equals(phoneNumberUser)){
-                            //Log.i("CONTACTOSS","user -> " + "phoneNumberUser" + phoneNumberUser);
-                            //Log.i("CONTACTOSS","finales -> " + phoneNumber);
-                            Log.i("CONTACTOSS","finales -> " + contactos.get(phoneNumber));
                             usuario.setNick(contactos.get(phoneNumber));
                             usuarios.add(usuario);
                             sinContactos=false;
@@ -205,9 +198,9 @@ public class ContactosFragment extends Fragment {
                         Log.i("mateo","si el primer usuario es Mateo");
                             showcaseView = new ShowcaseView.Builder(getActivity())
                                     .setTarget(new CustomViewTarget(R.id.showcase_button,-75,0,getActivity()))
-                                    .setContentTitle("Contactos")
+                                    .setContentTitle(getString(R.string.contactos_showcase))
                                     .setStyle(R.style.CustomShowcaseTheme3)
-                                    .setContentText("Haz click en un contacto para ver sus series favoritas")
+                                    .setContentText(getString(R.string.showcaseTextoCont))
                                     .setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -219,12 +212,11 @@ public class ContactosFragment extends Fragment {
                                     .build();
 
                     }else{
-                        Log.i("mateo","si el primer usuario NO es Mateo, es decir tenemos contactos en la agenda");
                             showcaseView = new ShowcaseView.Builder(getActivity())
                                     .setTarget(new CustomViewTarget(R.id.showcase_button,-75,0,getActivity()))
-                                    .setContentTitle("Contactos")
+                                    .setContentTitle(getString(R.string.contactos_showcase))
                                     .setStyle(R.style.CustomShowcaseTheme3)
-                                    .setContentText("Haz click en un contacto para ver sus series favoritas")
+                                    .setContentText(getString(R.string.showcaseTextoCont))
                                     .setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {

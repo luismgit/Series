@@ -12,25 +12,25 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_tab">Series</string>
-    <string name="req_num_telef">Debe introducir el número de telefono</string>
+    <string name="req_num_telef">Debe introducir el número de telefono.</string>
     <string name="error_verif">OnVerificationFailed</string>
     <string name="time_out_code">OnCodeAutoRetrievalTimeOut :</string>
-    <string name="error_log">Fallo al loguearse</string>
-    <string name="introd_cod_sms">Debe introducir el código recibido pos SMS</string>
-    <string name="error_cod_verif">Código incorrecto</string>
-    <string name="perm_no_aceptados">Si no acepta los permisos la aplicacion no puede seguir</string>
-    <string name="text_verif_num_telef">Verifica tu número de teléfono</string>
+    <string name="error_log">Fallo al loguearse.</string>
+    <string name="introd_cod_sms">Debe introducir el código recibido pos SMS.</string>
+    <string name="error_cod_verif">Código incorrecto.</string>
+    <string name="perm_no_aceptados">Si no acepta los permisos la aplicacion no puede seguir.</string>
+    <string name="text_verif_num_telef">Verifica tu número de teléfono.</string>
     <string name="text_msg_autent_aviso">Series enviará un único mensaje SMS para verificar tu número de telefono.</string>
     <string name="text_msg_autent_num_tel">Introduzca su número de teléfono y pulse OK.</string>
     <string name="hint_num_telef">número de teléfono</string>
     <string name="btn_ok">OK</string>
-    <string name="text_msg_autent_aviso2">En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR</string>
+    <string name="text_msg_autent_aviso2">En caso de que el SMS no se verifique automaticamente introduzca el código recibido y pulse ENVIAR.</string>
     <string name="hint_cod_rec">código recibido</string>
     <string name="sigin">SIGIN</string>
-    <string name="toast_usu_reg">Usuario registrado</string>
+    <string name="toast_usu_reg">Usuario registrado.</string>
     <string name="msg_registro_uso_email">El nick introducido ya está en uso!!</string>
     <string name="error_registro_campos_vacios">Debe rellenar todos los campos!!</string>
-    <string name="error_registro_nick">El nick no puede contener más de 15 caracteres</string>
+    <string name="error_registro_nick">El nick no puede contener más de 15 caracteres.</string>
     <string name="error_email_format">Formato Email incorrecto!!</string>
     <string name="hint_nick">Nick</string>
     <string name="hint_mail">Email</string>
@@ -44,7 +44,7 @@
     <string name="rep_favoritos"> ya la tienes en favoritos</string>
     <string name="anadida_fav"> añadida a favoritos</string>
     <string name="ayuda">Ayuda</string>
-    <string name="msg_ayuda">Ingrese su email y a continuación detalle su problema y el equipo de desarrolladores lo intentará resolver lo antes posible</string>
+    <string name="msg_ayuda">Ingrese su email y a continuación detalle su problema y el equipo de desarrolladores lo intentará resolver lo antes posible.</string>
     <string name="btn_enviar_ayuda">Enviar</string>
     <string name="msg_enviado_ayuda">Mensaje enviado</string>
     <string name="btn_cancelar_ayuda">cancelar</string>
@@ -67,7 +67,8 @@
     <string name="debe_comentar">Debe escribir algun comentario</string>
     <string name="ultima_conex_hoy">últ. vez hoy a las</string>
     <string name="ultima_conex">últ. vez</string>
-    <string name="sin_contactos">Sin contactos,añade a tu agenda contactos que tengan la aplicación</string>
+    <string name="sin_contactos">Sin contactos,añade a tu agenda contactos que tengan la aplicación.</string>
+    <string name="sin_favoritos">Sin favoritos,añade tus series favoritas.</string>
     <string name="esta_serie_no_tiene_comentarios_se_el_primero_en_comentarla">Esta serie no tiene comentarios , se el primero en comentarla.</string>
     <string name="me_gusta">Me gusta</string>
     <string name="hoy_a_las">Hoy a las</string>
@@ -81,6 +82,12 @@
     <string name="perfil">Perfil</string>
     <string name="tutorial_menu">tutorial</string>
     <string name="menu_show_tutorial">La próxima vez que ejecutes la app se visualizará el tutorial</string>
+    <string name="contactos_showcase">Contactos</string>
+    <string name="showcaseTextoCont">Haz click en un contacto para ver sus series favoritas.</string>
+    <string name="series_showcase">Series</string>
+    <string name="texto_showcase_series">Busca una serie</string>
+    <string name="favoritos_showcase">Favoritos</string>
+    <string name="texto_showcase_fav2">Y acceder a un foro donde podrás compartir tus opiniones solo con tus contactos.</string>
 
 
 </resources>

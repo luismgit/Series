@@ -662,9 +662,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         if(id==R.id.item_tutorial){
             SharedPreferences sharedPref = this.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean("pulsado_tutorial",true);
+            editor.putBoolean(Common.PULSADO_TUTORIAL,true);
             editor.commit();
-            Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_SHORT).show();
         }
 
 
@@ -679,7 +679,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.i("compruebaNotif","llega a new intent");
         super.onNewIntent(intent);
          SharedPreferences sharedPre = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
         boolean deNotificacion=sharedPre.getBoolean("notify",false);
@@ -734,23 +733,18 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     protected void onDestroy() {
         super.onDestroy();
         SharedPreferences preferences = this.getSharedPreferences(Common.TUTORIAL_PREF,getApplicationContext().MODE_PRIVATE);
-        /*SharedPreferences.Editor editorr = preferences.edit();
-        editorr.putBoolean("pulsado_tutorial",false);
-        editorr.commit();*/
-        boolean pulsadoTutorial = preferences.getBoolean("pulsado_tutorial",false);
+        boolean pulsadoTutorial = preferences.getBoolean(Common.PULSADO_TUTORIAL,false);
 
         if(pulsadoTutorial){
-            Log.i("isShowedToturial","OnDestroy -> SI se ha pulsado mostrar el tutorial" );
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(Common.TUTORIAL_CONTACTOS,true);
             editor.putBoolean(Common.TUTORIAL_SERIES,true);
             editor.putBoolean(Common.TUTORIAL_FAVORITOS,true);
-            editor.putBoolean("pulsado_tutorial",false);
+            editor.putBoolean(Common.PULSADO_TUTORIAL,false);
             editor.commit();
         }else{
-            Log.i("isShowedToturial","OnDestroy -> NO se ha pulsado mostrar el tutorial" );
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("pulsado_tutorial",false);
+            editor.putBoolean(Common.PULSADO_TUTORIAL,false);
             editor.commit();
         }
 

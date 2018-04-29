@@ -122,9 +122,9 @@ public class SeriesFragment extends Fragment{
                     isShowedTuturial=false;
                      showcaseView = new ShowcaseView.Builder(getActivity())
                             .setTarget(new CustomViewTarget(R.id.toolbar, 280, -100, getActivity()))
-                            .setContentTitle("Series")
+                            .setContentTitle(getString(R.string.series_showcase))
                             .setStyle(R.style.CustomShowcaseTheme2)
-                            .setContentText("Busca una serie")
+                            .setContentText(getString(R.string.texto_showcase_series))
                              .setOnClickListener(new View.OnClickListener() {
                                  @Override
                                  public void onClick(View view) {

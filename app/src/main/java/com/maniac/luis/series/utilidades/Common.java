@@ -28,5 +28,7 @@ public class Common {
     final public static String TUTORIAL_CONTACTOS="tutorial_contactos";
     final public static String TUTORIAL_SERIES="tutorial_series";
     final public static String TUTORIAL_FAVORITOS="tutorial_favoritos";
+    final public static String PULSADO_TUTORIAL="pulsado_tutorial";
+    final public static String POL_PRIV_IUBENDA="https://www.iubenda.com/privacy-policy/66955812";
 
 }

@@ -99,7 +99,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         avatarIcono=findViewById(R.id.avatarIcono);
         Glide.with(this)
                 .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
-                .error(R.drawable.sin_conexion)
                 .into(avatarIcono);
         avatarIcono.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +153,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(Common.REGISTRO_CERRADO,true);
         editor.commit();
-        Log.i("REGISTRO","Hemos cerrado la pantalla de registro");
         super.onBackPressed();
     }
 
@@ -171,7 +169,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                 switch (opcion){
 
                     case CAMARA:
-                        Log.i("perfil","Selecciona camara");
                         File fileImagen = new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
                         boolean creada=fileImagen.exists();
                         String nombreImagen="";
@@ -190,7 +187,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         break;
 
                     case GALERIA:
-                        Log.i("perfil","Selecciona galeria");
                         Intent intent1=new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent1.setType("image/*");
                         startActivityForResult(intent1.createChooser(intent1,getString(R.string.selec_app)),GALLERY_INTENT);
@@ -216,37 +212,24 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
             if(requestCode==CAMERA_INTENT){
                 camara=true;
                 galeria=false;
-               /* Bundle bundle = data.getExtras();
-                final Bitmap bmp = (Bitmap) bundle.get("data");
-                Log.i("perfil","requestCode==CAMERA_INTENT");
-                avatarIcono.setImageBitmap(bmp);
-                stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);*/
                 MediaScannerConnection.scanFile(this, new String[]{miPath}, null,
                         new MediaScannerConnection.OnScanCompletedListener() {
                             @Override
                             public void onScanCompleted(String s, Uri uri) {
-                                Log.i("Ruta de almacenamiento","Path -> " + miPath);
+
                             }
                         });
-                //Bitmap bitmap = BitmapFactory.decodeFile(miPath);
-                //avatarIcono.setImageBitmap(bitmap);
                 Glide.with(this)
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
                         .into(avatarIcono);
-                //stream = new ByteArrayOutputStream();
-                //bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
             }else if(requestCode==GALLERY_INTENT){
                 galeria=true;
                 camara=false;
-                Log.i("perfil","requestCode==GALLERY_INTENT");
                  imagenSeleccionada = data.getData();
-                Log.i("perfil","Uri -> " + imagenSeleccionada.toString());
-                //avatarIcono.setImageURI(imagenSeleccionada);
-                //avatarIcono.setRotation(270);
+
                 Glide.with(registroActivity.this)
                         .load(data.getData())
                         .centerCrop()
@@ -331,10 +314,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                      //SI NO HAY ERRORES EN EL REGISTRO PASAMOS A DAR DE ALTA AL USUARIO EN LA BB.DD
                      if (!error) {
                          filePath = refStorage.child(FirebaseReferences.FOTO_PERFIL_USUARIO + "/" + correo + "_" + getFecha());
-                         Log.i("fecha -> ", new Date().toString());
                          if (camara) {
                              Log.i("perfil ", "entra camara");
-                             //byte[] data = stream.toByteArray();
                              avatarIcono.setDrawingCacheEnabled(true);
                              avatarIcono.buildDrawingCache();
                              Bitmap bitmap = avatarIcono.getDrawingCache();
@@ -346,13 +327,11 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                                  @Override
                                  public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                      enlaceFotoFirebasde=taskSnapshot.getDownloadUrl();
-                                     Log.i("Perfil", "foto subida de camara con el enlace " + enlaceFotoFirebasde.toString());
                                      registro();
                                  }
                              });
 
                          } else if (galeria) {
-                             Log.i("perfil ", "entra galeria");
                            avatarIcono.setDrawingCacheEnabled(true);
                            avatarIcono.buildDrawingCache();
                            Bitmap bitmap = avatarIcono.getDrawingCache();
@@ -402,6 +381,24 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         dfr.setValue(enlaceFotoFirebasde.toString());
                     }
 
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference databaseReferences = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
+        databaseReferences.orderByChild(FirebaseReferences.COMENTARIO_PHONE_NUMBER).equalTo(ComunicarCurrentUser.getPhoneNumberUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                    String claveComentario=childSnapshot.getKey();
+                    DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
+                            .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
+                    dfr.setValue(enlaceFotoFirebasde.toString());
                 }
             }
 
@@ -487,11 +484,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     public void loadContactFromTlf() {
         ContentResolver contentResolver=this.getContentResolver();
         String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
-        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
         String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
-        //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
         Cursor cursor=this.getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
         while(cursor.moveToNext()){
             String name=cursor.getString(0);
@@ -500,20 +495,10 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                 phoneNumber=phoneNumber.replaceAll("\\s","");
                 if(phoneNumber.substring(0,3).equals("+34")){
                     phoneNumber=phoneNumber.substring(3,phoneNumber.length());
-                    //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
-
                 }
-                //nombreContactosTelefono.add(name);
-                // contactosTelefono.add(phoneNumber);
-                Log.i("contactos","Nombre: " + name);
-                Log.i("contactos","Numero: " + phoneNumber);
                 phoneNumbers.add(phoneNumber);
             }
 
-            //Log.i("contactos","Identificador: " + cursor.getString(0));
-
-
-            //Log.i("contactos","Tipo: " + cursor.getString(3));
         }
         cursor.close();
     }

@@ -14,4 +14,17 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/sin_favoritos"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:id="@+id/mensajeSinFavoritos"
+        android:textColor="@color/negro"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="20dp"
+        />
+
 </FrameLayout>
