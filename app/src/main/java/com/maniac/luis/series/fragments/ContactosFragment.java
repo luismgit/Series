@@ -1,7 +1,9 @@
 package com.maniac.luis.series.fragments;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,13 +32,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorContactos;
+import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.CustomViewTarget;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
 
 import java.text.SimpleDateFormat;
@@ -72,6 +79,11 @@ public class ContactosFragment extends Fragment {
     FirebaseUser user;
     TextView mensajeSinContactos;
     SearchView searchView = null;
+    ShowcaseView showcaseView;
+    boolean sinContactos;
+    ViewPager vp;
+    SharedPreferences sharedPref;
+    Usuario usuarioMateo;
 
     public ContactosFragment() {
         // Required empty public constructor
@@ -117,7 +129,11 @@ public class ContactosFragment extends Fragment {
                 "                             Bundle savedInstanceState) ");
 
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
-        ViewPager vp = getActivity().findViewById(R.id.container);
+        /*Suscripcion s1 = new Suscripcion("-LBC2X2Y3yPDDsY1ziBS","Sons of anarchy", (float) 2,"000000000","https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/iconos_series%2Fanarchy.jpg?alt=media&token=a28260a3-a9df-4eef-bca4-18fef1001f9e"
+                ,"000000000"+"_"+ "Sons of anarchy" ,"si");
+        DatabaseReference jkhsk = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
+        jkhsk.push().setValue(s1);*/
+        vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recycler);
         contactos = new Hashtable<String, String>();
         usuarios=new ArrayList<>();
@@ -140,13 +156,20 @@ public class ContactosFragment extends Fragment {
         //LE APLICAMOS EL ADAPTADOR AL RECYCLERVIEW
         rv.setAdapter(adapter);
 
+        sharedPref = getActivity().getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+
         //LISTENER QUE COTEJA QUE NÚMEROS DE LA AGENDA DEL USUARIO COINCIDEN CON LOS DE NUESTRA BB.DD Y LOS AÑASE AL ARRAYLIST USUARIOS
         database.getReference(FirebaseReferences.USUARIOS_REFERENCE).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                sinContactos=true;
+                if(usuarios.size()!=0){
+                    if(!usuarios.get(0).getTelefono().equals("000000000")){
+                        usuarios.removeAll(usuarios);
+                    }
+                }
 
-                usuarios.removeAll(usuarios);
                 ComunicarContactosPhoneNumber.removeAllPhoneNumbers();
                 Log.i("Carga","empieza la carga");
                 for (DataSnapshot snapshot:
@@ -160,8 +183,57 @@ public class ContactosFragment extends Fragment {
                             Log.i("CONTACTOSS","finales -> " + contactos.get(phoneNumber));
                             usuario.setNick(contactos.get(phoneNumber));
                             usuarios.add(usuario);
+                            sinContactos=false;
                             ComunicarContactosPhoneNumber.addPhoneNumber(usuario.getTelefono());
                         }
+                    }
+                    if(sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true) && usuario.getTelefono().equals("000000000")){
+                        Log.i("mateo","asigna usuario a usuarioMateo");
+                        usuarioMateo=usuario;
+                    }
+                }
+                if(sinContactos && sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true)){
+                    usuarios.add(usuarioMateo);
+                    Log.i("mateo","añade usuarioMateo a la lista de usuarios");
+                }
+                if(sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true)){
+                    Log.i("mateo","mostrar el tutorial es true");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean(Common.TUTORIAL_CONTACTOS,false);
+                    editor.commit();
+                    if(usuarios.get(0).getTelefono().equals("000000000")){
+                        Log.i("mateo","si el primer usuario es Mateo");
+                            showcaseView = new ShowcaseView.Builder(getActivity())
+                                    .setTarget(new CustomViewTarget(R.id.showcase_button,-75,0,getActivity()))
+                                    .setContentTitle("Contactos")
+                                    .setStyle(R.style.CustomShowcaseTheme3)
+                                    .setContentText("Haz click en un contacto para ver sus series favoritas")
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            showcaseView.hide();
+                                            usuarios.remove(0);
+                                            vp.setCurrentItem(1);
+                                        }
+                                    })
+                                    .build();
+
+                    }else{
+                        Log.i("mateo","si el primer usuario NO es Mateo, es decir tenemos contactos en la agenda");
+                            showcaseView = new ShowcaseView.Builder(getActivity())
+                                    .setTarget(new CustomViewTarget(R.id.showcase_button,-75,0,getActivity()))
+                                    .setContentTitle("Contactos")
+                                    .setStyle(R.style.CustomShowcaseTheme3)
+                                    .setContentText("Haz click en un contacto para ver sus series favoritas")
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            showcaseView.hide();
+                                            vp.setCurrentItem(1);
+                                        }
+                                    })
+                                    .build();
+
                     }
                 }
                 if(usuarios.size()==0){
@@ -169,6 +241,7 @@ public class ContactosFragment extends Fragment {
                 }else{
                     mensajeSinContactos.setVisibility(View.GONE);
                 }
+
                 adapter.notifyDataSetChanged();
             }
 

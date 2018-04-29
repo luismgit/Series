@@ -59,7 +59,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
     //MÉTODO QUE MUESTRA LOS DATOS DE LA POSICION DE LA VARIABLE position, Y MODIFICA EL CONTENIDO DE LA VISTA
     @Override
     public void onBindViewHolder(UsuariosviewHolder holder, int position) {
-        sharedPref = context.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+       /* sharedPref = context.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
         isShowedToturial=sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true);
         if(position==0 && isShowedToturial){
             Log.i("isShowedToturial","OnBind -> " + isShowedToturial);
@@ -84,7 +84,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
                    })
                     .build();
 
-        }
+        }*/
 
 
         Usuario usuario = usuarios.get(position);
