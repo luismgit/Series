@@ -74,11 +74,11 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             Log.i("SeriesViewHolder","ejecuta");
         }
          serie = series.get(position);
-         if(serie.getNombre().length()>16){
+        /* if(serie.getNombre().length()>16){
              holder.textViewNombre.setTextSize(17);
          }else{
              holder.textViewNombre.setTextSize(20);
-         }
+         }*/
         holder.textViewNombre.setText(serie.getNombre());
         Glide.with(mContext)
                 .load(serie.getImagen())

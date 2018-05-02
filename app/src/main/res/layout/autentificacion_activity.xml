@@ -40,7 +40,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="20dp"
         android:paddingBottom="10dp"
         android:textColor="#050505"
         android:textSize="15dp"
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="40dp">
+        android:paddingHorizontal="20dp">
 
         <EditText
             android:id="@+id/etxtPhone"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_num_telef"
             android:inputType="phone"
-            android:layout_margin="10dp"
+           android:layout_marginRight="10dp"
             android:textStyle="bold"
             android:textColor="#050505"/>
         <Button
@@ -86,14 +86,14 @@
         android:textSize="15dp"
         android:paddingHorizontal="20dp"
         android:text="@string/text_msg_autent_aviso2"
-        android:paddingVertical="7dp"
+        android:paddingVertical="9dp"
         android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="48dp">
+        android:paddingHorizontal="20dp">
 
     <EditText
         android:layout_width="wrap_content"

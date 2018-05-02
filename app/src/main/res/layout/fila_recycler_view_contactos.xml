@@ -16,6 +16,7 @@
         android:layout_height="90dp"
         android:id="@+id/avatarImagen"
         android:layout_alignParentLeft="true"
+        android:src="@drawable/a100"
         />
 
     <TextView
@@ -41,8 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/estado"
-        android:text="prueba"
-        android:textSize="17dp"
+        android:text="ult. hoy a las 29/04 22:39"
+        android:textSize="@dimen/_13sdp"
         android:layout_below="@id/nombre"
         android:layout_toRightOf="@id/avatarImagen"
         android:layout_marginLeft="10dp"
@@ -57,7 +58,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:id="@+id/imagenMedalla"
-        android:layout_marginRight="2dp"/>
+        android:layout_marginRight="2dp"
+        android:src="@drawable/bronce_mod"/>
 
 
 </RelativeLayout>

@@ -52,6 +52,7 @@ dependencies {
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.shehabic.droppy:Droppy:0.6.0@aar'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
 
 }
 
