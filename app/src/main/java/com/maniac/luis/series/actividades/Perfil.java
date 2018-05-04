@@ -4,18 +4,15 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -30,12 +27,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.maniac.luis.series.Objetos.Usuario;
-import com.maniac.luis.series.R;
-import com.maniac.luis.series.references.FirebaseReferences;
-import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
-import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
-import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.maniac.luis.series.Objetos.Usuario;
+import com.maniac.luis.series.R;
+import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
+import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
+import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.Utilities;
 
 import java.io.ByteArrayOutputStream;
@@ -91,7 +88,6 @@ public class Perfil extends AppCompatActivity {
         cargaFotoPerfil=findViewById(R.id.cargaFotoPerfil);
         cargaPerfil=findViewById(R.id.cargaPerfil);
         user = (Usuario) getIntent().getSerializableExtra("usuario");
-        Log.i("avatar", "-> " + user.getAvatar());
         Glide.with(this)
                 .load(user.getAvatar())
                 .fitCenter()
@@ -134,7 +130,6 @@ public class Perfil extends AppCompatActivity {
                         switch (opcion) {
 
                             case CAMARA:
-                                Log.i("perfil","Selecciona camara");
                                 File fileImagen = new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
                                 boolean creada=fileImagen.exists();
                                 String nombreImagen="";
@@ -153,7 +148,6 @@ public class Perfil extends AppCompatActivity {
                                 break;
 
                             case GALERIA:
-                                Log.i("perfil", "Selecciona galeria");
                                 Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                 intent1.setType("image/*");
                                 startActivityForResult(intent1.createChooser(intent1,getString(R.string.selec_app)),GALLERY_INTENT);
@@ -186,27 +180,19 @@ public class Perfil extends AppCompatActivity {
                         new MediaScannerConnection.OnScanCompletedListener() {
                             @Override
                             public void onScanCompleted(String s, Uri uri) {
-                                Log.i("Ruta de almacenamiento","Path -> " + miPath);
                             }
                         });
-                //Bitmap bitmap = BitmapFactory.decodeFile(miPath);
-                //avatarIcono.setImageBitmap(bitmap);
                 Glide.with(this)
                         .load(miPath)
                         .centerCrop()
                         .fitCenter()
                         .into(imagenUsuario);
-               // stream = new ByteArrayOutputStream();
-               // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
 
             } else if (requestCode == GALLERY_INTENT) {
                 galeria = true;
                 camara = false;
                 cambios = true;
-                Log.i("perfil", "requestCode==GALLERY_INTENT");
                 imagenSeleccionada = data.getData();
-                Log.i("perfil", "Uri -> " + imagenSeleccionada.toString());
                 Glide.with(Perfil.this)
                         .load(data.getData())
                         .centerCrop()
@@ -234,8 +220,6 @@ public class Perfil extends AppCompatActivity {
             ref.setValue(editTextEmailUsuario.getText().toString());
 
             if (camara) {
-                Log.i("perfil ", "entra camara");
-                // byte[] data = stream.toByteArray();
                 imagenUsuario.setDrawingCacheEnabled(true);
                 imagenUsuario.buildDrawingCache();
                 Bitmap bitmap = imagenUsuario.getDrawingCache();
@@ -247,13 +231,11 @@ public class Perfil extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
-                        Log.i("Perfil", "foto subida de camara con el enlace " + enlaceFotoFirebase.toString());
                         modificarFotoPerfil();
                     }
                 });
 
             } else if (galeria) {
-                Log.i("perfil ", "entra galeria");
                 imagenUsuario.setDrawingCacheEnabled(true);
                 imagenUsuario.buildDrawingCache();
                 Bitmap bitmap = imagenUsuario.getDrawingCache();
@@ -265,7 +247,6 @@ public class Perfil extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         enlaceFotoFirebase = taskSnapshot.getDownloadUrl();
-                        Log.i("Perfil", "foto subida de la galeria con el enlace " + enlaceFotoFirebase.toString());
                         modificarFotoPerfil();
                     }
                 });
@@ -274,7 +255,6 @@ public class Perfil extends AppCompatActivity {
                 Toast.makeText(this, R.string.perfil_mod, Toast.LENGTH_SHORT).show();
                 cambios = false;
                 botonModificar.setClickable(true);
-                //finish();
             }
         }else{
             textoEmailIncorrecto.setVisibility(View.VISIBLE);
@@ -286,14 +266,10 @@ public class Perfil extends AppCompatActivity {
     private void modificarFotoPerfil() {
 
         StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(user.getAvatar());
-        Log.i("NoBorrar"," " + photoRef.getName());
-        Log.i("NoBorrar"," " + photoRef.toString());
         if(!photoRef.getName().equals("series_ic.png")){
             photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-
-                    Log.i("Perfil", "foto borrada correctamente");
 
                 }
             });
@@ -311,7 +287,6 @@ public class Perfil extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                             String claveComentario=childSnapshot.getKey();
-                            Log.i("claveComentario","claveComentario -> " + claveComentario);
                             DatabaseReference dfr=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS).child(claveComentario)
                                     .child(FirebaseReferences.COMENTARIO_AVATAR_USUARIO);
                                     dfr.setValue(enlaceFotoFirebase.toString());
@@ -325,11 +300,6 @@ public class Perfil extends AppCompatActivity {
                 });
         cambios = false;
         botonModificar.setClickable(true);
-        //finish();
-
-
-
-
 
     }
 
@@ -370,7 +340,6 @@ public class Perfil extends AppCompatActivity {
                                         modificarPerfil(null);
                                         new Esperar().execute();
                                     }else{
-                                        Log.i("modifcorreo","incorrecto!!");
                                         textoEmailIncorrecto.setVisibility(View.VISIBLE);
                                     }
                                 }

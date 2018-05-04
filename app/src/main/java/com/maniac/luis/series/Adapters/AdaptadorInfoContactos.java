@@ -31,7 +31,6 @@ import java.util.List;
 public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoContactos.ContactosViewHolder>{
 
     List<Suscripcion> suscripcionesContactos;
-    //private int [] iconos = Imagenes.getIconosSeries();
     Context contexto;
 
     public AdaptadorInfoContactos(List<Suscripcion> suscripcionesContactos,Context contexto){
@@ -49,13 +48,7 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     @Override
     public void onBindViewHolder(ContactosViewHolder holder, int position) {
         Suscripcion suscripcion = suscripcionesContactos.get(position);
-        /*if(suscripcion.getSerie().length()>21){
-            holder.nombreSerie.setTextSize(18);
-        }else{
-            holder.nombreSerie.setTextSize(20);
-        }*/
         holder.nombreSerie.setText(suscripcion.getSerie());
-       // holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(contexto)
                 .load(suscripcion.getImagen())
                 .into(holder.avatarSerie);

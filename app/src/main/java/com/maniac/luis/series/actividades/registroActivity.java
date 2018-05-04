@@ -11,14 +11,13 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,15 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.maniac.luis.series.Objetos.Comentario;
-import com.maniac.luis.series.Objetos.Series;
-import com.maniac.luis.series.R;
-import com.maniac.luis.series.references.FirebaseReferences;
-import com.maniac.luis.series.Objetos.Usuario;
-import com.maniac.luis.series.utilidades.Common;
-import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
-import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
-import com.maniac.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,6 +41,14 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.maniac.luis.series.Objetos.Comentario;
+import com.maniac.luis.series.Objetos.Series;
+import com.maniac.luis.series.Objetos.Usuario;
+import com.maniac.luis.series.R;
+import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.Utilities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -315,7 +313,6 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                      if (!error) {
                          filePath = refStorage.child(FirebaseReferences.FOTO_PERFIL_USUARIO + "/" + correo + "_" + getFecha());
                          if (camara) {
-                             Log.i("perfil ", "entra camara");
                              avatarIcono.setDrawingCacheEnabled(true);
                              avatarIcono.buildDrawingCache();
                              Bitmap bitmap = avatarIcono.getDrawingCache();

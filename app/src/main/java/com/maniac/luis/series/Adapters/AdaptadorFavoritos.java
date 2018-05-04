@@ -13,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,11 +132,6 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             });
         }
         final Suscripcion suscripcion = suscripciones.get(position);
-       /* if(suscripcion.getSerie().length()>16){
-            holder.textViewNombre.setTextSize(17);
-        }else{
-            holder.textViewNombre.setTextSize(20);
-        }*/
         holder.textViewNombre.setText(suscripcion.getSerie());
         Glide.with(mContext)
                 .load(suscripcion.getImagen())
@@ -257,15 +251,6 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                 @Override
                 public void onClick( View view) {
 
-                    //COGEMOS EL ELEMENTO RATINBAR Y LE APLICAMOS UNA ANIMACIÓN
-                    /*miVista= (RelativeLayout) view.getParent();
-                    View vista = miVista.findViewById(R.id.estrellasFav);
-                    myRotation = AnimationUtils.loadAnimation(vista.getContext(), R.anim.rotator);
-                    myRotation.setRepeatCount(0);
-                    vista.startAnimation(myRotation);*/
-
-
-
                     nombreSerie=textViewNombre.getText().toString();
                     contador=0;
                     totalEstrellas=0.0;
@@ -293,23 +278,16 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                         String votada = (String) childSnapshot.child("votada").getValue();
-                                        Log.i("Puntuacion","Votada -> " + votada);
                                         if(votada.equalsIgnoreCase("si")){
                                             double estrellas =  childSnapshot.child(FirebaseReferences.ESTRELLAS_USUARIO).getValue(Double.class);
-                                            Log.i("Puntuacion","Estrellas -> " + estrellas);
                                             contador++;
                                             totalEstrellas+=estrellas;
-                                            Log.i("Puntuacion","totalEstrellas -> " + totalEstrellas);
                                         }
 
                                     }
-                                    Log.i("Puntuacion","contador " + contador);
-                                    Log.i("Puntuacion","total estrellas " + totalEstrellas);
                                     Double media = totalEstrellas/contador;
-                                    Log.i("Puntuacion","Media  " + media);
                                     FirebaseDatabase f = FirebaseDatabase.getInstance();
                                     DatabaseReference d = f.getReference();
-                                    Log.i("Puntuacion","serie -> " + nombreSerie);
                                     d.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie).child(FirebaseReferences.ESTRELLAS_SERIE).setValue(media);
 
                                 }
@@ -388,11 +366,6 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
                                                 if(suscripcion.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
                                                     String claveSerie = snapshot.getKey();
-                                                    Log.i("Clave","--------------------------------------------------");
-                                                    Log.i("Clave","suscripcion.getSerie() -> " + suscripcion.getSerie());
-                                                    Log.i("Clave","textViewNombre.getText() -> " + textViewNombre.getText());
-                                                    Log.i("Clave","clave Serie -> " + claveSerie);
-                                                    Log.i("Clave","--------------------------------------------------");
                                                     database.getReference(FirebaseReferences.SUSCRIPCIONES).child(claveSerie).removeValue();
                                                     final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
                                                             .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);

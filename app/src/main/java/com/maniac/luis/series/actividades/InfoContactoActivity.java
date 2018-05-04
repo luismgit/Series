@@ -3,25 +3,24 @@ package com.maniac.luis.series.actividades;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorInfoContactos;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,6 @@ public class InfoContactoActivity extends AppCompatActivity {
 
 private TextView nombreUsuario;
 private ImageView avatarUsuario;
-private int [] avatares;
 
     private List<Suscripcion> suscripciones;
     private RecyclerView rv;
@@ -52,22 +50,10 @@ private int [] avatares;
         imagenContacto=findViewById(R.id.avatarContacto);
 
 
-        //RECOGEMOS EL NOMBRE DEL CONTACTO QUE QUEREMOS VISUALIZAR
-        /*String contact=getIntent().getStringExtra(Common.CONTACTO);
-        if(contact.length()>10){
-            contact=contact.substring(0,10);
-            contact=contact+"...";
-        }*/
         String contact = getIntent().getStringExtra(Common.CONTACTO);
-       /* if(contact.length()>20){
-            nombreUsuario.setTextSize(18);
-        }else{
-            nombreUsuario.setTextSize(22);
-        }*/
         nombreUsuario.setText(contact);
 
         //LE ASIGNAMOS SU AVATAR
-        //avatarUsuario.setImageResource(avatares[getIntent().getIntExtra(Common.AVATAR,0)]);
         imagen=getIntent().getStringExtra(Common.AVATAR);
         Glide.with(this)
                 .load(imagen)
@@ -108,8 +94,6 @@ private int [] avatares;
                         dataSnapshot.getChildren()){
                     Suscripcion suscripcion=snapshot.getValue(Suscripcion.class);
                     if(suscripcion.getTelefono().equals(telefonoUsuarioSeleccionado)){
-                        Log.i("susc","telefono -> " + suscripcion.getTelefono());
-                        Log.i("susc","telefonoUsuarioSeleccionado -> " + telefonoUsuarioSeleccionado);
                         suscripciones.add(suscripcion);
                     }
                 }

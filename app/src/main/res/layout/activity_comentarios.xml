@@ -111,7 +111,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Escribe un comentario..."
+            android:hint="@string/escribe_un_comentario"
             android:id="@+id/nuevoComentario"
             android:layout_marginRight="25dp"
             android:textColor="@color/negro"

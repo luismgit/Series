@@ -20,7 +20,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +95,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     String passwordAyuda;
     List<String> listaFondos;
     List<String> listaFondosGaleriaComentarios;
-    private static final int PERFIL=1;
     private static final int LISTA_FONDOS=2;
     public static final String EMAIL_USUARIO="emailUsuario";
     public static final String FOTO_USUARIO="fotoUsuario";
@@ -129,7 +127,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         suscripcionesUsuario=new ArrayList<>();
         fondo = findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
-        Log.i("TOKEN", "token -> " + FirebaseInstanceId.getInstance().getToken());
         listaFondos = new ArrayList<>();
 
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
@@ -177,12 +174,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
-        //SELECCIONAMOS UN FONDO DE PANTALLA ALEATORIO Y LO APLICAMOS
-        //int fondoAleatorio=(int)Math.floor(Math.random()*((fondos.length-1)-0)+0);
-        //fondo.setImageResource(fondos[fondoAleatorio]);
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        Log.i("compruebaNotif", "OnCreate TabActivity");
 
         //GUARDAMOS EN PREFERENCIAS QUE EL USUARIO HA LLEGADO A ESTA ACTIVITY.
         SharedPreferences sharedPref = getSharedPreferences(Common.PREFERENCIAS, Context.MODE_PRIVATE);
@@ -212,7 +206,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     if(suscripcion.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
 
                         suscripcionesUsuario.add(suscripcion.getSerie());
-                        Log.i("batch","suscripcion -> " + suscripcion.getSerie());
                     }
                 }
 
@@ -227,11 +220,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
                                 Long com = (Long) snapshot.child(FirebaseReferences.COM_LEIDOS).getValue();
                                 comentariosTotales=comentariosTotales+com;
-                                Log.i("batch","comentario -> " + com);
                             }
 
                         }
-                        Log.i("batch","comentariosTotales -> " + comentariosTotales);
                         if(comentariosTotales!=0){
                             try{
                                 ShortcutBadger.applyCount(TabActivity.this, (int) (long) comentariosTotales); //for 1.1.4+
@@ -287,7 +278,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 String fondo = (String) dataSnapshot.getValue();
-                                Log.i("FONDO","FONDO -> " + fondo);
                                 ComunicarFondoComentarios.setFondo(fondo);
                             }
 
@@ -365,10 +355,8 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 }
             });
             String accion = getIntent().getStringExtra(Common.NOTIFICACION);
-            Log.i("compruebaNotif", "accion -> " + accion);
             if (accion != null) {
                 if (accion.equals(Common.NOTIFICACION)) {
-                    Log.i("compruebaNotif", "llega a tabActivity con una notificacion NORMAL");
                     mViewPager.setCurrentItem(1);
                     FirebaseDatabase databas = FirebaseDatabase.getInstance();
                     DatabaseReference roote = databas.getReference();
@@ -384,7 +372,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         String fondo = (String) dataSnapshot.getValue();
-                                        Log.i("FONDO","FONDO -> " + fondo);
                                         ComunicarFondoComentarios.setFondo(fondo);
                                         String nombreSerie = getIntent().getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
                                         Intent intent = new Intent(TabActivity.this, ComentariosActivity.class);
@@ -452,7 +439,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.i("onChildChanged","dataSnapshot.key -> " + dataSnapshot.getKey());
 
             }
 
@@ -486,7 +472,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.menuBar)));
 
                 }
-                    Log.i("collapsed","true");
                 }
                 else
                 {
@@ -497,7 +482,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.menuBar)));
 
                     }
-                    Log.i("collapsed","false");
 
                 }
             }
@@ -506,52 +490,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
 
         }
-
-
- /*   @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        Log.i("actividades","onCreateOptionsMenu");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tab, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        searchView = (SearchView) item.getActionView();
-        searchView.setQueryHint("Busca");
-        searchView.setIconifiedByDefault(true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                search=query;
-                //Log.i("fragmenttt","query submit -> " + search);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Log.i("fragmenttt","query change -> " + newText);
-                return false;
-            }
-        });
-        final EditText searchEditText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
-
-        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem menuItem) {
-                collapseAppBarLayout(false);
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-
-                collapseAppBarLayout(true);
-                return true;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }*/
-
 
 
     public void collapseAppBarLayout(boolean contraer){
@@ -564,15 +502,12 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i("actividades","onOptionsItemSelected");
         int id = item.getItemId();
 
 
 
         //SI EL USUARIO PULSA EL EL MENÚ DE CONTACTO
         if (id == R.id.contacto) {
-            Log.i("onOptionsItemSelected","correo ->" + emailAyuda);
-            Log.i("onOptionsItemSelected","password ->" + passwordAyuda);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.ayuda);
             builder.setMessage(R.string.msg_ayuda);
@@ -646,7 +581,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                     }
                 }
             });
-           // return true;
+
         }
 
         //SI EL USUARIO PULSA EL EL MENÚ DE CAMBIAR FONDO PANTALLA
@@ -687,7 +622,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("notify",false);
             editor.commit();
-            Log.i("compruebaNotif","llega a new intent con una notificacion ");
             String nombreSerie=intent.getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
             Intent i = new Intent(this, ComentariosActivity.class);
             i.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,nombreSerie);
@@ -720,7 +654,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     public void onPause() {
 
         super.onPause();
-        Log.i("compruebaNotif","pause");
         if(FirebaseDatabase.getInstance()!=null)
         {
             FirebaseDatabase.getInstance().goOffline();
@@ -762,10 +695,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                                 dataSnapshot.getChildren()){
                             Usuario user = snapshot.getValue(Usuario.class);
                             if(user.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
-                                Log.i("userem","email -> " + user.getCorreo());
                                 Intent intent = new Intent(TabActivity.this,Perfil.class);
-                                //intent.putExtra(EMAIL_USUARIO,user.getCorreo());
-                                //intent.putExtra(FOTO_USUARIO,user.getAvatar());
                                 intent.putExtra("usuario",user);
                                 startActivity(intent);
                             }
@@ -798,9 +728,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             case LISTA_FONDOS:
                 if(data != null && resultCode == RESULT_OK){
                     int numFondo = data.getIntExtra(Common.FONDO_SELECCIONADO,-1);
-                    Log.i("OnActivityResult","Numero de icono -> " + numFondo);
                     if(numFondo != -1){
-                        //fondo.setImageResource(fondos[numFondo]);
                         Glide.with(TabActivity.this)
                                 .load(listaFondos.get(numFondo))
                                 .into(fondo);
@@ -832,12 +760,10 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
-            Log.i("actividades","PlaceholderFragment()");
         }
 
         //DEVUELVE UNA INSTANCIA DEL FRAGMENT
         public static Fragment newInstance(int sectionNumber) {
-            Log.i("actividades","public static Fragment newInstance");
             Fragment fragment=null;
             switch (sectionNumber){
                 case 1:fragment=new ContactosFragment();
@@ -853,8 +779,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            Log.i("actividades","public View onCreateView(LayoutInflater inflater, ViewGroup container,\n" +
-                    "                                 Bundle savedInstanceState)");
             View rootView = inflater.inflate(R.layout.fragment_tab, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -875,7 +799,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
         @Override
         public Fragment getItem(int position) {
-            Log.i("actividades","public Fragment getItem(int position)");
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
@@ -888,14 +811,13 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
         @Override
         public CharSequence getPageTitle(int position){
-            Log.i("actividades","public CharSequence getPageTitle(int position)");
             switch (position){
                 case 0:
-                    return Common.CONTACTOS;
+                    return getString(R.string.contactos_tab_title);
                 case 1:
-                    return Common.SERIES;
+                    return getString(R.string.series_tab_title);
                 case 2:
-                    return Common.FAVORITOS;
+                    return getString(R.string.favoritos_tab_title);
 
             }
             return null;

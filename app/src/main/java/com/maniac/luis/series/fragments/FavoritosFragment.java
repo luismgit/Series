@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +28,6 @@ import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
-import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
 import java.util.ArrayList;
@@ -121,10 +119,7 @@ public class FavoritosFragment extends Fragment {
                 for(DataSnapshot snapshot:
                         dataSnapshot.getChildren()){
                     Suscripcion suscripcion = snapshot.getValue(Suscripcion.class);
-                    Log.i("hoy","suscripcion.getIdUsuario() -> " + suscripcion.getIdUsuario());
-                    Log.i("hoy","ComunicarClaveUsuarioActual.getClave() -> " + ComunicarClaveUsuarioActual.getClave());
                     if(suscripcion.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
-                        Log.i("suscripcion"," estrellas -> " + suscripcion.getEstrellasUsuario());
                         suscripciones.add(suscripcion);
                     }
 
@@ -186,7 +181,6 @@ public class FavoritosFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
-        Log.i("actividades","onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_tab, menu);
         MenuItem item = menu.findItem(R.id.search);
@@ -196,13 +190,11 @@ public class FavoritosFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("fragmenttt","query submit -> " + query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("fragmenttt","query change -> " + newText);
                 try{
                     List<Suscripcion>listaFiltrada=filter(suscripciones,newText);
                     adaptadorFavoritos.setFilter(listaFiltrada);

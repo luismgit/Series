@@ -21,7 +21,6 @@ import java.util.List;
 public class AdapatadorRecyclerFondos extends RecyclerView.Adapter<AdapatadorRecyclerFondos.FondosViewHolderRecycler> implements View.OnClickListener{
 
     Context contexto;
-    //int [] fondos=Imagenes.getCambiaFondos();
     List<String> listaFondos = Imagenes.getListaFondos();
 
     private View.OnClickListener listener;

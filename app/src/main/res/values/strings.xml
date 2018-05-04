@@ -88,6 +88,22 @@
     <string name="texto_showcase_series">Busca una serie</string>
     <string name="favoritos_showcase">Favoritos</string>
     <string name="texto_showcase_fav2">Y acceder a un foro donde podrás compartir tus opiniones solo con tus contactos.</string>
+    <string name="escribe_un_comentario">Escribe un comentario...</string>
+    <string name="favoritos_info_contacto">Favoritos</string>
+    <string name="email_perfil">Email</string>
+    <string name="volver_perfil">Volver</string>
+    <string name="contactos_tab_title">CONTACTOS</string>
+    <string name="series_tab_title">SERIES</string>
+    <string name="favoritos_tab_title">FAVORITOS</string>
+    <string name="enviar_button">ENVIAR</string>
+    <string name="politica_priv_text">He leido y acepto la política de privacidad.</string>
+    <string name="fondo">Fondo</string>
+    <string name="galer_a_de_fondos">Galería de fondos</string>
+    <string name="color_s_lido">Color sólido</string>
+    <string name="vota">Vota</string>
+    <string name="comentarios_text_icon">Comentarios</string>
+    <string name="buscar">Buscar</string>
+    <string name="eliminar_de_favoritos">Eliminar de favoritos</string>
 
 
 </resources>

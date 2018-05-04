@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fondo"
+        android:text="@string/fondo"
         android:textSize="@dimen/_17sdp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
@@ -51,7 +51,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Galería de fondos"
+            android:text="@string/galer_a_de_fondos"
             android:textSize="@dimen/_10sdp"
             android:layout_weight="5"
             android:gravity="center"
@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Color sólido"
+            android:text="@string/color_s_lido"
             android:textSize="@dimen/_10sdp"
             android:layout_weight="5"
             android:gravity="center"

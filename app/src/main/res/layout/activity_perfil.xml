@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="@string/email_perfil"
             android:layout_below="@id/fotoPerfil"
             android:textSize="@dimen/_23sdp"
             android:id="@+id/textoEmail"
@@ -61,7 +61,6 @@
             android:textColorLink="#ffffff"
             android:shadowColor="#ffffff"
             android:textSize="@dimen/_14sdp"
-            android:text="charocastromuoz@gmail.com"
             />
 
         <LinearLayout
@@ -90,7 +89,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Volver"
+                            android:text="@string/volver_perfil"
                             android:background="@drawable/botones_perfil"
                             android:id="@+id/botonVolver"
                             android:textColor="#bab7b7"

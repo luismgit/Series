@@ -6,16 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.maniac.luis.series.Adapters.AdapatadorRecyclerFondos;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class ListaFondos extends AppCompatActivity {
 
@@ -33,11 +32,9 @@ public class ListaFondos extends AppCompatActivity {
         adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("DemoRecView", "Pulsado el elemento " + recyclerView.getChildPosition(view));
                 int posicion=recyclerView.getChildLayoutPosition(view);
                 ImageView fondo = view.findViewById(R.id.fondoImagenSerie);
                 final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale);
-               // myRotation.setRepeatCount(0);
                 myRotation.setDuration(1000);
                 //INICIAMOS LA ANIMACIÓN DEL ICONO
                 fondo.startAnimation(myRotation);

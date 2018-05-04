@@ -110,7 +110,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ENVIAR"
+        android:text="@string/enviar_button"
         android:onClick="signIn"
         android:id="@+id/botonSIGIN"
         android:layout_marginLeft="35dp"
@@ -138,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="He leido y acepto la política de privacidad."
+            android:text="@string/politica_priv_text"
             android:textSize="@dimen/_11sdp"
             android:textColor="#10036c"
             android:clickable="true"

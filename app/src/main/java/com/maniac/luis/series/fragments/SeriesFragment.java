@@ -107,15 +107,12 @@ public class SeriesFragment extends Fragment{
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Log.i("PageChangeListener","onPageScrolled");
 
             }
 
             @Override
             public void onPageSelected(int position) {
-                Log.i("PageChangeListener","onPageSelected -> " + position);
                 if(position==1 && isShowedTuturial){
-                    Log.i("isShowedToturial","position==1 && isShowedTuturial" );
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putBoolean(Common.TUTORIAL_SERIES,false);
                     editor.commit();
@@ -141,7 +138,6 @@ public class SeriesFragment extends Fragment{
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                // Log.i("PageChangeListener","onPageScrollStateChanged");
             }
         });
         rv=vista.findViewById(R.id.recyclerSeries);
@@ -220,7 +216,6 @@ public class SeriesFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
-        Log.i("onCreateOptionsMenu","onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_tab, menu);
         final MenuItem item = menu.findItem(R.id.search);
@@ -230,13 +225,11 @@ public class SeriesFragment extends Fragment{
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("fragmenttt","query submit -> " + query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("fragmenttt","query change -> " + newText);
                 try{
                     List<Series>listaFiltrada=filter(series,newText);
                     adaptadorSeries.setFilter(listaFiltrada);

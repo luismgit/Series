@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,15 +69,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     @Override
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
 
-        if(position==0){
-            Log.i("SeriesViewHolder","ejecuta");
-        }
          serie = series.get(position);
-        /* if(serie.getNombre().length()>16){
-             holder.textViewNombre.setTextSize(17);
-         }else{
-             holder.textViewNombre.setTextSize(20);
-         }*/
         holder.textViewNombre.setText(serie.getNombre());
         Glide.with(mContext)
                 .load(serie.getImagen())
@@ -87,35 +78,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 .into(holder.iconoSerie);
         holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
-
-     /*   DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS_LEIDOS_SERIE).child(ComunicarCurrentUser.getPhoneNumberUser())
-                .child(serie.getNombre()).child(FirebaseReferences.COM_LEIDOS);
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                 Long sinleer= (Long) dataSnapshot.getValue();
-                 Log.i("sinleer","sinleer -> " + sinleer);
-                Log.i("sinleer","sinleer -> " + serie.getNombre());
-                Log.i("sinleer","sinleer -> " + ComunicarCurrentUser.getPhoneNumberUser());
-                try{
-                    if(sinleer==0){
-                        holder.numComentarios.setVisibility(View.INVISIBLE);
-                    }else{
-                        holder.numComentarios.setText(String.valueOf(sinleer));
-                        holder.numComentarios.setVisibility(View.VISIBLE);
-                    }
-                }catch(Exception e){
-                    Log.i("Excepcion","excepcion -> ");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
         holder.setOnclickListener();
 
     }
@@ -168,27 +130,11 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
-           // textComentarios=itemView.findViewById(R.id.textoComentarios);
-           // iconoComentarios=itemView.findViewById(R.id.iconoComentarios);
-           // numComentarios=itemView.findViewById(R.id.numComentarios);
 
         }
 
         public void setOnclickListener(){
             textViewOptions.setOnClickListener(this);
-           /* textComentarios.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                   irAComentarios();
-                }
-
-            });
-            iconoComentarios.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    irAComentarios();
-                }
-            });*/
             iconoSerie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -216,7 +162,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         @Override
         public void onClick(View view) {
             @SuppressLint("RestrictedApi") Context wrapper = new ContextThemeWrapper(context, R.style.ThemeOverlay_MyTheme);
-            Log.i("HOLDER", "pulsado " );
             repetidoFavorito=false;
             PopupMenu popupMenu = new PopupMenu(wrapper, textViewOptions);
             popupMenu.inflate(R.menu.option_menu);
@@ -239,16 +184,12 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 e.printStackTrace();
             }
 
-           /* popupMenu.show();
-            PopupMenu popupMenu = new PopupMenu(context,textViewOptions);
-            popupMenu.inflate(R.menu.option_menu);*/
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()){
                         //EN EL CASO DE QUE SE PULSE AÑADIR A FAVORITOS
                         case R.id.menu_item_favoritos:
-                            Log.i("HOLDER", "pulsado favoritos" );
                             database=FirebaseDatabase.getInstance();
                             rootRef = database.getReference();
 
@@ -259,7 +200,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     suscripciones = dataSnapshot.getValue(Long.class);
-                                    Log.i("HOLDER","likes -> " + suscripciones);
                                     FirebaseDatabase data = FirebaseDatabase.getInstance();
 
                                     //CONSEGUIMOS LA IMAGEN DE AVATAR DE LA SERIE Y COMPROBAMOS QUE ESA SERIE NO LA TENGA YA EL USUARIO EN SUS SUSCRIPCIONES CON repetidoFavorito
@@ -270,8 +210,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                         dataSnapshot.getChildren()){
                                                     Series serie = snapshot.getValue(Series.class);
                                                     if(serie.getNombre().equals(textViewNombre.getText())){
-                                                        Log.i("imagen","imagen -> " + serie.getNombre());
-                                                        Log.i("imagen","imagen -> " + serie.getImagen());
                                                         imagenSuscripcion=serie.getImagen();
                                                         DatabaseReference df = FirebaseDatabase.getInstance().getReference();
                                                         df.child(FirebaseReferences.SUSCRIPCIONES).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -290,7 +228,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                     DatabaseReference dbr=FirebaseDatabase.getInstance().getReference();
                                                                     Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
                                                                             ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
-                                                                    //df.child("suscripciones").child(claveUsuarioActual).setValue(suscripcion);
                                                                     dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
                                                                     suscripciones++;
                                                                     refLikes.setValue(suscripciones);
@@ -397,11 +334,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             context.startActivity(intent);
         }
 
-     /*   private void irAComentarios() {
-           Intent intent = new Intent(context, ComentariosActivity.class);
-           intent.putExtra(Common.NOMBRE_SERIE_COMENTARIOS,textViewNombre.getText().toString());
-           context.startActivity(intent);
-        }*/
 
 
     }

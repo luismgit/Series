@@ -41,7 +41,7 @@
             android:layout_below="@id/nombreContacto"
             android:layout_toRightOf="@id/avatarContacto"
             android:layout_marginLeft="15dp"
-            android:text="Favoritos"
+            android:text="@string/favoritos_info_contacto"
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:textColor="@color/negro"

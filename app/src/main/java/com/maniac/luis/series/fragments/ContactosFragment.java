@@ -1,6 +1,5 @@
 package com.maniac.luis.series.fragments;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +22,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorContactos;
-import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
@@ -87,7 +83,6 @@ public class ContactosFragment extends Fragment {
 
     public ContactosFragment() {
         // Required empty public constructor
-        Log.i("actividades","public ContactosFragment()");
     }
 
     /**
@@ -100,7 +95,6 @@ public class ContactosFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ContactosFragment newInstance(String param1, String param2) {
-        Log.i("actividades","public static ContactosFragment newInstance(String param1, String param2)");
         ContactosFragment fragment = new ContactosFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -112,7 +106,6 @@ public class ContactosFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("actividades","public void onCreate(Bundle savedInstanceState)");
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -125,8 +118,6 @@ public class ContactosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("actividades"," public View onCreateView(LayoutInflater inflater, ViewGroup container,\n" +
-                "                             Bundle savedInstanceState) ");
 
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
         vp = getActivity().findViewById(R.id.container);
@@ -137,7 +128,6 @@ public class ContactosFragment extends Fragment {
         //LE APLICAMOS UN LAYOUT A EL RECYCLERVIEW
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         //GUARDAMOS EL USUARIO ACTUAL
-        //user= ComunicarCurrentUser.getUser();---------------------------------------------
         //GUARDAMOS EL TELEÉFONO DEL USUARIO ACTUAL
         phoneNumberUser = ComunicarCurrentUser.getPhoneNumberUser();
         phoneNumberUser.replaceAll("\\s","");
@@ -167,7 +157,6 @@ public class ContactosFragment extends Fragment {
                 }
 
                 ComunicarContactosPhoneNumber.removeAllPhoneNumbers();
-                Log.i("Carga","empieza la carga");
                 for (DataSnapshot snapshot:
                         dataSnapshot.getChildren() ){
                     Usuario usuario = snapshot.getValue(Usuario.class);
@@ -181,21 +170,17 @@ public class ContactosFragment extends Fragment {
                         }
                     }
                     if(sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true) && usuario.getTelefono().equals("000000000")){
-                        Log.i("mateo","asigna usuario a usuarioMateo");
                         usuarioMateo=usuario;
                     }
                 }
                 if(sinContactos && sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true)){
                     usuarios.add(usuarioMateo);
-                    Log.i("mateo","añade usuarioMateo a la lista de usuarios");
                 }
                 if(sharedPref.getBoolean(Common.TUTORIAL_CONTACTOS,true)){
-                    Log.i("mateo","mostrar el tutorial es true");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putBoolean(Common.TUTORIAL_CONTACTOS,false);
                     editor.commit();
                     if(usuarios.get(0).getTelefono().equals("000000000")){
-                        Log.i("mateo","si el primer usuario es Mateo");
                             showcaseView = new ShowcaseView.Builder(getActivity())
                                     .setTarget(new CustomViewTarget(R.id.showcase_button,-75,0,getActivity()))
                                     .setContentTitle(getString(R.string.contactos_showcase))
@@ -279,9 +264,7 @@ public class ContactosFragment extends Fragment {
                         //SI SE CONECTA ESTABLECEMOS EL NODO 'conectado' A ONLINE,CUANDO SE DESCONECTE LO PASAMOS A OFFLINE
                         if(connected){
                             myConnectionsRef.setValue(FirebaseReferences.ONLINE);
-                           // DatabaseReference con = myConnectionsRef;
                             myConnectionsRef.onDisconnect().setValue(getFecha());
-                            //lastOnlineRef.onDisconnect().setValue(ServerValue.TIMESTAMP);
 
                         }
                     }
@@ -313,11 +296,9 @@ public class ContactosFragment extends Fragment {
     public void loadContactFromTlf() {
         ContentResolver contentResolver=getContext().getContentResolver();
         String [] projeccion=new String[]{ContactsContract.Data.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone.NUMBER};
-        //String [] projeccion=new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.Contacts.DISPLAY_NAME};
         String selectionClause=ContactsContract.Data.MIMETYPE + "='" +
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND " +
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL";
-        //String sortOrder = ContactsContract.Data.DISPLAY_NAME + " ASC";
         Cursor cursor=getContext().getContentResolver().query(ContactsContract.Data.CONTENT_URI,projeccion,selectionClause,null,null);
         while(cursor.moveToNext()){
             String name=cursor.getString(0);
@@ -326,20 +307,11 @@ public class ContactosFragment extends Fragment {
                 phoneNumber=phoneNumber.replaceAll("\\s","");
                 if(phoneNumber.substring(0,3).equals("+34")){
                     phoneNumber=phoneNumber.substring(3,phoneNumber.length());
-                    //Log.i("contactosTlf","numSin+34 -> " + phoneNumber);
 
                 }
-                //nombreContactosTelefono.add(name);
-               // contactosTelefono.add(phoneNumber);
-                Log.i("contactos","Nombre: " + name);
-                Log.i("contactos","Numero: " + phoneNumber);
                 contactos.put(phoneNumber,name);
             }
 
-            //Log.i("contactos","Identificador: " + cursor.getString(0));
-
-
-            //Log.i("contactos","Tipo: " + cursor.getString(3));
         }
         ListaNumerosAgendaTelefonos.setContactos(contactos);
         cursor.close();
@@ -386,7 +358,6 @@ public class ContactosFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
-        Log.i("actividades","onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_tab, menu);
         MenuItem item = menu.findItem(R.id.search);
@@ -396,13 +367,11 @@ public class ContactosFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("fragmenttt","query submit -> " + query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("fragmenttt","query change -> " + newText);
                 try{
                     List<Usuario>listaFiltrada=filter(usuarios,newText);
                     adapter.setFilter(listaFiltrada);

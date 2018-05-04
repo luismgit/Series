@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -85,7 +84,6 @@ public class ComentariosActivity extends AppCompatActivity {
     LinearLayoutManager manager;
     List<String> serie_telefono_suscripciones=new ArrayList<>();
     boolean primeraCargaRv=true;
-    Long sLeer;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -93,7 +91,6 @@ public class ComentariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
         FirebaseDatabase.getInstance().goOnline();
-        Log.i("FONDO","FONDOjj -> " + ComunicarFondoComentarios.getFondo());
         linearLayout=findViewById(R.id.linearLayoutComentarios);
         String fondoComentario=ComunicarFondoComentarios.getFondo();
 
@@ -173,11 +170,6 @@ public class ComentariosActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String nombreSerie= (String) dataSnapshot.getValue();
-               /* if(nombreSerie.length()>=20){
-                    textoSerieComentarios.setTextSize(15);
-                }else{
-                    textoSerieComentarios.setTextSize(20);
-                }*/
                 textoSerieComentarios.setText(nombreSerie);
             }
 
@@ -207,9 +199,6 @@ public class ComentariosActivity extends AppCompatActivity {
         });
 
 
-        /*Drawable dividerDrawable = getResources().getDrawable(R.drawable.dividerdrawable);
-        com.maniac.luis.series.utilidades.DividerItemDecoration dividerItemDecoration = new com.maniac.luis.series.utilidades.DividerItemDecoration(dividerDrawable);
-        rv.addItemDecoration(dividerItemDecoration);*/
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -277,7 +266,6 @@ public class ComentariosActivity extends AppCompatActivity {
                     List<String> numeroContactos=new ArrayList<>();
                     numeroContactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
                     for (int i = 0; i < numeroContactos.size(); i++) {
-                        Log.i("liked","numeros -> " + numeroContactos.get(i));
                         liked.put(numeroContactos.get(i),false);
                     }
                     liked.put("prueba",false);
@@ -299,7 +287,6 @@ public class ComentariosActivity extends AppCompatActivity {
                             for(DataSnapshot snapshot:
                                     dataSnapshot.getChildren()){
                                 final String phoneNumber = snapshot.getKey();
-                                Log.i("snapshot.getKey()",phoneNumber);
 
                                 if(!phoneNumber.equals(ComunicarCurrentUser.getPhoneNumberUser()) && contactos.contains(phoneNumber) &&
                                         serie_telefono_suscripciones.contains(phoneNumber+"_"+nombreSerie)){
@@ -309,8 +296,6 @@ public class ComentariosActivity extends AppCompatActivity {
                                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Log.i("com_leidos","phone -> " + phoneNumber);
-                                            Log.i("com_leidos","serie -> " + nombreSerie);
                                             Long sinLeer= (Long) dataSnapshot.getValue();
                                             sinLeer++;
                                             ref.setValue(sinLeer);
@@ -321,8 +306,6 @@ public class ComentariosActivity extends AppCompatActivity {
                                                            for(DataSnapshot snapshot1:
                                                                    dataSnapshot.getChildren()){
                                                                Usuario user = snapshot1.getValue(Usuario.class);
-                                                               Log.i("snapshot1.getValue",user.getToken());
-                                                               Log.i("snapshot1.getValue",user.getNick());
                                                            }
                                                        }
 

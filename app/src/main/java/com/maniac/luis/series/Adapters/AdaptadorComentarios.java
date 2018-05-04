@@ -81,7 +81,6 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                 .centerCrop()
                 .fitCenter()
                 .into(holder.avatarComentario);
-       // String texto=contacto + ": " + comentario.getComentario();
         holder.textUserName.setText(contacto);
         if(comentario.getNumLikes()!=0){
             holder.numeroMeGustan.setText("("+comentario.getNumLikes()+")");
@@ -90,9 +89,6 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
         }
         holder.fechaComentario.setText(getFechaComentarioFormateada(comentario.getFecha()));
 
-        //Spannable spannable = new SpannableString(texto);
-       // spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);
         holder.editTextComentario.setText(comentario.getComentario());
         Map<String,Boolean> liked = comentario.getLiked();
         Boolean isLiked=liked.get(ComunicarCurrentUser.getPhoneNumberUser());
@@ -103,10 +99,6 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
 
     private void iniLayoutUser(ComentariosViewHolderUser holder, int position) {
         Comentario comentario= comentarios.get(position);
-        /*String texto="Yo: " + comentario.getComentario();
-        Spannable spannable = new SpannableString(texto);
-        spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0,texto.length()-comentario.getComentario().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        holder.editTextComentario.setText(spannable,TextView.BufferType.SPANNABLE);*/
         if(comentario.getNumLikes()!=0){
             holder.numMeGustan.setText("("+comentario.getNumLikes()+")");
         }else{
