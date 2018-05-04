@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="15dp"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textSize="@dimen/_18sdp"
             android:layout_marginTop="5dp"
             android:textColor="@color/negro"
             />
@@ -42,16 +42,18 @@
             android:layout_toRightOf="@id/avatarContacto"
             android:layout_marginLeft="15dp"
             android:text="Favoritos"
-            android:textSize="22dp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
-            android:textColor="@color/negro"/>
+            android:textColor="@color/negro"
+            android:id="@+id/textoFavoritos"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_below="@id/avatarContacto"
+            android:layout_below="@id/textoFavoritos"
             android:src="@drawable/separador"
-            android:id="@+id/separador"/>
+            android:id="@+id/separador"
+            android:layout_marginTop="15dp"/>
 
         <TextView
             android:layout_width="match_parent"

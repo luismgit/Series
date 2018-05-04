@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_verif_num_telef"
-            android:textSize="20dp"
+            android:textSize="@dimen/_17sdp"
             android:textColor="#0b0b0b"
             android:textStyle="bold"
             android:paddingBottom="7dp"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:textColor="#050505"
-        android:textSize="15dp"
+        android:textSize="@dimen/_13sdp"
         android:text="@string/text_msg_autent_aviso"
         android:textStyle="bold"/>
 
@@ -43,7 +43,7 @@
         android:paddingHorizontal="20dp"
         android:paddingBottom="10dp"
         android:textColor="#050505"
-        android:textSize="15dp"
+        android:textSize="@dimen/_13sdp"
         android:text="@string/text_msg_autent_num_tel"
         android:textStyle="bold"
         />
@@ -62,7 +62,8 @@
             android:inputType="phone"
            android:layout_marginRight="10dp"
             android:textStyle="bold"
-            android:textColor="#050505"/>
+            android:textColor="#050505"
+            android:textSize="@dimen/_16sdp"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +74,7 @@
             android:background="@drawable/degradado_boton"
             android:layout_marginLeft="10dp"
             android:textColor="#bab7b7"
-            android:textSize="15sp"
+            android:textSize="@dimen/_15sdp"
             />
 
     </LinearLayout>
@@ -83,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#050505"
-        android:textSize="15dp"
+        android:textSize="@dimen/_13sdp"
         android:paddingHorizontal="20dp"
         android:text="@string/text_msg_autent_aviso2"
         android:paddingVertical="9dp"
@@ -103,6 +104,7 @@
         android:id="@+id/etxtPhoneCode"
         android:textStyle="bold"
         android:textColor="#050505"
+        android:textSize="@dimen/_16sdp"
         />
 
     <Button
@@ -114,7 +116,8 @@
         android:layout_marginLeft="35dp"
         android:background="@drawable/degradado_boton"
         android:textColor="#bab7b7"
-        android:textSize="15sp"
+        android:textSize="@dimen/_15sdp"
+        android:paddingHorizontal="3dp"
         />
     </LinearLayout>
 
@@ -136,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="He leido y acepto la política de privacidad."
-            android:textSize="12dp"
+            android:textSize="@dimen/_11sdp"
             android:textColor="#10036c"
             android:clickable="true"
             android:shadowColor="#000000"
@@ -163,7 +166,7 @@
         android:text="@string/texto_cargando"
         android:layout_gravity="center"
         android:textColor="#07ff6e"
-        android:textSize="17sp"
+        android:textSize="@dimen/_15sdp"
         android:layout_marginBottom="15dp"
         android:visibility="gone"
         android:id="@+id/mensajeCargando"/>
@@ -173,7 +176,7 @@
             android:layout_height="wrap_content"
             android:text="@string/texto_ayuda"
             android:textColor="#000000"
-            android:textSize="17dp"
+            android:textSize="@dimen/_15sdp"
             android:paddingHorizontal="16dp"
             android:layout_gravity="center"
             android:visibility="gone"
@@ -182,7 +185,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22dp"
+            android:textSize="@dimen/_17sdp"
             android:textColor="#10036c"
             android:gravity="center"
             android:clickable="true"

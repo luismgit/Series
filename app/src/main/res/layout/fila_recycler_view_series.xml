@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
@@ -21,12 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nombreSerie"
-        android:text="American Horror Story"
+        android:text="Cazadores de sombras"
         android:layout_toRightOf="@id/imagenSerie"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="15dp"
         android:textStyle="bold"
-        android:textSize="@dimen/_13sdp"
+        android:textSize="@dimen/_12sdp"
         android:textColor="@color/negro"
         />
 
@@ -69,7 +69,7 @@
         android:layout_toRightOf="@id/imagenSerie"
         android:text="@string/likes"
         android:layout_marginLeft="16dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold"
         android:id="@+id/likesText"
         android:textColor="@color/negro"/>
@@ -80,11 +80,17 @@
         android:layout_below="@id/ratingBar"
         android:layout_toRightOf="@id/likesText"
         android:text="8"
-        android:textSize="20sp"
+        android:textSize="@dimen/_13sdp"
         android:layout_marginLeft="5dp"
         android:id="@+id/numLikes"
         android:textStyle="bold"
         android:textColor="@color/negro"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="hola"
+        android:layout_below="@id/likesText"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="match_parent"

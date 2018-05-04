@@ -3,7 +3,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:paddingTop="10dp"
     android:paddingHorizontal="10dp"
     android:paddingBottom="5dp"
@@ -16,7 +16,6 @@
         android:layout_height="90dp"
         android:id="@+id/avatarImagen"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/a100"
         />
 
     <TextView
@@ -28,7 +27,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:textStyle="bold"
-        android:textSize="17sp"
+        android:textSize="@dimen/_13sdp"
         android:layout_marginTop="5dp"
         android:textColor="@color/negro"
         />
@@ -42,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/estado"
-        android:text="ult. hoy a las 29/04 22:39"
+        android:text="ult. vez hoy a las 22:39"
         android:textSize="@dimen/_13sdp"
         android:layout_below="@id/nombre"
         android:layout_toRightOf="@id/avatarImagen"
@@ -60,6 +59,13 @@
         android:id="@+id/imagenMedalla"
         android:layout_marginRight="2dp"
         android:src="@drawable/bronce_mod"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/avatarImagen"
+        android:text="hola"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

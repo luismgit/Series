@@ -35,14 +35,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textoSerieComentarios"
-            android:text="Breaking bad"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="15dp"
+            android:text="Cazadores de sombras"
+            android:layout_toRightOf="@id/imagenSerieComentarios"
             android:layout_marginTop="15dp"
-            android:textSize="20sp"
+            android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
-            android:layout_marginRight="20dp"
-            android:textColor="@color/negro"/>
+            android:textColor="@color/negro"
+            android:layout_marginLeft="5dp"/>
 
 
         <TextView
@@ -77,7 +76,7 @@
             android:text="@string/esta_serie_no_tiene_comentarios_se_el_primero_en_comentarla"
             android:id="@+id/mensajeSinComentarios"
             android:layout_centerInParent="true"
-            android:textSize="24sp"
+            android:textSize="@dimen/_24sdp"
             android:textAlignment="center"
             android:gravity="center_vertical"
             android:paddingHorizontal="15dp"
@@ -116,6 +115,7 @@
             android:id="@+id/nuevoComentario"
             android:layout_marginRight="25dp"
             android:textColor="@color/negro"
+            android:textSize="@dimen/_15sdp"
             />
         <ImageView
             android:layout_width="30dp"

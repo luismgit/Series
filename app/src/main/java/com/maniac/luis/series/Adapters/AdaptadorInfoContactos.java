@@ -16,15 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.maniac.luis.series.Objetos.Series;
-import com.maniac.luis.series.Objetos.Suscripcion;
-import com.maniac.luis.series.R;
-import com.maniac.luis.series.references.FirebaseReferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.Objetos.Suscripcion;
+import com.maniac.luis.series.R;
+import com.maniac.luis.series.references.FirebaseReferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +49,11 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     @Override
     public void onBindViewHolder(ContactosViewHolder holder, int position) {
         Suscripcion suscripcion = suscripcionesContactos.get(position);
-        if(suscripcion.getSerie().length()>21){
+        /*if(suscripcion.getSerie().length()>21){
             holder.nombreSerie.setTextSize(18);
         }else{
             holder.nombreSerie.setTextSize(20);
-        }
+        }*/
         holder.nombreSerie.setText(suscripcion.getSerie());
        // holder.avatarSerie.setImageResource(iconos[suscripcion.getImagen()]);
         Glide.with(contexto)

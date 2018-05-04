@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Email"
             android:layout_below="@id/fotoPerfil"
-            android:textSize="25sp"
+            android:textSize="@dimen/_23sdp"
             android:id="@+id/textoEmail"
             android:textColor="#ffffff"/>
         <TextView
@@ -60,6 +60,8 @@
             android:textColorHighlight="#ffffff"
             android:textColorLink="#ffffff"
             android:shadowColor="#ffffff"
+            android:textSize="@dimen/_14sdp"
+            android:text="charocastromuoz@gmail.com"
             />
 
         <LinearLayout
@@ -81,9 +83,9 @@
                             android:background="@drawable/botones_perfil"
                             android:id="@+id/botonModificar"
                             android:textColor="#bab7b7"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/_17sdp"
                             android:onClick="modificarPerfil"
-                            android:paddingHorizontal="10dp"
+                            android:paddingHorizontal="12dp"
                             />
                         <Button
                             android:layout_width="wrap_content"
@@ -92,10 +94,10 @@
                             android:background="@drawable/botones_perfil"
                             android:id="@+id/botonVolver"
                             android:textColor="#bab7b7"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/_17sdp"
                             android:onClick="volver"
                             android:layout_alignParentRight="true"
-                            android:paddingHorizontal="5dp"
+                            android:paddingHorizontal="10dp"
                             />
 
 

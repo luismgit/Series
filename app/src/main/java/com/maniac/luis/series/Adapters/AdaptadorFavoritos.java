@@ -133,11 +133,11 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             });
         }
         final Suscripcion suscripcion = suscripciones.get(position);
-        if(suscripcion.getSerie().length()>16){
+       /* if(suscripcion.getSerie().length()>16){
             holder.textViewNombre.setTextSize(17);
         }else{
             holder.textViewNombre.setTextSize(20);
-        }
+        }*/
         holder.textViewNombre.setText(suscripcion.getSerie());
         Glide.with(mContext)
                 .load(suscripcion.getImagen())

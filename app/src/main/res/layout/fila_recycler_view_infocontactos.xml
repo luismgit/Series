@@ -29,21 +29,33 @@
         android:layout_toEndOf="@+id/imagenSerieContactosInfo"
         android:layout_toRightOf="@+id/imagenSerieContactosInfo"
         android:text="Breaking Bad"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/negro"/>
 
-    <ProgressBar
-        android:id="@+id/progressBarNota"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="105dp"
-        android:layout_height="105dp"
-        android:layout_below="@+id/nombreSerieFavoritos"
-        android:layout_toRightOf="@id/imagenSerieContactosInfo"
-        android:indeterminate="false"
-        android:max="5"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        android:layout_marginTop="5dp"/>
+   <ProgressBar
+       android:id="@+id/progressBarNota"
+       style="?android:attr/progressBarStyleHorizontal"
+       android:layout_width="105dp"
+       android:layout_height="105dp"
+        android:layout_centerInParent="true"
+       android:indeterminate="false"
+       android:max="5"
+       android:progressDrawable="@drawable/circular_progress_bar" />
+
+   <TextView
+       android:id="@+id/textViewNota"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:shadowColor="#d6d5d4"
+       android:shadowDx="3"
+       android:shadowDy="2"
+       android:shadowRadius="1.8"
+       android:text="8.5"
+       android:layout_centerInParent="true"
+       android:textColor="#000000"
+       android:textSize="25sp"
+       android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -52,21 +64,7 @@
         android:background="#d4d4d4"
         android:id="@+id/textView" />
 
-    <TextView
-        android:id="@+id/textViewNota"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/imagenSerieContactosInfo"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="67dp"
-        android:shadowColor="#d6d5d4"
-        android:shadowDx="3"
-        android:shadowDy="2"
-        android:shadowRadius="1.8"
-        android:text="8.5"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+
 
     <ImageView
         android:id="@+id/filmaffinityImage"
@@ -75,18 +73,9 @@
         android:layout_marginTop="50dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:src="@drawable/film" />
+        android:src="@drawable/film"
+        />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/filmaffinityImage"
-        android:layout_alignBaseline="@id/textViewNota"
-        android:layout_marginRight="10dp"
-        android:text="Ir a"
-        android:textColor="#39517b"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+
 
 </RelativeLayout>

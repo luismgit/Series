@@ -25,6 +25,7 @@
         android:textColor="@color/negro"
         android:textStyle="bold"
         android:layout_marginHorizontal="20dp"
+        android:textSize="@dimen/_15sdp"
         />
 
 </FrameLayout>

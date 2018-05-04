@@ -43,7 +43,6 @@ public class AdapatadorRecyclerFondos extends RecyclerView.Adapter<AdapatadorRec
 
         Glide.with(contexto)
                 .load(listaFondos.get(position))
-                .error(R.drawable.sin_conexion)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

@@ -59,11 +59,11 @@ private int [] avatares;
             contact=contact+"...";
         }*/
         String contact = getIntent().getStringExtra(Common.CONTACTO);
-        if(contact.length()>20){
+       /* if(contact.length()>20){
             nombreUsuario.setTextSize(18);
         }else{
             nombreUsuario.setTextSize(22);
-        }
+        }*/
         nombreUsuario.setText(contact);
 
         //LE ASIGNAMOS SU AVATAR
@@ -73,7 +73,6 @@ private int [] avatares;
                 .load(imagen)
                 .fitCenter()
                 .centerCrop()
-                .error(R.drawable.sin_conexion)
                 .into(avatarUsuario);
         imagenContacto.setOnClickListener(new View.OnClickListener() {
             @Override

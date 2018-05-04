@@ -17,7 +17,8 @@
         android:hint="@string/hint_nick"
         android:textColorHint="#cacaca"
         android:inputType="textPersonName"
-        android:textColor="#cacaca"/>
+        android:textColor="#cacaca"
+        android:textSize="@dimen/_15sdp"/>
 
     <EditText
         android:id="@+id/editTextCorreo"
@@ -27,7 +28,8 @@
         android:inputType="textEmailAddress"
         android:layout_marginVertical="25dp"
         android:textColorHint="#cacaca"
-        android:textColor="#cacaca"/>
+        android:textColor="#cacaca"
+        android:textSize="@dimen/_15sdp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -37,7 +39,8 @@
         android:id="@+id/botonAvatar"
         android:textColor="#bab7b7"
         android:background="@drawable/degradado_boton"
-        android:textSize="17sp"
+        android:textSize="@dimen/_17sdp"
+        android:paddingHorizontal="@dimen/_5sdp"
         />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,7 +67,7 @@
         android:inputType=""
         android:id="@+id/botonRegistro"
         android:textColor="#bab7b7"
-        android:textSize="17sp"/>
+        android:textSize="@dimen/_17sdp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -72,7 +75,7 @@
         android:id="@+id/textViewError"
         android:textAlignment="center"
         android:textColor="#fafafa"
-        android:textSize="18dp"
+        android:textSize="@dimen/_17sdp"
         android:layout_marginTop="10dp"/>
 
     <ProgressBar

@@ -17,7 +17,8 @@
         android:layout_marginBottom="4dp"
         android:hint="Email"
         android:textColor="@color/negro"
-        android:textColorHint="@color/negro"/>
+        android:textColorHint="@color/negro"
+        android:textSize="@dimen/_14sdp"/>
 
 
 
