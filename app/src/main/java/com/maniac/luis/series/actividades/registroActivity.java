@@ -96,7 +96,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         loadContactFromTlf();
         avatarIcono=findViewById(R.id.avatarIcono);
         Glide.with(this)
-                .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
+                //.load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88")
+                .load("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2FIcono-Recuperado_bordes_negros.png?alt=media&token=9087cc44-c38c-42d9-849c-e5b4d23b9073")
                 .into(avatarIcono);
         avatarIcono.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,7 +346,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                            });
 
                          }else{
-                             enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2Fseries_ic.png?alt=media&token=feb3ff8f-bd8a-4848-8a42-2f4f6b72cb88");
+                             enlaceFotoFirebasde= Uri.parse("https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2FIcono-Recuperado_bordes_negros.png?alt=media&token=9087cc44-c38c-42d9-849c-e5b4d23b9073");
                              registro();
                          }
                          avatarIcono.setBackgroundResource(R.drawable.degradado_registro);

@@ -7,16 +7,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +28,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.maniac.luis.series.BuildConfig;
-import com.maniac.luis.series.R;
-import com.maniac.luis.series.utilidades.Common;
-import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
-import com.maniac.luis.series.references.FirebaseReferences;
-import com.maniac.luis.series.Objetos.Usuario;
-import com.maniac.luis.series.utilidades.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -49,6 +41,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.BuildConfig;
+import com.maniac.luis.series.Objetos.Usuario;
+import com.maniac.luis.series.R;
+import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,7 +210,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             return;
         }
         if(!checkBoxPolitica.isChecked()){
-            Toast.makeText(AutentificacionActivity.this,"Debe aceptar la pólitica de privacidad para continuar.",Toast.LENGTH_LONG).show();
+            Toast.makeText(AutentificacionActivity.this,"Debe aceptar la política de privacidad para continuar.",Toast.LENGTH_LONG).show();
             return;
         }
         //HACEMOS EL PROGESSBAR VISIBLE Y EVITAMOS EL USUARIO PUEDA VOLVER A PULSAR LOS BOTONES DEL LAYOUT
