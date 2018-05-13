@@ -141,7 +141,6 @@ public class ContactosFragment extends Fragment {
         adapter=new AdaptadorContactos(usuarios,this.getContext(),vp);
         //LE APLICAMOS EL ADAPTADOR AL RECYCLERVIEW
         rv.setAdapter(adapter);
-
         sharedPref = getActivity().getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
 
         //LISTENER QUE COTEJA QUE NÚMEROS DE LA AGENDA DEL USUARIO COINCIDEN CON LOS DE NUESTRA BB.DD Y LOS AÑASE AL ARRAYLIST USUARIOS

@@ -62,6 +62,7 @@ public class FavoritosFragment extends Fragment {
     boolean isShowedTuturial;
     SharedPreferences sharedPref;
     TextView mensajeSinFavoritos;
+    List<Suscripcion>listaFiltrada;
 
     public FavoritosFragment() {
         // Required empty public constructor
@@ -129,6 +130,7 @@ public class FavoritosFragment extends Fragment {
                 }else{
                     mensajeSinFavoritos.setVisibility(View.GONE);
                 }
+                adaptadorFavoritos.setFilter(suscripciones);
                 adaptadorFavoritos.notifyDataSetChanged();
             }
 
@@ -137,7 +139,11 @@ public class FavoritosFragment extends Fragment {
 
             }
         });
+
+
         return vista;
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -196,7 +202,7 @@ public class FavoritosFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 try{
-                    List<Suscripcion>listaFiltrada=filter(suscripciones,newText);
+                    listaFiltrada=filter(suscripciones,newText);
                     adaptadorFavoritos.setFilter(listaFiltrada);
                 }catch (Exception e){
 

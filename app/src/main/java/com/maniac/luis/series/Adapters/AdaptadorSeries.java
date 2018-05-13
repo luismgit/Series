@@ -59,10 +59,14 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
     }
 
+    public List<Series> getSeries(){
+        return this.series;
+    }
+
     @Override
     public SeriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_series,parent,false);
-        SeriesViewHolder holder = new SeriesViewHolder(v,series,vp);
+        SeriesViewHolder holder = new SeriesViewHolder(v,series,vp,this);
         return holder;
     }
 
@@ -116,8 +120,9 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         Context contexto;
         List<Series> series=new ArrayList<>();
         ViewPager vp;
+        AdaptadorSeries adaptadorSeries;
 
-        public SeriesViewHolder(View itemView,List series,ViewPager vp) {
+        public SeriesViewHolder(View itemView,List series,ViewPager vp,AdaptadorSeries adaptadorSeries) {
             super(itemView);
             context=itemView.getContext();
             this.series=series;
@@ -130,7 +135,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
-
+            this.adaptadorSeries=adaptadorSeries;
         }
 
         public void setOnclickListener(){
@@ -143,7 +148,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                     miDialogo.setContentView(R.layout.image_pop_up);
                     imagen=miDialogo.findViewById(R.id.imagenAmpliada);
                     int position = getAdapterPosition();
-                    Series serie = series.get(position);
+                    Series serie = adaptadorSeries.getSeries().get(position);
                     Glide.with(context)
                             .load(serie.getImagen())
                             .fitCenter()

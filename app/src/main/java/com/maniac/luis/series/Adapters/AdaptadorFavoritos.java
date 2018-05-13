@@ -63,6 +63,10 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         this.vp=vp;
     }
 
+    public List<Suscripcion> getSuscripciones(){
+        return this.suscripciones;
+    }
+
     public void mostrarSegundoShowCase(){
         showcaseView=new ShowcaseView.Builder((Activity)mContext)
                 .setTarget(new CustomViewTarget(R.id.iconComentarios, 100, 0, (Activity) mContext))
@@ -83,7 +87,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
     @Override
     public FavoritosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_favoritos,parent,false);
-        FavoritosViewHolder holder = new FavoritosViewHolder(v,suscripciones);
+        FavoritosViewHolder holder = new FavoritosViewHolder(v,suscripciones,this);
         return holder;
     }
 
@@ -195,8 +199,9 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         ImageView iconoComentarios;
         TextView numComentarios;
         TextView textComentarios;
+        AdaptadorFavoritos adaptadorFavoritos;
 
-        public FavoritosViewHolder(View itemView,List suscripciones) {
+        public FavoritosViewHolder(View itemView,List suscripciones,AdaptadorFavoritos adaptadorFavoritos) {
             super(itemView);
             context=itemView.getContext();
             imagenSerie=itemView.findViewById(R.id.imagenSerieFavoritos);
@@ -208,6 +213,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             numComentarios=itemView.findViewById(R.id.numerComentarios);
             textComentarios=itemView.findViewById(R.id.textComentarios);
             this.suscripciones=suscripciones;
+            this.adaptadorFavoritos=adaptadorFavoritos;
         }
 
 
@@ -235,7 +241,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                     miDialogo.setContentView(R.layout.image_pop_up);
                     imagen=miDialogo.findViewById(R.id.imagenAmpliada);
                     int position = getAdapterPosition();
-                    Suscripcion suscripcion = suscripciones.get(position);
+                    Suscripcion suscripcion = adaptadorFavoritos.getSuscripciones().get(position);
                     Glide.with(context)
                             .load(suscripcion.getImagen())
                             .fitCenter()

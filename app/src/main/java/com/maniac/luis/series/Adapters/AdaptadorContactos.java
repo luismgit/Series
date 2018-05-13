@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -47,9 +48,14 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
     @Override
     public UsuariosviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_contactos,parent,false);
-        UsuariosviewHolder holder = new UsuariosviewHolder(v,context,usuarios);
+        UsuariosviewHolder holder = new UsuariosviewHolder(v,context,usuarios,this);
         return holder;
     }
+
+    public List<Usuario> getUsuarios(){
+        return this.usuarios;
+    }
+
 
 
 
@@ -104,8 +110,10 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         List<Usuario> usuarios = new ArrayList<>();
         Context context;
         Dialog miDialogo;
+        RelativeLayout vista;
+        AdaptadorContactos adaptadorContactos;
 
-        public UsuariosviewHolder(View itemView, Context context, List usuarios) {
+        public UsuariosviewHolder(View itemView, Context context, List usuarios,AdaptadorContactos adaptadorContactos) {
             super(itemView);
             this.usuarios=usuarios;
             this.context=context;
@@ -114,7 +122,11 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             avatar=itemView.findViewById(R.id.avatarImagen);
             estado=itemView.findViewById(R.id.estado);
             medalla=itemView.findViewById(R.id.imagenMedalla);
+            vista=itemView.findViewById(R.id.relativeLayoutFavoritos);
+            this.adaptadorContactos=adaptadorContactos;
         }
+
+
 
         public void setOnclickListener(){
             avatar.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +137,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
                     miDialogo.setContentView(R.layout.image_pop_up);
                     imagen=miDialogo.findViewById(R.id.imagenAmpliada);
                     int position = getAdapterPosition();
-                    Usuario usuario = usuarios.get(position);
+                    Usuario usuario = adaptadorContactos.getUsuarios().get(position);
                     Glide.with(context)
                             .load(usuario.getAvatar())
                             .fitCenter()
@@ -144,7 +156,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Usuario usuario = this.usuarios.get(position);
+            Usuario usuario = adaptadorContactos.getUsuarios().get(position);
             Intent intent=new Intent(context,InfoContactoActivity.class);
             intent.putExtra(Common.CONTACTO,usuario.getNick());
             intent.putExtra(Common.AVATAR,usuario.getAvatar());
@@ -152,6 +164,7 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
             this.context.startActivity(intent);
         }
     }
+
 
     private String getMensajeUltimaConexion(String fechaConexion) {
         String fechaActual=getFecha();
