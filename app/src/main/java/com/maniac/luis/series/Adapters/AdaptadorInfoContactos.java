@@ -49,9 +49,21 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     public void onBindViewHolder(ContactosViewHolder holder, int position) {
         Suscripcion suscripcion = suscripcionesContactos.get(position);
         holder.nombreSerie.setText(suscripcion.getSerie());
-        Glide.with(contexto)
-                .load(suscripcion.getImagen())
-                .into(holder.avatarSerie);
+        String imagen = suscripcion.getImagen();
+
+        if(imagen.contains("null")){
+            Glide.with(contexto)
+                    .load(R.drawable.series_back)
+                    .fitCenter()
+                    .centerCrop()
+                    .into(holder.avatarSerie);
+        }else{
+            Glide.with(contexto)
+                    .load(imagen)
+                    .fitCenter()
+                    .centerCrop()
+                    .into(holder.avatarSerie);
+        }
         //AL TEXTVIEW NOTA LE APLICAMOS LA NOTA QUE EL USUARIO ELEGIDO LE HA PUESTO SOBRE 10
         if(suscripcion.getVotada().equals("si")){
             float notaSobreDiez=(suscripcion.getEstrellasUsuario()*10)/5;

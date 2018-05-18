@@ -76,7 +76,7 @@
     <string name="texto_ayuda">En caso de problemas en el registro pulse</string>
     <string name="cambiar_fondo">Cambiar fondo</string>
     <string name="a_adir_a_favoritos">Añadir a favoritos</string>
-    <string name="ir_a_filmaffinity">Ir a Filmaffinity</string>
+    <string name="ir_a_filmaffinity">Ir a MOVIEDB</string>
     <string name="sin_valorar">Sin valorar</string>
     <string name="default_notification_channel_id">Channel Name</string>
     <string name="perfil">Perfil</string>
@@ -104,6 +104,11 @@
     <string name="comentarios_text_icon">Comentarios</string>
     <string name="buscar">Buscar</string>
     <string name="eliminar_de_favoritos">Eliminar de favoritos</string>
+    <string name="compartir">Compartir</string>
+    <string name="unete">Únete a mi comunidad de Series Maníacos,</string>
+    <string name="te_recomiendo">Te recomiendo esta serie:</string>
+    <string name="descubre_mas_en">Descubre más en</string>
+    <string name="comparte_con">Comparte con</string>
 
 
 </resources>

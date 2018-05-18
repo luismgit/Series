@@ -30,7 +30,7 @@
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         android:textColor="@color/negro"
-
+        android:maxEms="10"
         />
 
 
@@ -74,7 +74,7 @@
         android:textStyle="bold"
         android:layout_below="@id/imagenSerieFavoritos"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="22dp"
         android:layout_marginRight="5dp"
         android:textColor="@color/negro"/>
 
@@ -99,7 +99,7 @@
         app:rippleColor="@android:color/background_dark"
         android:clickable="true"
         android:id="@+id/botonVoto"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="9dp"
         />
 
  <ImageView
@@ -108,7 +108,7 @@
      android:layout_toLeftOf="@id/textComentarios"
      android:layout_below="@+id/imagenSerieFavoritos"
      android:layout_marginLeft="30dp"
-     android:layout_marginTop="7dp"
+     android:layout_marginTop="11dp"
      android:src="@drawable/comment_edit"
      android:id="@+id/iconComentarios"
 
@@ -119,7 +119,7 @@
      android:layout_below="@id/imagenSerieFavoritos"
      android:layout_alignParentRight="true"
      android:layout_marginRight="23dp"
-     android:layout_marginTop="12dp"
+     android:layout_marginTop="16dp"
      android:text="@string/comentarios_text_icon"
      android:textStyle="bold"
      android:id="@+id/textComentarios"
@@ -135,7 +135,17 @@
      android:textColor="#FFF"
      android:textSize="13sp"
      android:textStyle="bold"
-     android:background="@drawable/circulo_num_comentarios"/>
+     android:background="@drawable/circulo_num_comentarios"
+     android:layout_marginTop="4dp"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progressFavoritos"
+        android:visibility="invisible"
+        android:indeterminate="false"
+        android:max="100"/>
 
 
 

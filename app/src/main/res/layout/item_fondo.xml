@@ -12,7 +12,7 @@
         android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/film"
+        android:src="@drawable/logo_tmdb"
          />
     <ProgressBar
         android:layout_width="match_parent"

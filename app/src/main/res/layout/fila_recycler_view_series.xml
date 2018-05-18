@@ -8,7 +8,14 @@
     android:paddingTop="10dp"
     android:id="@+id/relativeLayout"
 >
-    
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:id="@+id/imagenSerie2"
+        android:src="@drawable/series_back"
+        android:visibility="gone"
+
+        />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="110dp"
@@ -17,6 +24,9 @@
         android:layout_alignParentLeft="true"
         android:src="@drawable/series_back"
         />
+
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +38,7 @@
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         android:textColor="@color/negro"
+        android:maxEms="10"
         />
 
 
@@ -44,6 +55,7 @@
         android:layout_alignParentRight="true"
         android:id="@+id/textViewOptionsDigit"
         android:textColor="@color/negro"
+        android:layout_marginLeft="1dp"
         />
 
     <RatingBar

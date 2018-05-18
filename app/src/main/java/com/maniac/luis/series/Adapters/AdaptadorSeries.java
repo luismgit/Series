@@ -6,9 +6,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
@@ -37,6 +41,8 @@ import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -74,12 +80,36 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     public void onBindViewHolder(final SeriesViewHolder holder, int position) {
 
          serie = series.get(position);
-        holder.textViewNombre.setText(serie.getNombre());
-        Glide.with(mContext)
-                .load(serie.getImagen())
-                .fitCenter()
-                .centerCrop()
-                .into(holder.iconoSerie);
+         String nombreSerie = serie.getNombre();
+        /* if(nombreSerie.length()>=26){
+             nombreSerie=nombreSerie.substring(0,26) + Html.fromHtml("<br />") + nombreSerie.substring(26,nombreSerie.length());
+         }*/
+        holder.textViewNombre.setText(nombreSerie);
+         String imagen = serie.getImagen();
+         if(imagen.contains("null")){
+             Glide.with(mContext)
+                     .load(R.drawable.series_back)
+                     .fitCenter()
+                     .centerCrop()
+                     .into(holder.iconoSerie);
+             Glide.with(mContext)
+                     .load(R.drawable.series_back)
+                     .fitCenter()
+                     .centerCrop()
+                     .into(holder.iconoSerie2);
+         }else{
+             Glide.with(mContext)
+                     .load(serie.getImagen())
+                     .fitCenter()
+                     .centerCrop()
+                     .into(holder.iconoSerie);
+             Glide.with(mContext)
+                     .load(serie.getImagen())
+                     .fitCenter()
+                     .centerCrop()
+                     .into(holder.iconoSerie2);
+         }
+
         holder.numLikes.setText("" + serie.getLikes());
         holder.ratingBar.setRating(serie.getEstrellas());
         holder.setOnclickListener();
@@ -101,6 +131,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         RatingBar ratingBar;
         TextView textViewNombre;
         ImageView iconoSerie;
+        ImageView iconoSerie2;
         TextView numLikes;
         TextView textViewOptions;
         String claveUsuarioActual;
@@ -131,11 +162,14 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
             numLikes=itemView.findViewById(R.id.numLikes);
             iconoSerie=itemView.findViewById(R.id.imagenSerie);
+            iconoSerie2=itemView.findViewById(R.id.imagenSerie2);
             textViewOptions=itemView.findViewById(R.id.textViewOptionsDigit);
             ratingBar=itemView.findViewById(R.id.ratingBar);
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
             this.adaptadorSeries=adaptadorSeries;
+            //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+           // StrictMode.setVmPolicy(builder.build());
         }
 
         public void setOnclickListener(){
@@ -193,12 +227,20 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()){
+
+                        case R.id.menu_item_share:
+
+                           new MiAsync().execute();
+
+                            break;
+
                         //EN EL CASO DE QUE SE PULSE AÑADIR A FAVORITOS
                         case R.id.menu_item_favoritos:
                             database=FirebaseDatabase.getInstance();
                             rootRef = database.getReference();
 
                             //CREAMOS UNA REFERENCIA AL NODO LIKES DE LA SERIE DE LA VISTA SELECCIONADA
+
                             refLikes = rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.LIKES_SERIE);
                             refLikes.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -339,6 +381,63 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             context.startActivity(intent);
         }
 
+
+
+
+
+        public class MiAsync extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected void onPreExecute() {
+                iconoSerie2.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Bitmap bitmap =getBitmapFromView(iconoSerie2);
+                try {
+                    File file = new File(context.getExternalCacheDir(),"logicchip.png");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+                    final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                    intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.te_recomiendo) + " " + textViewNombre.getText().toString()+"." + " "
+                            + context.getString(R.string.descubre_mas_en) + " " + Common.URL_APP );
+                    intent.setType("image/png");
+                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.comparte_con)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
+        private Bitmap getBitmapFromView(View view) {
+            Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(returnedBitmap);
+            Drawable bgDrawable =view.getBackground();
+            if (bgDrawable!=null) {
+                //has background drawable, then draw it on the canvas
+                bgDrawable.draw(canvas);
+            }   else{
+                //does not have background drawable, then draw white background on the canvas
+                canvas.drawColor(Color.BLACK);
+            }
+            view.draw(canvas);
+            return returnedBitmap;
+        }
 
 
     }

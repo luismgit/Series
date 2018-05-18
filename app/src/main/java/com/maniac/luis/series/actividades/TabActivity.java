@@ -601,6 +601,14 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             editor.commit();
             Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_SHORT).show();
         }
+        if(id==R.id.item_compartir){
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + Common.URL_APP);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, getString(R.string.compartir)));
+
+        }
 
 
         return super.onOptionsItemSelected(item);

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -137,11 +138,21 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         }
         final Suscripcion suscripcion = suscripciones.get(position);
         holder.textViewNombre.setText(suscripcion.getSerie());
-        Glide.with(mContext)
-                .load(suscripcion.getImagen())
-                .fitCenter()
-                .centerCrop()
-                .into(holder.imagenSerie);
+        String imagen = suscripcion.getImagen();
+        if(imagen.contains("null")){
+            Glide.with(mContext)
+                    .load(R.drawable.series_back)
+                    .fitCenter()
+                    .centerCrop()
+                    .into(holder.imagenSerie);
+        }else{
+            Glide.with(mContext)
+                    .load(suscripcion.getImagen())
+                    .fitCenter()
+                    .centerCrop()
+                    .into(holder.imagenSerie);
+        }
+
         holder.ratingBarFavoritos.setRating(suscripcion.getEstrellasUsuario());
         holder.ratingBarFavoritos.setAnimation(holder.myRotation);
 
@@ -200,6 +211,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         TextView numComentarios;
         TextView textComentarios;
         AdaptadorFavoritos adaptadorFavoritos;
+        ProgressBar progressBarFavoritos;
 
         public FavoritosViewHolder(View itemView,List suscripciones,AdaptadorFavoritos adaptadorFavoritos) {
             super(itemView);
@@ -212,6 +224,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             iconoComentarios=itemView.findViewById(R.id.iconComentarios);
             numComentarios=itemView.findViewById(R.id.numerComentarios);
             textComentarios=itemView.findViewById(R.id.textComentarios);
+            progressBarFavoritos=itemView.findViewById(R.id.progressFavoritos);
             this.suscripciones=suscripciones;
             this.adaptadorFavoritos=adaptadorFavoritos;
         }
@@ -256,7 +269,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
             botonVoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick( View view) {
-
+                    progressBarFavoritos.setVisibility(View.VISIBLE);
                     nombreSerie=textViewNombre.getText().toString();
                     contador=0;
                     totalEstrellas=0.0;
@@ -295,6 +308,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                     FirebaseDatabase f = FirebaseDatabase.getInstance();
                                     DatabaseReference d = f.getReference();
                                     d.child(FirebaseReferences.SERIES_REFERENCE).child(nombreSerie).child(FirebaseReferences.ESTRELLAS_SERIE).setValue(media);
+                                    progressBarFavoritos.setVisibility(View.GONE);
 
                                 }
 
@@ -353,6 +367,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                         //EN CASO DE QUE ESCOJA ELIMINAR UN FAVORITO
                         case R.id.menu_item_borrar_favoritos:
 
+                            progressBarFavoritos.setVisibility(View.VISIBLE);
                             //ELIMINAMOS LA SUSCRIPCIÓN DE ESE USUARIO Y LE QUITAMOS UN LIKE A LA SERIE
                             FirebaseDatabase fd =FirebaseDatabase.getInstance();
                             DatabaseReference root = fd.getReference();
@@ -372,6 +387,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
                                                 if(suscripcion.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
                                                     String claveSerie = snapshot.getKey();
+                                                    progressBarFavoritos.setVisibility(View.GONE);
                                                     database.getReference(FirebaseReferences.SUSCRIPCIONES).child(claveSerie).removeValue();
                                                     final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
                                                             .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
