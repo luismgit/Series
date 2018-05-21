@@ -29,6 +29,7 @@ import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.EliminaAcentos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,6 +238,7 @@ public class FavoritosFragment extends Fragment {
 
             for(Suscripcion suscripcion: suscripciones){
                 String suscripciones2=suscripcion.getSerie().toLowerCase();
+                suscripciones2= EliminaAcentos.eliminarAcentos(suscripciones2);
                 if(suscripciones2.contains(texto)){
                     listaFiltrada.add(suscripcion);
                 }

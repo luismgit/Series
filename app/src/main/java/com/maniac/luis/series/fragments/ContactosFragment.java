@@ -38,6 +38,7 @@ import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarContactosPhoneNumber;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.CustomViewTarget;
+import com.maniac.luis.series.utilidades.EliminaAcentos;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
 
 import java.text.SimpleDateFormat;
@@ -407,6 +408,7 @@ public class ContactosFragment extends Fragment {
 
             for(Usuario usuario: usuarios){
                 String usuario2=usuario.getNick().toLowerCase();
+                usuario2= EliminaAcentos.eliminarAcentos(usuario2);
                 if(usuario2.contains(texto)){
                     listaFiltrada.add(usuario);
                 }
