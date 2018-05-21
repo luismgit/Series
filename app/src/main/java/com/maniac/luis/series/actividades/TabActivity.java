@@ -55,6 +55,7 @@ import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
 import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.Imagenes;
+import com.maniac.luis.series.utilidades.UrlApp;
 import com.maniac.luis.series.utilidades.Utilities;
 
 import java.util.ArrayList;
@@ -487,6 +488,20 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
+        DatabaseReference referenceUrlApp = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMMON).child(FirebaseReferences.URL_APP);
+        referenceUrlApp.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url_app = (String) dataSnapshot.getValue();
+                UrlApp.setUrl_app(url_app);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         }
@@ -604,7 +619,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         if(id==R.id.item_compartir){
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + Common.URL_APP);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + UrlApp.getUrl_app());
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, getString(R.string.compartir)));
 

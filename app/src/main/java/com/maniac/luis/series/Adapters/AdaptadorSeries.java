@@ -40,6 +40,7 @@ import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.UrlApp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -413,7 +414,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
                     intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.te_recomiendo) + " " + textViewNombre.getText().toString()+"." + " "
-                            + context.getString(R.string.descubre_mas_en) + " " + Common.URL_APP );
+                            + context.getString(R.string.descubre_mas_en) + " " + UrlApp.getUrl_app());
                     intent.setType("image/png");
                     context.startActivity(Intent.createChooser(intent, context.getString(R.string.comparte_con)));
                 } catch (Exception e) {

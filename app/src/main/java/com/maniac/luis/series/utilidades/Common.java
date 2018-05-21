@@ -32,5 +32,4 @@ public class Common {
     final public static String POL_PRIV_IUBENDA="https://www.iubenda.com/privacy-policy/66955812";
     final public static String URL_AVATAR_DEFECTO="https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2FIcono-Recuperado_bordes_negros.png?alt=media&token=8e130021-b3a5-4e94-b0c0-19dafb8f0732";
     final public static String NOMBRE_AVATAR_DEFECTO="Icono-Recuperado_bordes_negros.png";
-    final public static String URL_APP="https://www.youtube.com/watch?v=j-i99LObuBw";
 }
