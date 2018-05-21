@@ -39,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
@@ -266,7 +267,7 @@ public class Perfil extends AppCompatActivity {
     private void modificarFotoPerfil() {
 
         StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(user.getAvatar());
-        if(!photoRef.getName().equals("series_ic.png")){
+        if(!photoRef.getName().equals(Common.NOMBRE_AVATAR_DEFECTO)){
             photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

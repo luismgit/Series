@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +23,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Adapters.AdaptadorSeries;
-import com.maniac.luis.series.utilidades.CustomViewTarget;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.CustomViewTarget;
+import com.maniac.luis.series.utilidades.EliminaAcentos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -286,6 +286,7 @@ public class SeriesFragment extends Fragment{
 
             for(Series serie: series){
                 String serie2=serie.getNombre().toLowerCase();
+                serie2= EliminaAcentos.eliminarAcentos(serie2);
                 if(serie2.contains(texto)){
                     listaFiltrada.add(serie);
                 }
