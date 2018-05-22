@@ -41,7 +41,8 @@
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             android:textColor="@color/negro"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:maxEms="10"/>
 
 
         <TextView

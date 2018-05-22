@@ -1,6 +1,8 @@
 package com.maniac.luis.series.Objetos;
 
 
+import java.util.List;
+
 public class Series {
 
     String nombre;
@@ -9,17 +11,74 @@ public class Series {
     String web;
     Float estrellas;
     Long numComentarios;
+    int idMovieDb;
+    String fechaEmision,nombreOriginal,lenguajeOriginal,sinopsis;
+    List<String> paises;
 
     public Series(){
 
     }
-    public Series(String nombre,String imagen,Long likes,String web,Float estrellas,Long numComentarios){
+    public Series(String nombre,String imagen,Long likes,String web,Float estrellas,Long numComentarios,int idMovieDb,String fechaEmision,String nombreOriginal,String lenguajeOriginal,String sinopsis,List<String> paises){
         this.nombre=nombre;
         this.imagen=imagen;
         this.likes=likes;
         this.web=web;
         this.estrellas=estrellas;
         this.numComentarios=numComentarios;
+        this.idMovieDb=idMovieDb;
+        this.fechaEmision=fechaEmision;
+        this.nombreOriginal=nombreOriginal;
+        this.lenguajeOriginal=lenguajeOriginal;
+        this.paises=paises;
+        this.sinopsis=sinopsis;
+    }
+
+    public int getIdMovieDb() {
+        return idMovieDb;
+    }
+
+    public void setIdMovieDb(int idMovieDb) {
+        this.idMovieDb = idMovieDb;
+    }
+
+    public String getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public String getNombreOriginal() {
+        return nombreOriginal;
+    }
+
+    public void setNombreOriginal(String nombreOriginal) {
+        this.nombreOriginal = nombreOriginal;
+    }
+
+    public String getLenguajeOriginal() {
+        return lenguajeOriginal;
+    }
+
+    public void setLenguajeOriginal(String lenguajeOriginal) {
+        this.lenguajeOriginal = lenguajeOriginal;
+    }
+
+    public String getSinopsis() {
+        return sinopsis;
+    }
+
+    public void setSinopsis(String sinopsis) {
+        this.sinopsis = sinopsis;
+    }
+
+    public List<String> getPaises() {
+        return paises;
+    }
+
+    public void setPaises(List<String> paises) {
+        this.paises = paises;
     }
 
     public Long getNumComentarios() {

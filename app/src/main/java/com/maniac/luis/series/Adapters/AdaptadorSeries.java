@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.InfoSeriesActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
@@ -154,12 +155,12 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         ViewPager vp;
         AdaptadorSeries adaptadorSeries;
 
-        public SeriesViewHolder(View itemView,List series,ViewPager vp,AdaptadorSeries adaptadorSeries) {
+        public SeriesViewHolder(View itemView,List series,ViewPager vp,AdaptadorSeries adaptadorSeries)  {
             super(itemView);
             context=itemView.getContext();
             this.series=series;
             this.vp=vp;
-            relativeLayout=itemView.findViewById(R.id.relativeLayout);
+            relativeLayout=itemView.findViewById(R.id.relativeLayoutSeries);
             textViewNombre=itemView.findViewById(R.id.nombreSerie);
             numLikes=itemView.findViewById(R.id.numLikes);
             iconoSerie=itemView.findViewById(R.id.imagenSerie);
@@ -191,6 +192,16 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                             .into(imagen);
                     miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     miDialogo.show();
+                }
+            });
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+            Series serie = adaptadorSeries.getSeries().get(position);
+            Intent intent=new Intent(context,InfoSeriesActivity.class);
+            intent.putExtra(Common.CONTACTO,serie.getNombre());
+            context.startActivity(intent);
                 }
             });
 
