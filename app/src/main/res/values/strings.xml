@@ -67,7 +67,7 @@
     <string name="debe_comentar">Debe escribir algun comentario</string>
     <string name="ultima_conex_hoy">últ. vez hoy a las</string>
     <string name="ultima_conex">últ. vez</string>
-    <string name="sin_contactos">Sin contactos,añade a tu agenda contactos que tengan la aplicación.</string>
+    <string name="sin_contactos">Sin contactos,añade a tu agenda contactos que tengan la aplicación o invítales pulsando el menú superior.</string>
     <string name="sin_favoritos">Sin favoritos,añade tus series favoritas.</string>
     <string name="esta_serie_no_tiene_comentarios_se_el_primero_en_comentarla">Esta serie no tiene comentarios , se el primero en comentarla.</string>
     <string name="me_gusta">Me gusta</string>
@@ -109,6 +109,7 @@
     <string name="te_recomiendo">Te recomiendo esta serie:</string>
     <string name="descubre_mas_en">Descubre más en</string>
     <string name="comparte_con">Comparte con</string>
+    <string name="desconocido">Desconocido</string>
 
 
 </resources>

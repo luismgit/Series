@@ -1,9 +1,10 @@
 package com.maniac.luis.series.Objetos;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Series {
+public class Series implements Serializable{
 
     String nombre;
     String imagen;

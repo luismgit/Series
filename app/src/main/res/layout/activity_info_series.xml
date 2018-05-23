@@ -1,23 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/cielo">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.maniac.luis.series.actividades.InfoSeriesActivity">
+    tools:context="com.maniac.luis.series.actividades.InfoSeriesActivity"
+    android:orientation="vertical"
+    android:id="@+id/linearLayoutInfoSeries"
+    >
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/player"
+        android:visibility="gone"
+        ></com.google.android.youtube.player.YouTubePlayerView>
+
 
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Hola!!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="Breaking Bad"
+        android:textSize="@dimen/_20sdp"
+        android:id="@+id/tituloSerie"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título original"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/tituloOriginal"
+    android:paddingHorizontal="@dimen/_15sdp"
+    android:text="Breaking Bad"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="Fecha de emisión"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fechaEmision"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="11/12/06"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="País de orígen"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/paisOrigen"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="Lenguaje original"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lenguaOriginal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="Sinopsis"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:id="@+id/sinopsis"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:textSize="@dimen/_12sdp"
+        />
+
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>

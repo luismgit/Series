@@ -33,4 +33,8 @@ public class Common {
     final public static String URL_AVATAR_DEFECTO="https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2FIcono-Recuperado_bordes_negros.png?alt=media&token=8e130021-b3a5-4e94-b0c0-19dafb8f0732";
     final public static String NOMBRE_AVATAR_DEFECTO="Icono-Recuperado_bordes_negros.png";
     public static final String API_KEY_YOUTUBE="AIzaSyB1Qx76g3aoEGJKiJTF42vo-la_4Sf7kIk";
+    public static final String API_KEY_MOVIE_DB="55843ea7caabbbbd8e584358727ce494";
+    public static final String BASE_URL="https://api.themoviedb.org";
+    public static final String SERIE_OBJETO="serie_objeto";
+    public static final String BASE_URL_POSTER="https://image.tmdb.org/t/p/original";
 }

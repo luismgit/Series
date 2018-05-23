@@ -82,7 +82,8 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
-        <activity android:name=".actividades.InfoSeriesActivity"></activity>
+        <activity android:name=".actividades.InfoSeriesActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

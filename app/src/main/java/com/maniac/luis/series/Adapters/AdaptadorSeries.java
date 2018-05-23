@@ -200,7 +200,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                     int position = getAdapterPosition();
             Series serie = adaptadorSeries.getSeries().get(position);
             Intent intent=new Intent(context,InfoSeriesActivity.class);
-            intent.putExtra(Common.CONTACTO,serie.getNombre());
+            intent.putExtra(Common.SERIE_OBJETO,serie);
             context.startActivity(intent);
                 }
             });
