@@ -110,6 +110,16 @@
     <string name="descubre_mas_en">Descubre más en</string>
     <string name="comparte_con">Comparte con</string>
     <string name="desconocido">Desconocido</string>
+    <string name="t_tulo_original">Título original</string>
+    <string name="fecha_de_emisi_n">Fecha de emisión</string>
+    <string name="pa_s_de_or_gen">País de orígen</string>
+    <string name="lenguaje_original">Lenguaje original</string>
+    <string name="sinopsis">Sinopsis</string>
+    <string name="creada_por">Creada por</string>
+    <string name="duraci_n_episodio">Duración episodio</string>
+    <string name="estado">Estado</string>
+    <string name="temporadas">Temporadas</string>
+    <string name="n_mero_de_episodios">Número de episodios</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,9 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.InfoSeriesActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
+import com.maniac.luis.series.utilidades.Common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,10 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
     public AdaptadorInfoContactos(List<Suscripcion> suscripcionesContactos,Context contexto){
         this.suscripcionesContactos=suscripcionesContactos;
         this.contexto=contexto;
+    }
+
+    public List<Suscripcion> getSuscripcionesContactos(){
+        return suscripcionesContactos;
     }
     @Override
     public ContactosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -100,6 +108,7 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         ImageView avatarSerie;
         TextView nombreSerie;
         ProgressBar barNota;
+        RelativeLayout relativeLayout;
         TextView textViewNota;
         ImageView filmaffinityLink;
         Context context;
@@ -109,6 +118,7 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
         public ContactosViewHolder(View itemView,List suscripcionesContactos) {
             super(itemView);
             context=itemView.getContext();
+            relativeLayout=itemView.findViewById(R.id.relativeLayoutInfoContactos);
             this.suscripcionesContactos=suscripcionesContactos;
             avatarSerie=itemView.findViewById(R.id.imagenSerieContactosInfo);
             nombreSerie=itemView.findViewById(R.id.nombreSerieFavoritos);
@@ -137,6 +147,27 @@ public class AdaptadorInfoContactos extends RecyclerView.Adapter<AdaptadorInfoCo
                 }
             });
             filmaffinityLink.setOnClickListener(this);
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE)
+                            .child(suscripcionesContactos.get(getAdapterPosition()).getSerie());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Series serie = dataSnapshot.getValue(Series.class);
+                            Intent intent=new Intent(context, InfoSeriesActivity.class);
+                            intent.putExtra(Common.SERIE_OBJETO,serie);
+                            context.startActivity(intent);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
         }
         @Override
         public void onClick(View view) {

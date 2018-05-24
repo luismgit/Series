@@ -34,9 +34,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.ComentariosActivity;
+import com.maniac.luis.series.actividades.InfoSeriesActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
@@ -204,7 +206,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         Double estrellas;
         String nombreSerie;
         Animation myRotation;
-        RelativeLayout miVista;
+        RelativeLayout relativeLayout;
         Dialog miDialogo;
         List<Suscripcion> suscripciones=new ArrayList<>();
         ImageView iconoComentarios;
@@ -216,6 +218,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         public FavoritosViewHolder(View itemView,List suscripciones,AdaptadorFavoritos adaptadorFavoritos) {
             super(itemView);
             context=itemView.getContext();
+            relativeLayout=itemView.findViewById(R.id.relativeLayoutFavoritos);
             imagenSerie=itemView.findViewById(R.id.imagenSerieFavoritos);
             ratingBarFavoritos=itemView.findViewById(R.id.estrellasFav);
             textViewNombre=itemView.findViewById(R.id.nombreSerieFavoritos);
@@ -232,6 +235,28 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
 
         public void setOnclickListener(){
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Suscripcion suscripcion=adaptadorFavoritos.getSuscripciones().get(getAdapterPosition());
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE)
+                            .child(suscripcion.getSerie());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Series serie = dataSnapshot.getValue(Series.class);
+                            Intent intent=new Intent(context, InfoSeriesActivity.class);
+                            intent.putExtra(Common.SERIE_OBJETO,serie);
+                            context.startActivity(intent);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
             menuFavoritos.setOnClickListener(this);
             textComentarios.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -34,12 +34,12 @@
         android:textSize="@dimen/_20sdp"
         android:id="@+id/tituloSerie"
         android:textStyle="bold"
-        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Título original"
+        android:text="@string/t_tulo_original"
         android:paddingHorizontal="@dimen/_15sdp"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:text="Fecha de emisión"
+        android:text="@string/fecha_de_emisi_n"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         />
@@ -74,23 +74,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:text="País de orígen"
+        android:text="@string/pa_s_de_or_gen"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         />
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/paisOrigen"
         android:paddingHorizontal="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
+        android:maxEms="30"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:text="Lenguaje original"
+        android:text="@string/lenguaje_original"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         />
@@ -99,17 +100,130 @@
         android:layout_height="wrap_content"
         android:id="@+id/lenguaOriginal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/creada_por"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:text="Sinopsis"
+
+        />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/imagenDirector"
+            android:src="@drawable/series_back"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:id="@+id/nombreDirector"
+            android:layout_marginBottom="@dimen/_5sdp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/duraci_n_episodio"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:textSize="@dimen/_12sdp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:id="@+id/duracionEpisodio"
+            android:layout_marginBottom="@dimen/_5sdp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Género/s"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:textSize="@dimen/_12sdp"
+            />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:id="@+id/generos"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/n_mero_de_episodios"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:id="@+id/numEpisodios"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temporadas"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:id="@+id/numTemporadas"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/estado"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:id="@+id/estado"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:text="@string/sinopsis"
         android:textStyle="bold"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         />
     <TextView
         android:layout_width="match_parent"
@@ -120,8 +234,32 @@
         android:layout_marginBottom="@dimen/_15sdp"
         android:textSize="@dimen/_12sdp"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reparto"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
+        android:text="@string/desconocido"
+        android:id="@+id/sinActores"
+        />
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:id="@+id/recyclerActores">
 
+    </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 
