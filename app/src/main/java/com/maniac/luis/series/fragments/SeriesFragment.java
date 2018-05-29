@@ -3,6 +3,7 @@ package com.maniac.luis.series.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -60,9 +61,11 @@ public class SeriesFragment extends Fragment{
     SearchView searchView = null;
     ViewPager vp;;
     ShowcaseView showcaseView;
+    ShowcaseView showcaseView2;
     boolean isShowedTuturial;
     SharedPreferences sharedPref;
     EditText searchEditText;
+    boolean pasadoTutorialShowcaseBusca;
 
     public SeriesFragment() {
         // Required empty public constructor
@@ -103,6 +106,9 @@ public class SeriesFragment extends Fragment{
         View vista= inflater.inflate(R.layout.fragment_series, container, false);
         sharedPref = getActivity().getSharedPreferences(Common.TUTORIAL_PREF,getActivity().getApplicationContext().MODE_PRIVATE);
         isShowedTuturial=sharedPref.getBoolean(Common.TUTORIAL_SERIES,true);
+        rv=vista.findViewById(R.id.recyclerSeries);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+         pasadoTutorialShowcaseBusca=false;
         vp = getActivity().findViewById(R.id.container);
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -117,22 +123,46 @@ public class SeriesFragment extends Fragment{
                     editor.putBoolean(Common.TUTORIAL_SERIES,false);
                     editor.commit();
                     isShowedTuturial=false;
-                     showcaseView = new ShowcaseView.Builder(getActivity())
-                            .setTarget(new CustomViewTarget(R.id.toolbar, 280, -100, getActivity()))
+                    showcaseView2=new ShowcaseView.Builder(getActivity())
+                            .setTarget(new CustomViewTarget(R.id.showcase_button_series,-75,0,getActivity()))
                             .setContentTitle(getString(R.string.series_showcase))
-                            .setStyle(R.style.CustomShowcaseTheme2)
-                            .setContentText(getString(R.string.texto_showcase_series))
-                             .setOnClickListener(new View.OnClickListener() {
-                                 @Override
-                                 public void onClick(View view) {
-                                     showcaseView.hide();
-                                     showcaseView=null;
-                                 }
-                             })
+                            .setStyle(R.style.CustomShowcaseTheme3)
+                            .setContentText("Pulsa sobre una serie para ver más información")
+                            .setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    showcaseView2.hide();
+                                    showcaseView2=null;
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                                        showcaseView = new ShowcaseView.Builder(getActivity())
+                                                .setTarget(new CustomViewTarget(R.id.toolbar, 280, -100, getActivity()))
+                                                .setContentTitle(getString(R.string.series_showcase))
+                                                .setStyle(R.style.CustomShowcaseTheme2)
+                                                .setContentText(getString(R.string.texto_showcase_series))
+                                                .setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        showcaseView.hide();
+                                                        showcaseView=null;
+                                                    }
+                                                })
+                                                .build();
+                                    }else{
+                                            vp.setCurrentItem(2);
+                                    }
+
+                                }
+                            })
                             .build();
+
+
                 }
                 if(position==2 && showcaseView!=null){
                     showcaseView.hide();
+                    if(showcaseView2!=null){
+                        showcaseView2.hide();
+                    }
+
                 }
             }
 
@@ -140,8 +170,7 @@ public class SeriesFragment extends Fragment{
             public void onPageScrollStateChanged(int state) {
             }
         });
-        rv=vista.findViewById(R.id.recyclerSeries);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+
         series=new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         adaptadorSeries=new AdaptadorSeries(series,this.getContext(),vp);
@@ -220,7 +249,7 @@ public class SeriesFragment extends Fragment{
         inflater.inflate(R.menu.menu_tab, menu);
         final MenuItem item = menu.findItem(R.id.search);
         searchView = (SearchView) item.getActionView();
-        searchView.setQueryHint("Busca");
+        searchView.setQueryHint(getString(R.string.busca));
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -242,13 +271,14 @@ public class SeriesFragment extends Fragment{
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(showcaseView!=null){
+                if(showcaseView!=null && !pasadoTutorialShowcaseBusca){
+                    pasadoTutorialShowcaseBusca=true;
                     showcaseView.hide();
                     showcaseView = new ShowcaseView.Builder(getActivity())
                             .setTarget(new CustomViewTarget(R.id.toolbar, -200, -100, getActivity()))
-                            .setContentTitle("Series")
+                            .setContentTitle(getString(R.string.series_showcase))
                             .setStyle(R.style.CustomShowcaseTheme2)
-                            .setContentText("Busca una serie")
+                            .setContentText(getString(R.string.texto_showcase_series))
                             .setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -294,14 +324,14 @@ public class SeriesFragment extends Fragment{
         }catch (Exception e){
 
         }
-        if(listaFiltrada.size()==1 && showcaseView!=null){
+        if(listaFiltrada.size()==1 && showcaseView!=null ){
             ((TabActivity)getActivity()).esconderTeclado(searchEditText);
             showcaseView.hide();
             showcaseView = new ShowcaseView.Builder(getActivity())
                     .setTarget(new CustomViewTarget(R.id.textViewOptionsDigit, 0, 0, getActivity()))
-                    .setContentTitle("Favoritos")
+                    .setContentTitle(getString(R.string.favoritos_showcase))
                     .setStyle(R.style.CustomShowcaseTheme2)
-                    .setContentText("Añade la serie a favoritos")
+                    .setContentText(getString(R.string.anade_serie_fav))
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

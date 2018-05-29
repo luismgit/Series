@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
+
+
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/cielo">
+    android:id="@+id/scrollViewSerie"
+    android:background="@drawable/degradado_info_series"
+    >
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,7 +19,9 @@
     tools:context="com.maniac.luis.series.actividades.InfoSeriesActivity"
     android:orientation="vertical"
     android:id="@+id/linearLayoutInfoSeries"
+
     >
+
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:layout_width="match_parent"
@@ -24,9 +31,8 @@
         ></com.google.android.youtube.player.YouTubePlayerView>
 
 
-
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_10sdp"
@@ -35,6 +41,7 @@
         android:id="@+id/tituloSerie"
         android:textStyle="bold"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -43,6 +50,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
     android:layout_width="match_parent"
@@ -52,6 +60,7 @@
     android:text="Breaking Bad"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
     />
     <TextView
         android:layout_width="match_parent"
@@ -60,6 +69,7 @@
         android:text="@string/fecha_de_emisi_n"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -69,6 +79,7 @@
         android:text="11/12/06"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -77,6 +88,7 @@
         android:text="@string/pa_s_de_or_gen"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -86,6 +98,7 @@
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
         android:maxEms="30"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -94,6 +107,7 @@
         android:text="@string/lenguaje_original"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -102,6 +116,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -110,7 +125,7 @@
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         android:paddingHorizontal="@dimen/_15sdp"
-
+        android:textColor="#ffffff"
         />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -122,6 +137,7 @@
             android:visibility="gone"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_3sdp"
+            android:textColor="#ffffff"
             />
         <TextView
             android:layout_width="match_parent"
@@ -129,6 +145,7 @@
             android:paddingHorizontal="@dimen/_15sdp"
             android:id="@+id/nombreDirector"
             android:layout_marginBottom="@dimen/_5sdp"
+            android:textColor="#ffffff"
             />
 
         <TextView
@@ -138,6 +155,7 @@
             android:paddingHorizontal="@dimen/_15sdp"
             android:textStyle="bold"
             android:textSize="@dimen/_12sdp"
+            android:textColor="#ffffff"
             />
         <TextView
             android:layout_width="match_parent"
@@ -146,6 +164,7 @@
             android:paddingHorizontal="@dimen/_15sdp"
             android:id="@+id/duracionEpisodio"
             android:layout_marginBottom="@dimen/_5sdp"
+            android:textColor="#ffffff"
             />
         <TextView
             android:layout_width="match_parent"
@@ -154,6 +173,7 @@
             android:paddingHorizontal="@dimen/_15sdp"
             android:textStyle="bold"
             android:textSize="@dimen/_12sdp"
+            android:textColor="#ffffff"
             />
     <TextView
         android:layout_width="match_parent"
@@ -162,6 +182,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:id="@+id/generos"
         android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#ffffff"
         />
 
     <TextView
@@ -171,6 +192,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -179,6 +201,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:id="@+id/numEpisodios"
         android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -187,6 +210,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -195,6 +219,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:id="@+id/numTemporadas"
         android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#ffffff"
         />
 
     <TextView
@@ -204,6 +229,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -212,6 +238,7 @@
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:id="@+id/estado"
         android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#ffffff"
         />
 
 
@@ -219,11 +246,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:text="@string/sinopsis"
+        android:text="Argumento"
         android:textStyle="bold"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_15sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -233,6 +261,7 @@
         android:paddingHorizontal="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_15sdp"
         android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -242,6 +271,7 @@
         android:textStyle="bold"
         android:textSize="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
@@ -251,6 +281,8 @@
         android:visibility="gone"
         android:text="@string/desconocido"
         android:id="@+id/sinActores"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:textColor="#ffffff"
         />
 
     <android.support.v7.widget.RecyclerView

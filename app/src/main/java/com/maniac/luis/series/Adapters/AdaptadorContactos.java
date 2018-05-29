@@ -21,6 +21,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.maniac.luis.series.Objetos.Usuario;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.actividades.InfoContactoActivity;
+import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 
 import java.text.SimpleDateFormat;
@@ -73,9 +74,9 @@ public class AdaptadorContactos extends RecyclerView.Adapter<AdaptadorContactos.
         Glide.with(context)
                 .load(usuario.getAvatar())
                 .into(holder.avatar);
-        if(usuario.getConectado().equals("online")){
+        if(usuario.getConectado().equals(FirebaseReferences.ONLINE)){
             holder.estado.setTextColor(Color.GREEN);
-            holder.estado.setText("En línea");
+            holder.estado.setText(R.string.en_linea);
         }else{
             holder.estado.setTextColor(Color.BLACK);
             holder.estado.setText(getMensajeUltimaConexion(usuario.getConectado()));

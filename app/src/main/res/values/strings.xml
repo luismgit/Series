@@ -8,19 +8,18 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_tabb">Series</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_tab">Series</string>
-    <string name="req_num_telef">Debe introducir el número de telefono.</string>
+    <string name="req_num_telef">Debe introducir el número de teléfono.</string>
     <string name="error_verif">OnVerificationFailed</string>
     <string name="time_out_code">OnCodeAutoRetrievalTimeOut :</string>
     <string name="error_log">Fallo al loguearse.</string>
-    <string name="introd_cod_sms">Debe introducir el código recibido pos SMS.</string>
+    <string name="introd_cod_sms">Debe introducir el código recibido por SMS.</string>
     <string name="error_cod_verif">Código incorrecto.</string>
-    <string name="perm_no_aceptados">Si no acepta los permisos la aplicacion no puede seguir.</string>
+    <string name="perm_no_aceptados">Si no acepta los permisos la aplicación no puede seguir.</string>
     <string name="text_verif_num_telef">Verifica tu número de teléfono.</string>
-    <string name="text_msg_autent_aviso">Series enviará un único mensaje SMS para verificar tu número de telefono.</string>
+    <string name="text_msg_autent_aviso">Series enviará un único mensaje SMS para verificar tu número de teléfono.</string>
     <string name="text_msg_autent_num_tel">Introduzca su número de teléfono y pulse OK.</string>
     <string name="hint_num_telef">número de teléfono</string>
     <string name="btn_ok">OK</string>
@@ -120,6 +119,30 @@
     <string name="estado">Estado</string>
     <string name="temporadas">Temporadas</string>
     <string name="n_mero_de_episodios">Número de episodios</string>
+    <string name="argumento">Argumento</string>
+    <string name="no_internet_comentarios">Los comentarios no serán visibles hasta que tenga conexión a internet.</string>
+    <string name="sin_con_internet">Sin conexión a internet</string>
+    <string name="no_internet_no_wifi">Necesita activar los datos móviles o WIFI para usar la aplicación.</string>
+    <string name="app_necesita_internet">La aplicación necesita de conexión a internet para usar esta opción.</string>
+    <string name="config_permisos_manual">Desea configurar los permisos de forma manual?</string>
+    <string name="si">si</string>
+    <string name="no">no</string>
+    <string name="app_sin_permisos">La aplicación no puede seguir sin estos permisos</string>
+    <string name="permisos_descativados">Permisos desactivados</string>
+    <string name="debe_aceptar_permisos">Debe aceptar los permisos para el correcto funcionamiento de la aplicación</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="aqui">Aquí</string>
+    <string name="aceptar_polit_priva">Debe aceptar la política de privacidad para continuar.</string>
+    <string name="terminada">Terminada</string>
+    <string name="emitiendo_o_prev">Emitiendo o en previsión de hacerlo</string>
+    <string name="cancelada">Cancelada</string>
+    <string name="en_produccion">En producción</string>
+    <string name="error_init_youtube">Error al inicializar Youtube</string>
+    <string name="error_envio_correo">Error al enviar el correo</string>
+    <string name="en_linea">En línea</string>
+    <string name="podras_votar_serie">Podrás votar la serie.</string>
+    <string name="busca">Busca</string>
+    <string name="anade_serie_fav">Añade la serie a favoritos</string>
 
 
 </resources>

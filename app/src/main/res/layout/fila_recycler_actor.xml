@@ -9,27 +9,26 @@
         android:layout_height="110dp"
         android:id="@+id/imagenActor"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/series_back"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="hola"
         android:layout_below="@id/imagenActor"
         android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center"
         android:id="@+id/nombreActorSerie"
         android:textStyle="bold"
+        android:textColor="#ffffff"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="hola"
         android:layout_below="@id/nombreActorSerie"
         android:layout_marginTop="@dimen/_5sdp"
         android:gravity="center"
         android:id="@+id/nombreActorReal"
         android:layout_marginBottom="@dimen/_7sdp"
+        android:textColor="#ffffff"
         />
 
 

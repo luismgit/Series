@@ -47,6 +47,7 @@ import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 import com.maniac.luis.series.utilidades.Utilities;
 
 import java.util.ArrayList;
@@ -132,9 +133,11 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
                 } else {
                     setContentView(R.layout.autentificacion_activity);
+                    if(!NetworkStatus.isConnected(AutentificacionActivity.this)) NetworkStatus.buildDialog(AutentificacionActivity.this).show();
+
                     botonSMS=findViewById(R.id.botonSMS);
                     ayudaTexto=findViewById(R.id.ayudaTexto);
-                    String mystring=new String("Aquí");
+                    String mystring=new String(getString(R.string.aqui));
                     SpannableString content = new SpannableString(mystring);
                     content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
                     ayudaTexto.setText(content);
@@ -210,7 +213,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
             return;
         }
         if(!checkBoxPolitica.isChecked()){
-            Toast.makeText(AutentificacionActivity.this,"Debe aceptar la política de privacidad para continuar.",Toast.LENGTH_LONG).show();
+            Toast.makeText(AutentificacionActivity.this, R.string.aceptar_polit_priva,Toast.LENGTH_LONG).show();
             return;
         }
         //HACEMOS EL PROGESSBAR VISIBLE Y EVITAMOS EL USUARIO PUEDA VOLVER A PULSAR LOS BOTONES DEL LAYOUT
@@ -408,9 +411,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     }
 
     private void solicitarPermisosManual() {
-       final CharSequence[] opciones ={"si","no"};
+       final CharSequence[] opciones ={getString(R.string.si),getString(R.string.no)};
        final AlertDialog.Builder alertOpciones = new AlertDialog.Builder(AutentificacionActivity.this);
-       alertOpciones.setTitle("Desea configurar los permisos de forma manual?");
+       alertOpciones.setTitle(R.string.config_permisos_manual);
        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
            @Override
            public void onClick(DialogInterface dialogInterface, int i) {
@@ -422,7 +425,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
                    intent.setData(uri);
                    startActivity(intent);
                }else{
-                   Toast.makeText(getApplicationContext(),"La aplicación no puede seguir sin estos permisos",Toast.LENGTH_LONG).show();
+                   Toast.makeText(getApplicationContext(), R.string.app_sin_permisos,Toast.LENGTH_LONG).show();
                    dialogInterface.dismiss();
                    finish();
                }
@@ -433,9 +436,9 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     private void cargarDialogoReacomendacion() {
         AlertDialog.Builder dialogo = new AlertDialog.Builder(AutentificacionActivity.this);
-        dialogo.setTitle("Permisos desactivados");
-        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la aplicación");
-        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+        dialogo.setTitle(R.string.permisos_descativados);
+        dialogo.setMessage(R.string.debe_aceptar_permisos);
+        dialogo.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

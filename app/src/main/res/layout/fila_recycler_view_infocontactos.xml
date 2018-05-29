@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="175dp"
+    android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
     android:id="@+id/relativeLayoutInfoContactos"
@@ -29,16 +29,18 @@
         android:layout_toEndOf="@+id/imagenSerieContactosInfo"
         android:layout_toRightOf="@+id/imagenSerieContactosInfo"
         android:text="Breaking Bad"
-        android:textSize="15sp"
+        android:textSize="@dimen/_12sdp"
         android:textStyle="bold"
-        android:textColor="@color/negro"/>
+        android:textColor="@color/negro"
+        android:maxEms="12"/>
 
    <ProgressBar
        android:id="@+id/progressBarNota"
        style="?android:attr/progressBarStyleHorizontal"
-       android:layout_width="105dp"
-       android:layout_height="105dp"
+       android:layout_width="@dimen/_80sdp"
+       android:layout_height="@dimen/_90sdp"
         android:layout_centerInParent="true"
+       android:layout_below="@id/nombreSerieFavoritos"
        android:indeterminate="false"
        android:max="5"
        android:progressDrawable="@drawable/circular_progress_bar"

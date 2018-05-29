@@ -43,6 +43,7 @@ import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarAvatarUsuario;
 import com.maniac.luis.series.utilidades.ComunicarClaveUsuarioActual;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 import com.maniac.luis.series.utilidades.Utilities;
 
 import java.io.ByteArrayOutputStream;
@@ -67,8 +68,8 @@ public class Perfil extends AppCompatActivity {
     private StorageReference storageReference;
     private Usuario user;
     Button botonModificar;
-    private  final String CARPETA_RAIZ="Series/";
-    private final String RUTA_IMAGEN=CARPETA_RAIZ+"series";
+    private  final String CARPETA_RAIZ=Common.SERIES_CARPETA_RAIZ;
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+Common.SERIES_RUTA_IMAGEN;
     String miPath;
     ProgressBar cargaFotoPerfil;
     ProgressBar cargaPerfil;
@@ -78,6 +79,7 @@ public class Perfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+        if(!NetworkStatus.isConnected(Perfil.this)) NetworkStatus.buildDialog(Perfil.this).show();
         FirebaseDatabase.getInstance().goOnline();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -88,7 +90,7 @@ public class Perfil extends AppCompatActivity {
         textoEmailIncorrecto=findViewById(R.id.textoEmailIncorrecto);
         cargaFotoPerfil=findViewById(R.id.cargaFotoPerfil);
         cargaPerfil=findViewById(R.id.cargaPerfil);
-        user = (Usuario) getIntent().getSerializableExtra("usuario");
+        user = (Usuario) getIntent().getSerializableExtra(Common.USUARIO);
         Glide.with(this)
                 .load(user.getAvatar())
                 .fitCenter()

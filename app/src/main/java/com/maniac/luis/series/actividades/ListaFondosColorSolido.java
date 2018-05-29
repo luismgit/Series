@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.maniac.luis.series.Adapters.AdaptadorColorSolido;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 public class ListaFondosColorSolido extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class ListaFondosColorSolido extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_fondos_color_solido);
+        if(!NetworkStatus.isConnected(ListaFondosColorSolido.this)) NetworkStatus.buildDialog(ListaFondosColorSolido.this).show();
         FirebaseDatabase.getInstance().goOnline();
         rv=findViewById(R.id.listaFondosColorSolido);
         adapter=new AdaptadorColorSolido(this);

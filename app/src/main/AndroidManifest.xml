@@ -15,6 +15,9 @@
     <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -28,10 +31,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon">
+        tools:replace="android:icon"
+        android:resizeableActivity="false"
+        >
         <activity
             android:name=".actividades.AutentificacionActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,25 +46,31 @@
         </activity>
         <activity
             android:name=".actividades.registroActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.TabActivity"
             android:label=""
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.ListaFondos"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.InfoContactoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.Perfil"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.ComentariosActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
 
         <service android:name=".utilidades.MiFirebaseInstanceIdService">
             <intent-filter>
@@ -73,17 +85,20 @@
 
         <activity
             android:name=".actividades.ListaFondosColorSolido"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
         <activity
             android:name=".actividades.ListaFondosGaleria"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
         <activity android:name=".actividades.InfoSeriesActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"></activity>
     </application>
 
 </manifest>

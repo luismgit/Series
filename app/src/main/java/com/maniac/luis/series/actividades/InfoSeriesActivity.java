@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import com.maniac.luis.series.MovieDbInterface.SeriesVideoResult;
 import com.maniac.luis.series.Objetos.Series;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 import java.util.List;
 
@@ -61,6 +61,7 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_series);
+        if(!NetworkStatus.isConnected(InfoSeriesActivity.this)) NetworkStatus.buildDialog(InfoSeriesActivity.this).show();
         FirebaseDatabase.getInstance().goOnline();
         tituloSerie=findViewById(R.id.tituloSerie);
         tituloOriginal=findViewById(R.id.tituloOriginal);
@@ -227,14 +228,12 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                     List<SeriesDetailsResult.CreatedByBean> creadores = result.getCreated_by();
                     if(creadores.size()!=0){
                         if(creadores.get(0).getName()!=null){
-                            Log.i("Creadores",creadores.get(0).getName());
                             nombreDirector.setText(creadores.get(0).getName());
                         }else{
                             nombreDirector.setText(R.string.desconocido);
                         }
                         if(creadores.get(0).getProfile_path()!=null){
                             imagenDirector.setVisibility(View.VISIBLE);
-                            Log.i("Creadores",creadores.get(0).getProfile_path());
                             urlImagenDirector=creadores.get(0).getProfile_path();
                             Glide.with(InfoSeriesActivity.this)
                                     .load(Common.BASE_URL_POSTER+creadores.get(0).getProfile_path())
@@ -293,13 +292,13 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                     }
                     if(result.getStatus()!=null && !result.getStatus().equals("")){
                         if(result.getStatus().toUpperCase().equals("ENDED")){
-                            estado.setText("Terminada");
+                            estado.setText(R.string.terminada);
                         }else if(result.getStatus().toUpperCase().equals("RETURNING SERIES")){
-                            estado.setText("Emitiendo o en previsión de hacerlo");
+                            estado.setText(R.string.emitiendo_o_prev);
                         }else if(result.getStatus().toUpperCase().equals("CANCELED")){
-                            estado.setText("Cancelada");
+                            estado.setText(R.string.cancelada);
                         }else if(result.getStatus().toUpperCase().equals("IN PRODUCTION")){
-                            estado.setText("En producción");
+                            estado.setText(R.string.en_produccion);
                         }else{
                             estado.setText(result.getStatus());
                         }
@@ -331,12 +330,7 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
             public void onResponse(Call<SeriesActoresResult> call, Response<SeriesActoresResult> response) {
                 SeriesActoresResult result = response.body();
                 List<SeriesActoresResult.CastBean> listaActores = result.getCast();
-              /*  for (int i = 0; i <listaActores.size() ; i++) {
-                    Log.i("Actor nombre",listaActores.get(i).getName());
-                    Log.i("Actor foto",listaActores.get(i).getProfile_path());
-                    Log.i("Actor personjae",listaActores.get(i).getCharacter());
-                    Log.i("Actor foto","-----------------------------------");
-                }*/
+
                 if(result==null || listaActores.size()==0 || listaActores==null){
                     sinActores.setVisibility(View.VISIBLE);
                 }else{
@@ -375,7 +369,7 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
         if(youTubeInitializationResult.isUserRecoverableError()){
             youTubeInitializationResult.getErrorDialog(this,1).show();
         }else{
-            Toast.makeText(this,"Error al inicializar Youtube"+youTubeInitializationResult.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.error_init_youtube)+youTubeInitializationResult.toString(),Toast.LENGTH_SHORT).show();
         }
     }
 

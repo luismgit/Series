@@ -37,4 +37,7 @@ public class Common {
     public static final String BASE_URL="https://api.themoviedb.org";
     public static final String SERIE_OBJETO="serie_objeto";
     public static final String BASE_URL_POSTER="https://image.tmdb.org/t/p/original";
+    public static final String USUARIO="usuario";
+    public static final String SERIES_CARPETA_RAIZ="SeriesManiacos/";
+    public static final String SERIES_RUTA_IMAGEN="seriesManiacos";
 }

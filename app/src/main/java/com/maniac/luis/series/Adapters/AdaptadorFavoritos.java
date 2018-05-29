@@ -118,7 +118,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 .setTarget(new CustomViewTarget(R.id.botonVoto, -125, 0, (Activity) mContext))
                                 .setContentTitle(mContext.getString(R.string.favoritos_showcase))
                                 .setStyle(R.style.CustomShowcaseTheme3)
-                                .setContentText("Podrás votar la serie.")
+                                .setContentText(mContext.getString(R.string.podras_votar_serie))
                                 .setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -321,7 +321,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                        String votada = (String) childSnapshot.child("votada").getValue();
+                                        String votada = (String) childSnapshot.child(FirebaseReferences.SERIE_VOTADA).getValue();
                                         if(votada.equalsIgnoreCase("si")){
                                             double estrellas =  childSnapshot.child(FirebaseReferences.ESTRELLAS_USUARIO).getValue(Double.class);
                                             contador++;
@@ -423,11 +423,11 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                                             numSuscripciones--;
                                                             String nivel;
                                                             if(numSuscripciones>=5 && numSuscripciones<10){
-                                                                nivel= Common.PRINCIPIANTE;
+                                                                nivel= Common.INTERMEDIO;
                                                             }else if(numSuscripciones>=10){
-                                                                nivel=Common.INTERMEDIO;
-                                                            }else{
                                                                 nivel=Common.AVANZADO;
+                                                            }else{
+                                                                nivel=Common.PRINCIPIANTE;
                                                             }
 
                                                             dataRef.setValue(numSuscripciones);

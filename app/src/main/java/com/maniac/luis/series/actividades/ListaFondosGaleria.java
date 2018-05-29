@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.maniac.luis.series.Adapters.AdaptadorFondosGaleria;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 public class ListaFondosGaleria extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class ListaFondosGaleria extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_fondos_galeria);
+        if(!NetworkStatus.isConnected(ListaFondosGaleria.this)) NetworkStatus.buildDialog(ListaFondosGaleria.this).show();
         FirebaseDatabase.getInstance().goOnline();
         rv=findViewById(R.id.listaFondosGaleriaRV);
         adapter=new AdaptadorFondosGaleria(this);

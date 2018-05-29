@@ -48,6 +48,7 @@ import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 import com.maniac.luis.series.utilidades.Utilities;
 
 import java.io.ByteArrayOutputStream;
@@ -80,8 +81,8 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     boolean galeria=false;
     Uri imagenSeleccionada;
     Uri enlaceFotoFirebasde;
-    private  final String CARPETA_RAIZ="Series/";
-    private final String RUTA_IMAGEN=CARPETA_RAIZ+"series";
+    private  final String CARPETA_RAIZ=Common.SERIES_CARPETA_RAIZ;
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+Common.SERIES_RUTA_IMAGEN;
     String miPath;
     List<String> phoneNumbers;
 
@@ -89,6 +90,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro_activity);
+        if(!NetworkStatus.isConnected(registroActivity.this)) NetworkStatus.buildDialog(registroActivity.this).show();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         refStorage= FirebaseStorage.getInstance().getReference();
@@ -413,7 +415,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
                         dataSnapshot.getChildren()){
                     String key = snapshot.getKey();
                    final DatabaseReference dataref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.COMENTARIOS)
-                            .child(key).child("liked");
+                            .child(key).child(FirebaseReferences.LIKED);
                    dataref.addListenerForSingleValueEvent(new ValueEventListener() {
                        @Override
                        public void onDataChange(DataSnapshot dataSnapshot) {
@@ -443,7 +445,7 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         //CREAMOS UN NUEVO OBJETO DE TIPO USUARIO
         Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE,
                 (long) 0, FirebaseInstanceId.getInstance().getToken(),
-                "https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/fondos_comentarios%2Fcielo.png?alt=media&token=da05397a-d53b-4e29-acc8-9097399d19a0");
+                FirebaseReferences.FONDO_DEFECTO_COMENTARIOS);
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)

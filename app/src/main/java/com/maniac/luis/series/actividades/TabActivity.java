@@ -55,6 +55,7 @@ import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
 import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.Imagenes;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 import com.maniac.luis.series.utilidades.UrlApp;
 import com.maniac.luis.series.utilidades.Utilities;
 
@@ -111,7 +112,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -129,6 +129,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         fondo = findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
         listaFondos = new ArrayList<>();
+
 
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
         FirebaseDatabase datab = FirebaseDatabase.getInstance();
@@ -288,7 +289,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                             }
                         });
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual);
-                        databaseReference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        databaseReference.child(FirebaseReferences.TOKEN).setValue(FirebaseInstanceId.getInstance().getToken());
                         DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(claveUsuarioActual)
                                 .child(FirebaseReferences.CORREO_USUARIO);
                         dref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -577,7 +578,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                             e.printStackTrace();
                         }
 
-                        if(session!=null){
+                        if(session!=null && emailAyuda!=null){
                             javax.mail.Message message = new MimeMessage(session);
                             try {
                                 message.setFrom(new InternetAddress(emailAyuda));
@@ -590,8 +591,12 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                             } catch (MessagingException e) {
                                 e.printStackTrace();
                             }
+                            Toast.makeText(TabActivity.this, R.string.msg_enviado_ayuda,Toast.LENGTH_SHORT).show();
+                        }else{
+                            if(!NetworkStatus.isConnected(TabActivity.this)) NetworkStatus.buildDialog(TabActivity.this).show();
+                            Toast.makeText(TabActivity.this, R.string.error_envio_correo,Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(TabActivity.this, R.string.msg_enviado_ayuda,Toast.LENGTH_SHORT).show();
+
                         dialog.dismiss();
                     }
                 }
@@ -610,18 +615,28 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         }
 
         if(id==R.id.item_tutorial){
-            SharedPreferences sharedPref = this.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Common.PULSADO_TUTORIAL,true);
-            editor.commit();
-            Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_SHORT).show();
+            if(!NetworkStatus.isConnected(TabActivity.this)) {
+                buildDialog(TabActivity.this).show();
+            }else{
+                SharedPreferences sharedPref = this.getSharedPreferences(Common.TUTORIAL_PREF,Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(Common.PULSADO_TUTORIAL,true);
+                editor.commit();
+                Toast.makeText(this, R.string.menu_show_tutorial,Toast.LENGTH_SHORT).show();
+            }
+
         }
         if(id==R.id.item_compartir){
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + UrlApp.getUrl_app());
-            sendIntent.setType("text/plain");
-            startActivity(Intent.createChooser(sendIntent, getString(R.string.compartir)));
+            if(!NetworkStatus.isConnected(TabActivity.this) && UrlApp.getUrl_app().equals("")){
+                buildDialog(TabActivity.this).show();
+            }else{
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + UrlApp.getUrl_app());
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.compartir)));
+            }
+
 
         }
 
@@ -639,11 +654,11 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
          SharedPreferences sharedPre = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
-        boolean deNotificacion=sharedPre.getBoolean("notify",false);
+        boolean deNotificacion=sharedPre.getBoolean(Common.NOTIFY,false);
         if(intent.getStringExtra(Common.NOTIFICACION).equals(Common.NOTIFICACION) && deNotificacion){
             SharedPreferences sharedPref = getSharedPreferences(Common.NOTIFICACION,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean("notify",false);
+            editor.putBoolean(Common.NOTIFY,false);
             editor.commit();
             String nombreSerie=intent.getStringExtra(Common.NOMBRE_SERIE_COMENTARIOS);
             Intent i = new Intent(this, ComentariosActivity.class);
@@ -708,29 +723,34 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE CAMBIO DE PERFIL
     public void seleccionarAvatar() {
-        FirebaseDatabase data = FirebaseDatabase.getInstance();
-        final DatabaseReference root = data.getReference();
-        root.child(FirebaseReferences.USUARIOS_REFERENCE)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot snapshot:
-                                dataSnapshot.getChildren()){
-                            Usuario user = snapshot.getValue(Usuario.class);
-                            if(user.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
-                                Intent intent = new Intent(TabActivity.this,Perfil.class);
-                                intent.putExtra("usuario",user);
-                                startActivity(intent);
+        if(!NetworkStatus.isConnected(TabActivity.this)) {
+            buildDialog(TabActivity.this).show();
+        }else{
+            FirebaseDatabase data = FirebaseDatabase.getInstance();
+            final DatabaseReference root = data.getReference();
+            root.child(FirebaseReferences.USUARIOS_REFERENCE)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot:
+                                    dataSnapshot.getChildren()){
+                                Usuario user = snapshot.getValue(Usuario.class);
+                                if(user.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
+                                    Intent intent = new Intent(TabActivity.this,Perfil.class);
+                                    intent.putExtra(Common.USUARIO,user);
+                                    startActivity(intent);
+                                }
+
                             }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    }
+                    });
+        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
     }
     //MÉTODO QUE ESCONDE EL TECLADO
@@ -847,4 +867,24 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         }
 
     }
+
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(R.string.sin_con_internet);
+        builder.setMessage(R.string.app_necesita_internet);
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+            }
+        });
+
+        return builder;
+    }
+
+
 }

@@ -21,6 +21,7 @@ import com.maniac.luis.series.Objetos.Suscripcion;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ private ImageView avatarUsuario;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_contacto);
+        if(!NetworkStatus.isConnected(InfoContactoActivity.this)) NetworkStatus.buildDialog(InfoContactoActivity.this).show();
         FirebaseDatabase.getInstance().goOnline();
         nombreUsuario=findViewById(R.id.nombreContacto);
         avatarUsuario=findViewById(R.id.avatarContacto);

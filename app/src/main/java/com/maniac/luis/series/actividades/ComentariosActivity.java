@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +50,7 @@ import com.maniac.luis.series.utilidades.ComunicarFondoComentarios;
 import com.maniac.luis.series.utilidades.FondosGaleriaComentarios;
 import com.maniac.luis.series.utilidades.ImagenesColoresSolidos;
 import com.maniac.luis.series.utilidades.LinearLayoutTarget;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -90,6 +93,7 @@ public class ComentariosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comentarios);
+        if(!NetworkStatus.isConnected(ComentariosActivity.this)) NetworkStatus.buildDialog(ComentariosActivity.this).show();
         FirebaseDatabase.getInstance().goOnline();
         linearLayout=findViewById(R.id.linearLayoutComentarios);
         String fondoComentario=ComunicarFondoComentarios.getFondo();
@@ -100,6 +104,7 @@ public class ComentariosActivity extends AppCompatActivity {
                         .load(fondoComentario)
                         .asBitmap()
                         .into(new LinearLayoutTarget(this.getApplicationContext(),linearLayout));
+
             }else{
                 linearLayout.setBackgroundColor(Color.parseColor(ComunicarFondoComentarios.getFondo()));
             }
@@ -262,6 +267,7 @@ public class ComentariosActivity extends AppCompatActivity {
                 if(coment.equals("")){
                     Toast.makeText(ComentariosActivity.this, R.string.debe_comentar,Toast.LENGTH_SHORT).show();
                 }else{
+                    if(!NetworkStatus.isConnected(ComentariosActivity.this)) buildDialog(ComentariosActivity.this).show();
                     Map<String,Boolean> liked = new HashMap<>();
                     List<String> numeroContactos=new ArrayList<>();
                     numeroContactos=ComunicarContactosPhoneNumber.getPhoneNumbers();
@@ -351,6 +357,23 @@ public class ComentariosActivity extends AppCompatActivity {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf= new SimpleDateFormat("dd/MM HH:mm");
         return sdf.format(date);
+    }
+
+    public  AlertDialog.Builder buildDialog(Context c) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(R.string.sin_con_internet);
+        builder.setMessage(R.string.no_internet_comentarios);
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        return builder;
     }
 
 

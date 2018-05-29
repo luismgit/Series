@@ -40,6 +40,7 @@ import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.CustomViewTarget;
 import com.maniac.luis.series.utilidades.EliminaAcentos;
 import com.maniac.luis.series.utilidades.ListaNumerosAgendaTelefonos;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,6 +124,9 @@ public class ContactosFragment extends Fragment {
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
         vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recycler);
+        if(!NetworkStatus.isConnected(container.getContext())) {
+            NetworkStatus.buildDialog(container.getContext()).show();
+        }
         contactos = new Hashtable<String, String>();
         usuarios=new ArrayList<>();
         mensajeSinContactos=vista.findViewById(R.id.mensajeSinContactos);
@@ -362,7 +366,7 @@ public class ContactosFragment extends Fragment {
         inflater.inflate(R.menu.menu_tab, menu);
         MenuItem item = menu.findItem(R.id.search);
         searchView = (SearchView) item.getActionView();
-        searchView.setQueryHint("Busca");
+        searchView.setQueryHint(getString(R.string.busca));
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

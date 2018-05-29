@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.maniac.luis.series.Adapters.AdapatadorRecyclerFondos;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 public class ListaFondos extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class ListaFondos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_fondos);
+        if(!NetworkStatus.isConnected(ListaFondos.this)) NetworkStatus.buildDialog(ListaFondos.this).show();
         FirebaseDatabase.getInstance().goOnline();
         recyclerView=findViewById(R.id.listaFondosRecycler);
 

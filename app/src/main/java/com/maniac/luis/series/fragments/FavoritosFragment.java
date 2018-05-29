@@ -30,6 +30,7 @@ import com.maniac.luis.series.actividades.TabActivity;
 import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.ComunicarCurrentUser;
 import com.maniac.luis.series.utilidades.EliminaAcentos;
+import com.maniac.luis.series.utilidades.NetworkStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class FavoritosFragment extends Fragment {
         //INFLA EL LAYOUT PARA ESTE FRAGMENT
         View vista = inflater.inflate(R.layout.fragment_favoritos, container, false);
         vp = getActivity().findViewById(R.id.container);
+        if(!NetworkStatus.isConnected(container.getContext())) NetworkStatus.buildDialog(container.getContext()).show();
         mensajeSinFavoritos=vista.findViewById(R.id.mensajeSinFavoritos);
         rv=vista.findViewById(R.id.recyclerSeriesFavoritos);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -192,7 +194,7 @@ public class FavoritosFragment extends Fragment {
         inflater.inflate(R.menu.menu_tab, menu);
         MenuItem item = menu.findItem(R.id.search);
         searchView = (SearchView) item.getActionView();
-        searchView.setQueryHint("Busca");
+        searchView.setQueryHint(getString(R.string.busca));
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -43,5 +43,7 @@ public class FirebaseReferences {
     final public static String LIKED="liked";
     final public static String FONDO_COMENTARIO="fondoComentario";
     final public static String FONDOS_GALERIA_COMENTARIOS="fondos_galeria_comentarios";
+    final public static String FONDO_DEFECTO_COMENTARIOS="https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/fondos_comentarios%2Fcielo.png?alt=media&token=da05397a-d53b-4e29-acc8-9097399d19a0";
+    final public static String TOKEN="token";
     final public static String URL_APP="url_app";
 }
