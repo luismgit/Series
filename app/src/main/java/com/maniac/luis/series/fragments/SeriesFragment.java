@@ -65,7 +65,7 @@ public class SeriesFragment extends Fragment{
     boolean isShowedTuturial;
     SharedPreferences sharedPref;
     EditText searchEditText;
-    boolean pasadoTutorialShowcaseBusca;
+    boolean pasadoTutorialShowcaseBusca,pasadoTutorialShowcaseBusca2;
 
     public SeriesFragment() {
         // Required empty public constructor
@@ -109,6 +109,7 @@ public class SeriesFragment extends Fragment{
         rv=vista.findViewById(R.id.recyclerSeries);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
          pasadoTutorialShowcaseBusca=false;
+        pasadoTutorialShowcaseBusca2=false;
         vp = getActivity().findViewById(R.id.container);
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -324,8 +325,9 @@ public class SeriesFragment extends Fragment{
         }catch (Exception e){
 
         }
-        if(listaFiltrada.size()==1 && showcaseView!=null ){
+        if(listaFiltrada.size()==1 && showcaseView!=null && !pasadoTutorialShowcaseBusca2 ){
             ((TabActivity)getActivity()).esconderTeclado(searchEditText);
+            pasadoTutorialShowcaseBusca2=true;
             showcaseView.hide();
             showcaseView = new ShowcaseView.Builder(getActivity())
                     .setTarget(new CustomViewTarget(R.id.textViewOptionsDigit, 0, 0, getActivity()))

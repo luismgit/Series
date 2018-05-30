@@ -64,7 +64,6 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         this.series = series;
         this.mContext=mContext;
         this.vp=vp;
-
     }
 
     public List<Series> getSeries(){
@@ -248,109 +247,85 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
                         //EN EL CASO DE QUE SE PULSE AÑADIR A FAVORITOS
                         case R.id.menu_item_favoritos:
-                            database=FirebaseDatabase.getInstance();
-                            rootRef = database.getReference();
-
-                            //CREAMOS UNA REFERENCIA AL NODO LIKES DE LA SERIE DE LA VISTA SELECCIONADA
-
-                            refLikes = rootRef.child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.LIKES_SERIE);
-                            refLikes.addListenerForSingleValueEvent(new ValueEventListener() {
+                            DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString());
+                            dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Series serie = dataSnapshot.getValue(Series.class);
+                                    suscripciones=serie.getLikes();
+                                    imagenSuscripcion=serie.getImagen();
 
-                                    suscripciones = dataSnapshot.getValue(Long.class);
-                                    FirebaseDatabase data = FirebaseDatabase.getInstance();
-
-                                    //CONSEGUIMOS LA IMAGEN DE AVATAR DE LA SERIE Y COMPROBAMOS QUE ESA SERIE NO LA TENGA YA EL USUARIO EN SUS SUSCRIPCIONES CON repetidoFavorito
-                                    data.getReference(FirebaseReferences.SERIES_REFERENCE).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                                for(DataSnapshot snapshot:
-                                                        dataSnapshot.getChildren()){
-                                                    Series serie = snapshot.getValue(Series.class);
-                                                    if(serie.getNombre().equals(textViewNombre.getText())){
-                                                        imagenSuscripcion=serie.getImagen();
-                                                        DatabaseReference df = FirebaseDatabase.getInstance().getReference();
-                                                        df.child(FirebaseReferences.SUSCRIPCIONES).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                for(DataSnapshot snapshot:
-                                                                        dataSnapshot.getChildren()){
-                                                                    Suscripcion s = snapshot.getValue(Suscripcion.class);
-                                                                    if(s.getTlf_serie().equals(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())){
-                                                                        repetidoFavorito=true;
-                                                                        Toast.makeText(context,textViewNombre.getText().toString() + " " +  context.getString(R.string.rep_favoritos),Toast.LENGTH_LONG).show();
-                                                                    }
-                                                                }
-                                                                //SI NO LA TIENE YA EN FAVORITOS AÑADIMOS LA SERIE A LAS SUSCRIPCIONES DEL USUSARIO ACTUAL Y  +1 AL CONTADOR DE SUSCRIPCIONES QUE TIENE LA SERIE
-                                                                if(!repetidoFavorito){
-                                                                    DatabaseReference dbr=FirebaseDatabase.getInstance().getReference();
-                                                                    Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
-                                                                            ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
-                                                                    dbr.child(FirebaseReferences.SUSCRIPCIONES).push().setValue(suscripcion);
-                                                                    suscripciones++;
-                                                                    refLikes.setValue(suscripciones);
-                                                                    final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                                            .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
-                                                                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                        @Override
-                                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                            Long numSuscripciones= (Long) dataSnapshot.getValue();
-                                                                            numSuscripciones++;
-                                                                            String nivel;
-                                                                            if(numSuscripciones>=5 && numSuscripciones<10){
-                                                                                nivel= Common.INTERMEDIO;
-                                                                            }else if(numSuscripciones>=10){
-                                                                                nivel=Common.AVANZADO;
-                                                                            }else{
-                                                                                nivel=Common.PRINCIPIANTE;
-                                                                            }
-
-                                                                            dataRef.setValue(numSuscripciones);
-                                                                            DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
-                                                                                    .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NIVEL_USUARIO);
-                                                                            datRef.setValue(nivel);
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onCancelled(DatabaseError databaseError) {
-
-                                                                        }
-                                                                    });
-                                                                    SharedPreferences sp = context.getSharedPreferences(Common.TUTORIAL_PREF,context.getApplicationContext().MODE_PRIVATE);
-                                                                    if(sp.getBoolean(Common.TUTORIAL_FAVORITOS,true)){
-                                                                        vp.setCurrentItem(2);
-                                                                    }
-                                                                    Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
+                                            DatabaseReference referenceSuscripcion = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES);
+                                            referenceSuscripcion.orderByChild(FirebaseReferences.TLF_SERIE).equalTo(ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString())
+                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                                                if(childSnapshot!=null){
+                                                                    repetidoFavorito=true;
+                                                                    Toast.makeText(context,textViewNombre.getText().toString() + " " +  context.getString(R.string.rep_favoritos),Toast.LENGTH_LONG).show();
                                                                 }
                                                             }
+                                                            //aqui
+                                                            if(!repetidoFavorito){
+                                                                Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
+                                                                        ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
+                                                                DatabaseReference anadirSerieRef = FirebaseDatabase.getInstance().getReference();
+                                                                anadirSerieRef.child(FirebaseReferences.SUSCRIPCIONES).child("susc_"+ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString()).setValue(suscripcion);
+                                                                refLikes = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.LIKES_SERIE);
+                                                                suscripciones++;
+                                                                refLikes.setValue(suscripciones);
+                                                                final DatabaseReference refNumSuscripUsuario = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                                        .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
+                                                                refNumSuscripUsuario.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                        Long numSuscripciones= (Long) dataSnapshot.getValue();
+                                                                        numSuscripciones++;
+                                                                        String nivel;
+                                                                        if(numSuscripciones>=5 && numSuscripciones<10){
+                                                                            nivel= Common.INTERMEDIO;
+                                                                        }else if(numSuscripciones>=10){
+                                                                            nivel=Common.AVANZADO;
+                                                                        }else{
+                                                                            nivel=Common.PRINCIPIANTE;
+                                                                        }
 
-                                                            @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
+                                                                        refNumSuscripUsuario.setValue(numSuscripciones);
+                                                                        DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                                                .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NIVEL_USUARIO);
+                                                                        datRef.setValue(nivel);
+                                                                    }
 
+                                                                    @Override
+                                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+                                                                SharedPreferences sp = context.getSharedPreferences(Common.TUTORIAL_PREF,context.getApplicationContext().MODE_PRIVATE);
+                                                                if(sp.getBoolean(Common.TUTORIAL_FAVORITOS,true)){
+                                                                    vp.setCurrentItem(2);
+                                                                }
+                                                                Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
                                                             }
-                                                        });
 
-                                                    }
+                                                        }
 
-                                                }
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
                                         }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-
-                                }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
 
-
                                 }
                             });
+
+
 
                             break;
 

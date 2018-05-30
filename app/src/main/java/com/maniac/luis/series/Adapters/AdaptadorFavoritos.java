@@ -391,8 +391,6 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
 
                         //EN CASO DE QUE ESCOJA ELIMINAR UN FAVORITO
                         case R.id.menu_item_borrar_favoritos:
-
-                            progressBarFavoritos.setVisibility(View.VISIBLE);
                             //ELIMINAMOS LA SUSCRIPCIÓN DE ESE USUARIO Y LE QUITAMOS UN LIKE A LA SERIE
                             FirebaseDatabase fd =FirebaseDatabase.getInstance();
                             DatabaseReference root = fd.getReference();
@@ -401,7 +399,38 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     long like = dataSnapshot.getValue(Long.class);
-                                    final FirebaseDatabase database=FirebaseDatabase.getInstance();
+                                    final DatabaseReference refFav=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SUSCRIPCIONES)
+                                            .child("susc_"+ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString());
+                                    refFav.removeValue();
+                                            final DatabaseReference dataRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                    .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
+                                            dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    Long numSuscripciones= (Long) dataSnapshot.getValue();
+                                                    numSuscripciones--;
+                                                    String nivel;
+                                                    if(numSuscripciones>=5 && numSuscripciones<10){
+                                                        nivel= Common.INTERMEDIO;
+                                                    }else if(numSuscripciones>=10){
+                                                        nivel=Common.AVANZADO;
+                                                    }else{
+                                                        nivel=Common.PRINCIPIANTE;
+                                                    }
+
+                                                    dataRef.setValue(numSuscripciones);
+                                                    DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                                            .child(ComunicarClaveUsuarioActual.getClave()).child("nivel");
+                                                    datRef.setValue(nivel);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+                                    /*final FirebaseDatabase database=FirebaseDatabase.getInstance();
                                     database.getReference(FirebaseReferences.SUSCRIPCIONES).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -451,7 +480,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
                                         public void onCancelled(DatabaseError databaseError) {
 
                                         }
-                                    });
+                                    });*/
                                     like--;
                                     refLikes.setValue(like);
                                 }
