@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -129,7 +133,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         fondo = findViewById(R.id.header);
         fondo.setImageResource(R.drawable.series_back);
         listaFondos = new ArrayList<>();
-
 
         //CONTAMOS CUANTOS FONDOS DE PANTALLA HAY EN LA BB.DD Y LOS CARGAMOS LOS ENLACES EN UNA LISTA, COGEMOS UNO DE ELLOS ALEATORIO.
         FirebaseDatabase datab = FirebaseDatabase.getInstance();
@@ -504,7 +507,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
         });
 
 
-
         }
 
 
@@ -642,6 +644,21 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Bitmap getBitmapFromView(View view) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null) {
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        }   else{
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.BLACK);
+        }
+        view.draw(canvas);
+        return returnedBitmap;
     }
     //MÉTODO QUE ABRIRÁ LA PANTALLA DE SELECCIÓN DE FONDOS DE ListaFondos ESPERANDO UN RESULTADO
     public void seleccionarFondo() {

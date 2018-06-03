@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'io.fabric'
+
 
 
 android {
@@ -58,6 +61,10 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.google.code.gson:gson:2.8.0'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'com.google.firebase:firebase-perf:11.8.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true
+    }
 
 }
 

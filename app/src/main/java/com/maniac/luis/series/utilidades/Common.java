@@ -40,4 +40,9 @@ public class Common {
     public static final String USUARIO="usuario";
     public static final String SERIES_CARPETA_RAIZ="SeriesManiacos/";
     public static final String SERIES_RUTA_IMAGEN="seriesManiacos";
+    public static final String NOMBRE="nombre";
+    public static final String FECHA_EMISION="fechaEmision";
+    public static final String LIKES="likes";
+    public static final String ASCENDENTE="Ascendente";
+    public static final String DESCENDENTE="Descendente";
 }

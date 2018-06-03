@@ -143,6 +143,22 @@
     <string name="podras_votar_serie">Podrás votar la serie.</string>
     <string name="busca">Busca</string>
     <string name="anade_serie_fav">Añade la serie a favoritos</string>
+    <string name="showcase_pulsa">Pulsa sobre una serie para ver más información</string>
+    <string name="nombre">nombre</string>
+    <string-array name="spinner_ordena">
+        <item>Ascendente</item>
+        <item>Descendente</item>
+    </string-array>
+    <string-array name="spinner_paises">
+        <item>Todos los paises</item>
+        <item>🇺🇸  United States</item>
+        <item>🇪🇸  España</item>
+        <item>🇬🇧  Gran Bretaña</item>
+        <item>🇲🇽  México</item>
+        <item>🇫🇷  Francia</item>
+        <item>🇨🇦  Canadá</item>
+        <item>Otros</item>
+    </string-array>
 
 
 </resources>

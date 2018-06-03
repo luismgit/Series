@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bg"
+
+    >
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre"
+            android:id="@+id/ordenaNombre"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_9sdp"
+            android:textColor="@color/white"
+            android:buttonTint="#f11775"
+            android:textStyle="bold"
+            android:textSize="@dimen/_15sdp"
+            />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de emisión"
+            android:id="@+id/ordenaFecha"
+            android:layout_marginBottom="@dimen/_9sdp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:buttonTint="#f11775"
+            android:textSize="@dimen/_15sdp"
+            />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Likes"
+            android:id="@+id/ordenaLikes"
+            android:textColor="@color/white"
+            android:buttonTint="#f11775"
+            android:textStyle="bold"
+            android:textSize="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_9sdp"
+            />
+    </RadioGroup>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerPaises"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textStyle="bold"
+        ></Spinner>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerOrdena"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:textStyle="bold"></Spinner>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancelar"
+        android:id="@+id/botonCancelar"
+        android:layout_weight="5"
+            android:background="@drawable/degradado_boton_dialog"
+            android:textColor="@color/white"
+        />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:background="@drawable/degradado_boton_dialog"
+
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:id="@+id/botonOk"
+            android:layout_weight="5"
+            android:background="@drawable/degradado_boton_dialog"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

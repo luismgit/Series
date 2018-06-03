@@ -6,20 +6,32 @@
     >
 
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ordenar por"
+        android:id="@+id/botonOrdenar"
+        android:background="#464353"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        />
+
+    <Button
         android:id="@+id/showcase_button_series"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:visibility="invisible"
         android:text="Showcase"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_centerHorizontal="true"/>
 
 
     <android.support.v7.widget.RecyclerView
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerSeries">
+        android:id="@+id/recyclerSeries"
+        android:layout_below="@id/botonOrdenar"
+        >
 
     </android.support.v7.widget.RecyclerView>
 

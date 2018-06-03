@@ -21,7 +21,7 @@
             android:layout_height="270dp"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/menuBarAbajo"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             android:background="@color/menuBarAbajo">
             <!--si ponemos : app:layout_scrollFlags="scroll|exitUntilCollapsed  al hacer scroll la foto desaparece...
              pero da problemas al cambiar de tabs">-->

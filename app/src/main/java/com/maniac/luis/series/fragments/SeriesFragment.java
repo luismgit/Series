@@ -1,7 +1,10 @@
 package com.maniac.luis.series.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +19,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +38,10 @@ import com.maniac.luis.series.references.FirebaseReferences;
 import com.maniac.luis.series.utilidades.Common;
 import com.maniac.luis.series.utilidades.CustomViewTarget;
 import com.maniac.luis.series.utilidades.EliminaAcentos;
+import com.maniac.luis.series.utilidades.SerieComparatorPorNombre;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -66,6 +75,16 @@ public class SeriesFragment extends Fragment{
     SharedPreferences sharedPref;
     EditText searchEditText;
     boolean pasadoTutorialShowcaseBusca,pasadoTutorialShowcaseBusca2;
+    FirebaseDatabase database;
+    Button ordenarBoton;
+    Spinner spinnerOrdenar,spinnerPaises;
+    String parametroOrdenacion,metodoOrdenacion;
+    RadioButton radioNombre,radioFecha,radioLikes;
+    LinearLayoutManager lm;
+    List<Series>listaFiltrada;
+    Button botonOk,botonCancelar;
+    AlertDialog dialog;
+
 
     public SeriesFragment() {
         // Required empty public constructor
@@ -106,8 +125,189 @@ public class SeriesFragment extends Fragment{
         View vista= inflater.inflate(R.layout.fragment_series, container, false);
         sharedPref = getActivity().getSharedPreferences(Common.TUTORIAL_PREF,getActivity().getApplicationContext().MODE_PRIVATE);
         isShowedTuturial=sharedPref.getBoolean(Common.TUTORIAL_SERIES,true);
+        database = FirebaseDatabase.getInstance();
         rv=vista.findViewById(R.id.recyclerSeries);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        ordenarBoton=vista.findViewById(R.id.botonOrdenar);
+
+
+        ordenarBoton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mbuilder = new AlertDialog.Builder(getActivity());
+                View vista = getLayoutInflater().inflate(R.layout.dialog_ordenar,null);
+                spinnerOrdenar=vista.findViewById(R.id.spinnerOrdena);
+                //ArrayAdapter<String> adapter  = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.spinner_ordena));
+                ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
+                        R.array.spinner_ordena, R.layout.spinner_item_orden);
+                adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                spinnerOrdenar.setAdapter(adapter);
+
+                ArrayAdapter adapterPaises = ArrayAdapter.createFromResource(getActivity(),
+                        R.array.spinner_paises, R.layout.spinner_item_orden);
+                spinnerPaises=vista.findViewById(R.id.spinnerPaises);
+                //ArrayAdapter<String> adapterPaises  = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.spinner_paises));
+                adapterPaises.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                spinnerPaises.setAdapter(adapterPaises);
+                 radioNombre=vista.findViewById(R.id.ordenaNombre);
+                 radioNombre.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         if(spinnerOrdenar.getSelectedItem().equals("Descendente")){
+                             spinnerOrdenar.setSelection(0);
+                         }
+                     }
+                 });
+                 radioFecha=vista.findViewById(R.id.ordenaFecha);
+                radioFecha.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(spinnerOrdenar.getSelectedItem().equals("Ascendente")){
+                            spinnerOrdenar.setSelection(1);
+                        }
+                    }
+                });
+               radioLikes=vista.findViewById(R.id.ordenaLikes);
+                radioLikes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(spinnerOrdenar.getSelectedItem().equals("Ascendente")){
+                            spinnerOrdenar.setSelection(1);
+                        }
+                    }
+                });
+                if(parametroOrdenacion==null || parametroOrdenacion.equals(Common.NOMBRE) ){
+                    radioNombre.setChecked(true);
+                }else if(parametroOrdenacion.equals(Common.FECHA_EMISION)){
+                    radioFecha.setChecked(true);
+                }else if(parametroOrdenacion.equals(Common.LIKES)){
+                    radioLikes.setChecked(true);
+                }
+
+
+               /* mbuilder.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if(radioNombre.isChecked()){
+                            parametroOrdenacion=Common.NOMBRE;
+                            if(listaFiltrada!=null){
+                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(listaFiltrada);
+                            }else{
+                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(series);
+                            }
+                        }else if(radioFecha.isChecked()){
+                            parametroOrdenacion=Common.FECHA_EMISION;
+                            if(listaFiltrada!=null){
+                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(listaFiltrada);
+                            }else{
+                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(series);
+                            }
+                        }else if(radioLikes.isChecked()){
+                            parametroOrdenacion=Common.LIKES;
+                            if(listaFiltrada!=null){
+                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(listaFiltrada);
+                            }else{
+                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                                adaptadorSeries.setFilter(series);
+                            }
+
+                        }
+                        if(listaFiltrada!=null){
+                            adaptadorSeries.setFilter(ordenarSeriesPaises(listaFiltrada, (String) spinnerPaises.getSelectedItem()));
+                        }else{
+                            adaptadorSeries.setFilter(ordenarSeriesPaises(series, (String) spinnerPaises.getSelectedItem()));
+                        }
+
+
+
+                        if(spinnerOrdenar.getSelectedItem().equals(Common.ASCENDENTE)){
+                            lm.setReverseLayout(false);
+                            lm.setStackFromEnd(false);
+                        }else if(spinnerOrdenar.getSelectedItem().equals(Common.DESCENDENTE)){
+                            lm.setReverseLayout(true);
+                            lm.setStackFromEnd(true);
+                        }
+                    }
+                });*/
+               botonOk=vista.findViewById(R.id.botonOk);
+               botonOk.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       if(radioNombre.isChecked()){
+                           parametroOrdenacion=Common.NOMBRE;
+                           if(listaFiltrada!=null){
+                               Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(listaFiltrada);
+                           }else{
+                               Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(series);
+                           }
+                       }else if(radioFecha.isChecked()){
+                           parametroOrdenacion=Common.FECHA_EMISION;
+                           if(listaFiltrada!=null){
+                               Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(listaFiltrada);
+                           }else{
+                               Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(series);
+                           }
+                       }else if(radioLikes.isChecked()){
+                           parametroOrdenacion=Common.LIKES;
+                           if(listaFiltrada!=null){
+                               Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(listaFiltrada);
+                           }else{
+                               Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
+                               adaptadorSeries.setFilter(series);
+                           }
+
+                       }
+                       if(listaFiltrada!=null){
+                           adaptadorSeries.setFilter(ordenarSeriesPaises(listaFiltrada, (String) spinnerPaises.getSelectedItem()));
+                       }else{
+                           adaptadorSeries.setFilter(ordenarSeriesPaises(series, (String) spinnerPaises.getSelectedItem()));
+                       }
+
+
+
+                       if(spinnerOrdenar.getSelectedItem().equals(Common.ASCENDENTE)){
+                           lm.setReverseLayout(false);
+                           lm.setStackFromEnd(false);
+                       }else if(spinnerOrdenar.getSelectedItem().equals(Common.DESCENDENTE)){
+                           lm.setReverseLayout(true);
+                           lm.setStackFromEnd(true);
+                       }
+                       dialog.dismiss();
+                   }
+               });
+
+               botonCancelar=vista.findViewById(R.id.botonCancelar);
+               botonCancelar.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       dialog.dismiss();
+                   }
+               });
+
+              /*  mbuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });*/
+                mbuilder.setView(vista);
+                dialog = mbuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+         lm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(lm);
          pasadoTutorialShowcaseBusca=false;
         pasadoTutorialShowcaseBusca2=false;
         vp = getActivity().findViewById(R.id.container);
@@ -128,7 +328,7 @@ public class SeriesFragment extends Fragment{
                             .setTarget(new CustomViewTarget(R.id.showcase_button_series,-75,0,getActivity()))
                             .setContentTitle(getString(R.string.series_showcase))
                             .setStyle(R.style.CustomShowcaseTheme3)
-                            .setContentText("Pulsa sobre una serie para ver más información")
+                            .setContentText(getString(R.string.showcase_pulsa))
                             .setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -173,18 +373,17 @@ public class SeriesFragment extends Fragment{
         });
 
         series=new ArrayList<>();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         adaptadorSeries=new AdaptadorSeries(series,this.getContext(),vp);
         rv.setAdapter(adaptadorSeries);
-
         //COGEMOS LA REFERENCIA DEL NODO SERIES A LO AÑADIMOS AL ARRAYLIST SERIES , CUANDO HAYA UN CAMBIO SE NOTIFICA AL AL ADAPTADOR PARA QUE CAMBIE LAS VISTAS
         database.getReference(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 series.removeAll(series);
                 for (DataSnapshot snapshot:
-                    dataSnapshot.getChildren()){
+                        dataSnapshot.getChildren()){
                     Series serie = snapshot.getValue(Series.class);
+
                     series.add(serie);
                 }
 
@@ -196,9 +395,9 @@ public class SeriesFragment extends Fragment{
 
             }
         });
+
         return vista;
     }
-
 
 
 
@@ -261,7 +460,7 @@ public class SeriesFragment extends Fragment{
             @Override
             public boolean onQueryTextChange(String newText) {
                 try{
-                    List<Series>listaFiltrada=filter(series,newText);
+                    listaFiltrada=filter(series,newText);
                     adaptadorSeries.setFilter(listaFiltrada);
                 }catch (Exception e){
 
@@ -344,6 +543,60 @@ public class SeriesFragment extends Fragment{
                     .build();
         }
         return listaFiltrada;
+    }
+
+    private List<Series> ordenarSeriesPaises(List<Series> lista,String pais){
+        List<Series> listaFiltro=new ArrayList<>();
+        String paisSeleccionado="";
+        if(pais.equals("Todos los paises")){
+            return lista;
+        }
+
+        switch (pais){
+            case "\uD83C\uDDFA\uD83C\uDDF8 United States":
+                paisSeleccionado="US";
+                break;
+            case "\uD83C\uDDEA\uD83C\uDDF8 España":
+                paisSeleccionado="ES";
+                break;
+            case "\uD83C\uDDEC\uD83C\uDDE7 Gran Bretaña":
+                paisSeleccionado="GB";
+                break;
+            case "\uD83C\uDDF2\uD83C\uDDFD México":
+                paisSeleccionado="MX";
+                break;
+            case "\uD83C\uDDEB\uD83C\uDDF7 Francia":
+                paisSeleccionado="FR";
+                break;
+            case "\uD83C\uDDE8\uD83C\uDDE6 Canadá":
+                paisSeleccionado="CA";
+                break;
+            default:
+                paisSeleccionado="desconocido";
+                break;
+
+        }
+
+        for (int i = 0; i <lista.size() ; i++) {
+            Series serie = lista.get(i);
+            if(!paisSeleccionado.equals("desconocido")){
+                if(serie.getPaises()!=null){
+                    if(serie.getPaises().get(0).equals(paisSeleccionado)){
+                        listaFiltro.add(serie);
+                    }
+
+                }
+            }else{
+                if(serie.getPaises()!=null){
+                    if(!serie.getPaises().get(0).equals("US") && !serie.getPaises().get(0).equals("ES") && !serie.getPaises().get(0).equals("GB")
+                            && !serie.getPaises().get(0).equals("MX") && !serie.getPaises().get(0).equals("FR") && !serie.getPaises().get(0).equals("CA")){
+                        listaFiltro.add(serie);
+                    }
+                }
+            }
+
+        }
+        return listaFiltro;
     }
 
 
