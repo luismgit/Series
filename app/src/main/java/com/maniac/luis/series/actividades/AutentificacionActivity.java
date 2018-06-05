@@ -198,8 +198,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
 
     //MÉTODO QUE LANZA UN INTENT A LA PANTALLA DE PRINCIPAL
     private void irAPrincipal() {
-
         Intent intent = new Intent(AutentificacionActivity.this, TabActivity.class);
+
         startActivity(intent);
 
     }

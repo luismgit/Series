@@ -204,12 +204,15 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                             @Override
                             public void onResponse(Call<SeriesVideoResult> call, Response<SeriesVideoResult> response) {
                                 SeriesVideoResult results = response.body();
-                                List<SeriesVideoResult.ResultsBean> listaVideos = results.getResults();
-                                if(listaVideos.size()!=0){
-                                    player.setVisibility(View.VISIBLE);
-                                    idYoutube=listaVideos.get(0).getKey();
-                                    player.initialize(Common.API_KEY_YOUTUBE, InfoSeriesActivity.this);
+                                if(results!=null){
+                                    List<SeriesVideoResult.ResultsBean> listaVideos = results.getResults();
+                                    if(listaVideos.size()!=0){
+                                        player.setVisibility(View.VISIBLE);
+                                        idYoutube=listaVideos.get(0).getKey();
+                                        player.initialize(Common.API_KEY_YOUTUBE, InfoSeriesActivity.this);
+                                    }
                                 }
+
                             }
 
                             @Override

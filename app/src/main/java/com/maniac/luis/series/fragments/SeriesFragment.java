@@ -183,57 +183,6 @@ public class SeriesFragment extends Fragment{
                     radioLikes.setChecked(true);
                 }
 
-
-               /* mbuilder.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        if(radioNombre.isChecked()){
-                            parametroOrdenacion=Common.NOMBRE;
-                            if(listaFiltrada!=null){
-                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(listaFiltrada);
-                            }else{
-                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(series);
-                            }
-                        }else if(radioFecha.isChecked()){
-                            parametroOrdenacion=Common.FECHA_EMISION;
-                            if(listaFiltrada!=null){
-                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(listaFiltrada);
-                            }else{
-                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(series);
-                            }
-                        }else if(radioLikes.isChecked()){
-                            parametroOrdenacion=Common.LIKES;
-                            if(listaFiltrada!=null){
-                                Collections.sort(listaFiltrada, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(listaFiltrada);
-                            }else{
-                                Collections.sort(series, new SerieComparatorPorNombre(true,parametroOrdenacion));
-                                adaptadorSeries.setFilter(series);
-                            }
-
-                        }
-                        if(listaFiltrada!=null){
-                            adaptadorSeries.setFilter(ordenarSeriesPaises(listaFiltrada, (String) spinnerPaises.getSelectedItem()));
-                        }else{
-                            adaptadorSeries.setFilter(ordenarSeriesPaises(series, (String) spinnerPaises.getSelectedItem()));
-                        }
-
-
-
-                        if(spinnerOrdenar.getSelectedItem().equals(Common.ASCENDENTE)){
-                            lm.setReverseLayout(false);
-                            lm.setStackFromEnd(false);
-                        }else if(spinnerOrdenar.getSelectedItem().equals(Common.DESCENDENTE)){
-                            lm.setReverseLayout(true);
-                            lm.setStackFromEnd(true);
-                        }
-                    }
-                });*/
                botonOk=vista.findViewById(R.id.botonOk);
                botonOk.setOnClickListener(new View.OnClickListener() {
                    @Override
@@ -294,12 +243,6 @@ public class SeriesFragment extends Fragment{
                    }
                });
 
-              /*  mbuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });*/
                 mbuilder.setView(vista);
                 dialog = mbuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -325,7 +268,7 @@ public class SeriesFragment extends Fragment{
                     editor.commit();
                     isShowedTuturial=false;
                     showcaseView2=new ShowcaseView.Builder(getActivity())
-                            .setTarget(new CustomViewTarget(R.id.showcase_button_series,-75,0,getActivity()))
+                            .setTarget(new CustomViewTarget(R.id.showcase_button_series,-75,100,getActivity()))
                             .setContentTitle(getString(R.string.series_showcase))
                             .setStyle(R.style.CustomShowcaseTheme3)
                             .setContentText(getString(R.string.showcase_pulsa))
@@ -373,7 +316,7 @@ public class SeriesFragment extends Fragment{
         });
 
         series=new ArrayList<>();
-        adaptadorSeries=new AdaptadorSeries(series,this.getContext(),vp);
+        adaptadorSeries=new AdaptadorSeries(series,this.getContext(),vp,vista);
         rv.setAdapter(adaptadorSeries);
         //COGEMOS LA REFERENCIA DEL NODO SERIES A LO AÑADIMOS AL ARRAYLIST SERIES , CUANDO HAYA UN CAMBIO SE NOTIFICA AL AL ADAPTADOR PARA QUE CAMBIE LAS VISTAS
         database.getReference(FirebaseReferences.SERIES_REFERENCE).addValueEventListener(new ValueEventListener() {
@@ -395,7 +338,6 @@ public class SeriesFragment extends Fragment{
 
             }
         });
-
         return vista;
     }
 

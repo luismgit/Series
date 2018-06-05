@@ -23,7 +23,6 @@
             android:layout_marginBottom="@dimen/_9sdp"
             android:textColor="@color/white"
             android:buttonTint="#f11775"
-            android:textStyle="bold"
             android:textSize="@dimen/_15sdp"
             />
         <RadioButton
@@ -33,7 +32,6 @@
             android:id="@+id/ordenaFecha"
             android:layout_marginBottom="@dimen/_9sdp"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:buttonTint="#f11775"
             android:textSize="@dimen/_15sdp"
             />
@@ -44,7 +42,6 @@
             android:id="@+id/ordenaLikes"
             android:textColor="@color/white"
             android:buttonTint="#f11775"
-            android:textStyle="bold"
             android:textSize="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_9sdp"
             />
@@ -71,7 +68,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/_30sdp"
-        android:paddingHorizontal="@dimen/_20sdp">
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_15sdp">
 
         <Button
         android:layout_width="wrap_content"

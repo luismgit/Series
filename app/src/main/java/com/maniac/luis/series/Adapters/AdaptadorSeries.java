@@ -2,6 +2,7 @@ package com.maniac.luis.series.Adapters;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -59,11 +60,13 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     private Hashtable<String,String> contactos;
     Series serie;
     ViewPager vp;
+    View rootView;
 
-    public AdaptadorSeries(List<Series> series,Context mContext,ViewPager vp) {
+    public AdaptadorSeries(List<Series> series,Context mContext,ViewPager vp,View rootView) {
         this.series = series;
         this.mContext=mContext;
         this.vp=vp;
+        this.rootView=rootView;
     }
 
     public List<Series> getSeries(){
@@ -73,7 +76,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
     @Override
     public SeriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_view_series,parent,false);
-        SeriesViewHolder holder = new SeriesViewHolder(v,series,vp,this);
+        SeriesViewHolder holder = new SeriesViewHolder(v,series,vp,this,rootView);
         return holder;
     }
 
@@ -153,8 +156,9 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         List<Series> series=new ArrayList<>();
         ViewPager vp;
         AdaptadorSeries adaptadorSeries;
+        View rootView;
 
-        public SeriesViewHolder(View itemView,List series,ViewPager vp,AdaptadorSeries adaptadorSeries)  {
+        public SeriesViewHolder(View itemView,List series,ViewPager vp,AdaptadorSeries adaptadorSeries,View rootView)  {
             super(itemView);
             context=itemView.getContext();
             this.series=series;
@@ -169,6 +173,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             claveUsuarioActual= ComunicarClaveUsuarioActual.getClave();
             phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
             this.adaptadorSeries=adaptadorSeries;
+            this.rootView=rootView;
             //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
            // StrictMode.setVmPolicy(builder.build());
         }
@@ -210,7 +215,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
         //MÉTODO QUE SE EJECUTARÁ CUANDO SE PULSE EL MENÚ DE CADA VISTA
 
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
+            View vistaRoot = view;
             @SuppressLint("RestrictedApi") Context wrapper = new ContextThemeWrapper(context, R.style.ThemeOverlay_MyTheme);
             repetidoFavorito=false;
             PopupMenu popupMenu = new PopupMenu(wrapper, textViewOptions);
@@ -252,6 +258,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Series serie = dataSnapshot.getValue(Series.class);
+
                                     suscripciones=serie.getLikes();
                                     imagenSuscripcion=serie.getImagen();
 
@@ -268,7 +275,12 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                             }
                                                             //aqui
                                                             if(!repetidoFavorito){
-                                                                Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
+                                                                if(!((Activity) context).isFinishing())
+                                                                {
+                                                                     Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show(); //show dialog
+                                                                }
+                                                                new AnadirFavoritosBackground().execute(view);
+                                                              /*  Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
                                                                         ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
                                                                 DatabaseReference anadirSerieRef = FirebaseDatabase.getInstance().getReference();
                                                                 anadirSerieRef.child(FirebaseReferences.SUSCRIPCIONES).child("susc_"+ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString()).setValue(suscripcion);
@@ -295,6 +307,8 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                         DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
                                                                                 .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NIVEL_USUARIO);
                                                                         datRef.setValue(nivel);
+                                                                        Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show(); //show dialog
+
                                                                     }
 
                                                                     @Override
@@ -306,7 +320,11 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
                                                                 if(sp.getBoolean(Common.TUTORIAL_FAVORITOS,true)){
                                                                     vp.setCurrentItem(2);
                                                                 }
-                                                                Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show();
+                                                                if(!((Activity) context).isFinishing())
+                                                                {
+                                                                   // Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show(); //show dialog
+                                                                }*/
+
                                                             }
 
                                                         }
@@ -368,6 +386,62 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             context.startActivity(intent);
         }
 
+        public  class AnadirFavoritosBackground extends AsyncTask<View,Void,View>{
+
+             DatabaseReference refNumSuscripUsuario=null;
+
+
+            @Override
+            protected View doInBackground(View... views) {
+                View v =views[0];
+                Suscripcion suscripcion = new Suscripcion(claveUsuarioActual,textViewNombre.getText().toString(), (float) 0,phoneNumber,imagenSuscripcion
+                        ,ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString(),"no");
+                DatabaseReference anadirSerieRef = FirebaseDatabase.getInstance().getReference();
+                anadirSerieRef.child(FirebaseReferences.SUSCRIPCIONES).child("susc_"+ComunicarCurrentUser.getPhoneNumberUser()+"_"+textViewNombre.getText().toString()).setValue(suscripcion);
+                refLikes = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.SERIES_REFERENCE).child(textViewNombre.getText().toString()).child(FirebaseReferences.LIKES_SERIE);
+                suscripciones++;
+                refLikes.setValue(suscripciones);
+                refNumSuscripUsuario = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                        .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NUM_SUSCRIPCIONES);
+                refNumSuscripUsuario.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long numSuscripciones= (Long) dataSnapshot.getValue();
+                        numSuscripciones++;
+                        String nivel;
+                        if(numSuscripciones>=5 && numSuscripciones<10){
+                            nivel= Common.INTERMEDIO;
+                        }else if(numSuscripciones>=10){
+                            nivel=Common.AVANZADO;
+                        }else{
+                            nivel=Common.PRINCIPIANTE;
+                        }
+
+                        refNumSuscripUsuario.setValue(numSuscripciones);
+                        DatabaseReference datRef=FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.USUARIOS_REFERENCE)
+                                .child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.NIVEL_USUARIO);
+                        datRef.setValue(nivel);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                return v;
+            }
+
+            @Override
+            protected void onPostExecute(View vista) {
+                super.onPostExecute(vista);
+                //Toast.makeText(context,textViewNombre.getText().toString() + " " + context.getString(R.string.anadida_fav),Toast.LENGTH_LONG).show(); //show dialog
+                SharedPreferences sp = context.getSharedPreferences(Common.TUTORIAL_PREF,context.getApplicationContext().MODE_PRIVATE);
+                if(sp.getBoolean(Common.TUTORIAL_FAVORITOS,true)){
+                    vp.setCurrentItem(2);
+                }
+            }
+        }
 
 
 

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -148,10 +149,15 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 aleatorio = (int) Math.floor(Math.random() * ((listaFondos.size()) - 0) + 0);
 
                 //A TRAVÉS DE LA LIBRERIA GLIDE CARGAMOS CARGAMOS EL ENLACE DE FIREBASE STORAGE EN EL IMAGEVIEW
-                Glide.with(TabActivity.this)
-                        .load(listaFondos.get(aleatorio))
-                        .into(fondo);
-                Imagenes.setListaFondos(listaFondos);
+                try{
+                    Glide.with(TabActivity.this)
+                            .load(listaFondos.get(aleatorio))
+                            .into(fondo);
+                    Imagenes.setListaFondos(listaFondos);
+                }catch (Exception e){
+
+                }
+
             }
 
             @Override
@@ -506,7 +512,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             }
         });
 
-
         }
 
 
@@ -518,6 +523,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -637,6 +643,7 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
                 sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.unete) + " " + UrlApp.getUrl_app());
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, getString(R.string.compartir)));
+
             }
 
 
@@ -842,7 +849,6 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             View rootView = inflater.inflate(R.layout.fragment_tab, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
             return rootView;
         }
     }

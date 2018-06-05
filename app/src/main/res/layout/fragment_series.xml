@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Ordenar por"
         android:id="@+id/botonOrdenar"
-        android:background="#464353"
+        android:background="@drawable/degradado_boton_ordenar"
         android:textColor="@color/white"
         android:textStyle="bold"
         />

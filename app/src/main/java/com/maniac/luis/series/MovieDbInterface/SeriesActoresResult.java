@@ -1,12 +1,13 @@
 package com.maniac.luis.series.MovieDbInterface;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Luis on 24/05/2018.
  */
 
-public class SeriesActoresResult {
+public class SeriesActoresResult implements Serializable{
 
     /**
      * cast : [{"character":"Walter White","credit_id":"52542282760ee313280017f9","gender":2,"id":17419,"name":"Bryan Cranston","order":0,"profile_path":"/9dvZ0Id5RtnCGianoayNJBFrNVU.jpg"},{"character":"Skyler White","credit_id":"52542282760ee3132800181b","gender":1,"id":134531,"name":"Anna Gunn","order":1,"profile_path":"/6yLKtfYFWbJp5HAjvCecQCYlmqk.jpg"},{"character":"Jesse Pinkman","credit_id":"52542282760ee31328001845","gender":2,"id":84497,"name":"Aaron Paul","order":2,"profile_path":"/pAa8H7DjgXENBhyvJy0hVLKvVT6.jpg"},{"character":"Hank Schrader","credit_id":"52542283760ee3132800187b","gender":2,"id":14329,"name":"Dean Norris","order":3,"profile_path":"/owIr4b4VIlJu0m6Drofd3P0qDl5.jpg"},{"character":"Marie Schrader","credit_id":"52542283760ee31328001891","gender":1,"id":1217934,"name":"Betsy Brandt","order":4,"profile_path":"/zpmsca1HCVqYrtWXV9xdmsECDTI.jpg"},{"character":"Walter White Jr.","credit_id":"52542284760ee313280018a9","gender":2,"id":209674,"name":"RJ Mitte","order":5,"profile_path":"/hAePiQIVZkgGfAB8bCxdmS9nCfW.jpg"},{"character":"Mike Ehrmantraut","credit_id":"5271b1e6760ee35af60941ad","gender":2,"id":783,"name":"Jonathan Banks","order":10,"profile_path":"/s6K0lromCtmSTzuX9hig8OPiRsC.jpg"},{"character":"Saul Goodman","credit_id":"5271b180760ee35afc09bb8d","gender":2,"id":59410,"name":"Bob Odenkirk","order":73,"profile_path":"/1NrWxUR86TnHzqxl4Cs9qTzJhtm.jpg"}]
@@ -42,7 +43,7 @@ public class SeriesActoresResult {
         this.crew = crew;
     }
 
-    public static class CastBean {
+    public static class CastBean implements Serializable {
         /**
          * character : Walter White
          * credit_id : 52542282760ee313280017f9

@@ -3,6 +3,7 @@ package com.maniac.luis.series.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.maniac.luis.series.MovieDbInterface.SeriesActoresResult;
 import com.maniac.luis.series.R;
+import com.maniac.luis.series.actividades.InfoActorActivity;
 import com.maniac.luis.series.utilidades.Common;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
     @Override
     public ActoresViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_actor,parent,false);
-        ActoresViewHolder holder = new ActoresViewHolder(view,context,this,urlImagenSerie);
+        ActoresViewHolder holder = new ActoresViewHolder(view,context,this,urlImagenSerie,actores);
         return holder;
     }
 
@@ -89,8 +91,9 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
         Context context;
         AdaptadorActores adaptadorActores;
         String urlImagenSerie;
+        List<SeriesActoresResult.CastBean> actores;
 
-        public ActoresViewHolder(View itemView,Context context,AdaptadorActores adaptadorActores,String urlImagenSerie) {
+        public ActoresViewHolder(View itemView,Context context,AdaptadorActores adaptadorActores,String urlImagenSerie,List actores) {
             super(itemView);
             this.context=context;
             imagenActor=itemView.findViewById(R.id.imagenActor);
@@ -98,6 +101,7 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
             actorReal=itemView.findViewById(R.id.nombreActorReal);
             this.adaptadorActores=adaptadorActores;
             this.urlImagenSerie=urlImagenSerie;
+            this.actores=actores;
         }
 
         public void setOnclickListener(){
@@ -127,6 +131,17 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
 
                     miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     miDialogo.show();
+                }
+            });
+
+            actorReal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(context,"Actor -> " + actores.get(getAdapterPosition()).getId(),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, InfoActorActivity.class);
+                    SeriesActoresResult.CastBean actor = actores.get(getAdapterPosition());
+                    intent.putExtra(Common.SERIE_OBJETO,actor);
+                    context.startActivity(intent);
                 }
             });
 

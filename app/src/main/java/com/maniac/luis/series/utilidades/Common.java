@@ -45,4 +45,5 @@ public class Common {
     public static final String LIKES="likes";
     public static final String ASCENDENTE="Ascendente";
     public static final String DESCENDENTE="Descendente";
+    public static final String ACTOR_ID="actorId";
 }

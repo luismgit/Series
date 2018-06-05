@@ -9,5 +9,4 @@
     android:gravity="left"
     android:textColor="#ffffff"
     android:padding="5dip"
-    android:textStyle="bold"
     />

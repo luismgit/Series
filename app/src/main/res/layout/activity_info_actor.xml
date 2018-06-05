@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/scrollViewSerie"
+    android:background="@drawable/degradado_info_series"
+    >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.maniac.luis.series.actividades.InfoActorActivity"
+    android:paddingLeft="@dimen/_15sdp"
+    android:paddingRight="@dimen/_15sdp"
+    android:paddingVertical="@dimen/_17sdp"
+    android:orientation="vertical"
+
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kiefer Sutherland"
+        android:textSize="@dimen/_20sdp"
+        android:gravity="left"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:id="@+id/nombreActor"
+        android:layout_marginBottom="@dimen/_10sdp"/>
+
+
+
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:id="@+id/imagenActor"
+            android:layout_marginRight="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edad"
+            android:textSize="@dimen/_13sdp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nacimientoActor"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:text="62"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp"
+
+            />
+
+
+
+    </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lugar de nacimiento"
+                android:textSize="@dimen/_13sdp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:textStyle="bold"
+                />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lugarNacimiento"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="#ffffff"
+        />
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Biografía"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:id="@+id/biografia"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="#ffffff"
+        />
+
+
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>
