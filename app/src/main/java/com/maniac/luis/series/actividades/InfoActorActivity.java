@@ -142,25 +142,6 @@ public class InfoActorActivity extends AppCompatActivity {
                         sinCreditos.setVisibility(View.GONE);
                     }else{
                         textViewInterpretacion.setVisibility(View.VISIBLE);
-                        for (int i = 0; i <papelesActor.size() ; i++) {
-                            interface1 = retrofit.create(ApiInterfaceActores.class);
-                            Call<SeriesActoresResult> callActores = interface1.listOfSeriesActores(papelesActor.get(i).getId(),Common.API_KEY_MOVIE_DB,"en");
-                            callActores.enqueue(new Callback<SeriesActoresResult>() {
-                                @Override
-                                public void onResponse(Call<SeriesActoresResult> call, Response<SeriesActoresResult> response) {
-                                    SeriesActoresResult result = response.body();
-                                    if(result!=null){
-                                        List<SeriesActoresResult.CastBean> listaActores = result.getCast();
-
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<SeriesActoresResult> call, Throwable t) {
-
-                                }
-                            });
-                        }
                         adaptadorCreditosActores=new AdaptadorCreditosActores(papelesActor,InfoActorActivity.this,actor.getProfile_path());
                         rvPapelesActor.setAdapter(adaptadorCreditosActores);
                         rvPapelesActor.setLayoutManager(new GridLayoutManager(InfoActorActivity.this,2));
