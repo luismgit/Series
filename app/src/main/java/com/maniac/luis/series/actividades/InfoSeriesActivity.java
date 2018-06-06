@@ -390,4 +390,6 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
     protected YouTubePlayer.Provider getYoutubePlayerProvider(){
         return player;
     }
+
+
 }

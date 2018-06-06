@@ -4,8 +4,6 @@ package com.maniac.luis.series.Adapters;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,43 +107,33 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
             imagenActor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    miDialogo=new Dialog(context);
-                    ImageView imagen;
-                    miDialogo.setContentView(R.layout.image_pop_up);
-                    imagen=miDialogo.findViewById(R.id.imagenAmpliada);
-                    int position = getAdapterPosition();
-                    SeriesActoresResult.CastBean actor = adaptadorActores.getActores().get(position);
-                    if(actor.getProfile_path()==null){
-                        Glide.with(context)
-                                .load(urlImagenSerie)
-                                .fitCenter()
-                                .centerCrop()
-                                .into(imagen);
-                    }else{
-                        Glide.with(context)
-                                .load(Common.BASE_URL_POSTER+actor.getProfile_path())
-                                .fitCenter()
-                                .centerCrop()
-                                .into(imagen);
-                    }
-
-                    miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    miDialogo.show();
+                   intentVerActor();
                 }
             });
 
             actorReal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(context,"Actor -> " + actores.get(getAdapterPosition()).getId(),Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, InfoActorActivity.class);
-                    SeriesActoresResult.CastBean actor = actores.get(getAdapterPosition());
-                    intent.putExtra(Common.SERIE_OBJETO,actor);
-                    context.startActivity(intent);
+                   intentVerActor();
+                }
+            });
+
+            actorSerie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    intentVerActor();
                 }
             });
 
 
+        }
+
+        public void intentVerActor(){
+            //Toast.makeText(context,"Actor -> " + actores.get(getAdapterPosition()).getId(),Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, InfoActorActivity.class);
+            SeriesActoresResult.CastBean actor = actores.get(getAdapterPosition());
+            intent.putExtra(Common.SERIE_OBJETO,actor);
+            context.startActivity(intent);
         }
 
     }

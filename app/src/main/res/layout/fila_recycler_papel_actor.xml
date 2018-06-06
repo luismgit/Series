@@ -23,17 +23,7 @@
         android:textColor="#ffffff"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nombreSerieCredito"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:gravity="center"
-        android:id="@+id/cargoActorSerie"
-        android:layout_marginBottom="@dimen/_7sdp"
-        android:textColor="#ffffff"
 
-        />
 
 
 

@@ -137,9 +137,10 @@ public class InfoActorActivity extends AppCompatActivity {
                     sinCreditos.setVisibility(View.VISIBLE);
                     textViewInterpretacion.setVisibility(View.GONE);
                 }else{
+                    sinCreditos.setVisibility(View.GONE);
 
                     if( papelesActor==null || papelesActor.size()==0){
-                        sinCreditos.setVisibility(View.GONE);
+                        textViewInterpretacion.setVisibility(View.GONE);
                     }else{
                         textViewInterpretacion.setVisibility(View.VISIBLE);
                         adaptadorCreditosActores=new AdaptadorCreditosActores(papelesActor,InfoActorActivity.this,actor.getProfile_path());
@@ -148,7 +149,7 @@ public class InfoActorActivity extends AppCompatActivity {
                     }
 
                     if( papelesProduccion==null || papelesProduccion.size()==0 ){
-                        sinCreditos.setVisibility(View.GONE);
+                       textViewProduccion.setVisibility(View.GONE);
                     }else{
                         textViewProduccion.setVisibility(View.VISIBLE);
                         adaptadorCreditosProduccionActores=new AdaptadorCreditosProduccionActores(papelesProduccion,InfoActorActivity.this);
