@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:text="Créditos"
         android:textStyle="bold"
-        android:textSize="@dimen/_12sdp"
+        android:textSize="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:textColor="#ffffff"
         />
@@ -137,15 +137,15 @@
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/_12sdp"
-        android:text="Interpretación"
-        android:id="@+id/comoInterpretacion"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        />
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/_12sdp"
+    android:text="Interpretación"
+    android:id="@+id/comoInterpretacion"
+    android:layout_marginBottom="@dimen/_15sdp"
+    android:textColor="#ffffff"
+    android:textStyle="bold"
+    />
 
 
     <android.support.v7.widget.RecyclerView
@@ -158,7 +158,25 @@
     </android.support.v7.widget.RecyclerView>
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:text="Producción"
+        android:id="@+id/comoProduccion"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        />
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:id="@+id/recyclerProduccionActor"
+        android:layout_marginBottom="@dimen/_15sdp"
+        >
+    </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 

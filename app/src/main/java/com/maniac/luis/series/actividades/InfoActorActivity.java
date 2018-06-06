@@ -7,10 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.maniac.luis.series.Adapters.AdaptadorCreditosActores;
+import com.maniac.luis.series.Adapters.AdaptadorCreditosProduccionActores;
+import com.maniac.luis.series.MovieDbInterface.ApiInterfaceActores;
 import com.maniac.luis.series.MovieDbInterface.ApiInterfaceCreditosActores;
 import com.maniac.luis.series.MovieDbInterface.ApiInterfaceInfoActores;
 import com.maniac.luis.series.MovieDbInterface.SeriesActoresInfoResult;
@@ -19,6 +22,7 @@ import com.maniac.luis.series.MovieDbInterface.SeriesCreditosActorResult;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,12 +36,16 @@ public class InfoActorActivity extends AppCompatActivity {
 
     SeriesActoresResult.CastBean actor;
     ImageView imagenActor;
-    TextView nombreActor,nacimentoActor,biografiaActor,lugarNacimiento,sinCreditos;
+    TextView nombreActor,nacimentoActor,biografiaActor,lugarNacimiento,sinCreditos,textViewInterpretacion,textViewProduccion;
     Retrofit retrofit;
     List<SeriesCreditosActorResult.CastBean> papelesActor;
     List<SeriesCreditosActorResult.CrewBean> papelesProduccion;
     RecyclerView rvPapelesActor,rvPapelesProduccion;
     AdaptadorCreditosActores adaptadorCreditosActores;
+    AdaptadorCreditosProduccionActores adaptadorCreditosProduccionActores;
+    List<String> papelesRepetidos;
+    ApiInterfaceActores interface1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +57,11 @@ public class InfoActorActivity extends AppCompatActivity {
         biografiaActor=findViewById(R.id.biografia);
         lugarNacimiento=findViewById(R.id.lugarNacimiento);
         rvPapelesActor=findViewById(R.id.recyclerPapelesActor);
+        rvPapelesProduccion=findViewById(R.id.recyclerProduccionActor);
         sinCreditos=findViewById(R.id.sinCreditos);
+        textViewInterpretacion=findViewById(R.id.comoInterpretacion);
+        textViewProduccion=findViewById(R.id.comoProduccion);
+        papelesRepetidos=new ArrayList<>();
         actor= (SeriesActoresResult.CastBean) getIntent().getExtras().getSerializable(Common.SERIE_OBJETO);
         Log.i("actor",actor.getId()+"");
         if(actor.getProfile_path()!=null){
@@ -99,6 +111,9 @@ public class InfoActorActivity extends AppCompatActivity {
                     biografiaActor.setText(detallesActor.getBiography());
                 }else{
                     biografiaActor.setText(getString(R.string.desconocido));
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)biografiaActor.getLayoutParams();
+                    params.setMargins(0,0,0,500);
+                    biografiaActor.setLayoutParams(params);
                 }
             }
 
@@ -109,7 +124,6 @@ public class InfoActorActivity extends AppCompatActivity {
         });
 
 
-
         ApiInterfaceCreditosActores interfaceCreditos = retrofit.create(ApiInterfaceCreditosActores.class);
         Call<SeriesCreditosActorResult> call2 = interfaceCreditos.listOfSeriesCreditosActores(actor.getId(),Common.API_KEY_MOVIE_DB,"es");
         call2.enqueue(new Callback<SeriesCreditosActorResult>() {
@@ -118,16 +132,47 @@ public class InfoActorActivity extends AppCompatActivity {
                 SeriesCreditosActorResult creditos=response.body();
                 papelesActor=creditos.getCast();
                 papelesProduccion=creditos.getCrew();
+
                 if(creditos==null){
                     sinCreditos.setVisibility(View.VISIBLE);
+                    textViewInterpretacion.setVisibility(View.GONE);
                 }else{
 
-                    if(papelesActor.size()==0 || papelesActor==null){
+                    if( papelesActor==null || papelesActor.size()==0){
                         sinCreditos.setVisibility(View.GONE);
                     }else{
+                        textViewInterpretacion.setVisibility(View.VISIBLE);
+                        for (int i = 0; i <papelesActor.size() ; i++) {
+                            interface1 = retrofit.create(ApiInterfaceActores.class);
+                            Call<SeriesActoresResult> callActores = interface1.listOfSeriesActores(papelesActor.get(i).getId(),Common.API_KEY_MOVIE_DB,"en");
+                            callActores.enqueue(new Callback<SeriesActoresResult>() {
+                                @Override
+                                public void onResponse(Call<SeriesActoresResult> call, Response<SeriesActoresResult> response) {
+                                    SeriesActoresResult result = response.body();
+                                    if(result!=null){
+                                        List<SeriesActoresResult.CastBean> listaActores = result.getCast();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<SeriesActoresResult> call, Throwable t) {
+
+                                }
+                            });
+                        }
                         adaptadorCreditosActores=new AdaptadorCreditosActores(papelesActor,InfoActorActivity.this,actor.getProfile_path());
                         rvPapelesActor.setAdapter(adaptadorCreditosActores);
                         rvPapelesActor.setLayoutManager(new GridLayoutManager(InfoActorActivity.this,2));
+                    }
+
+                    if( papelesProduccion==null || papelesProduccion.size()==0 ){
+                        sinCreditos.setVisibility(View.GONE);
+                    }else{
+                        textViewProduccion.setVisibility(View.VISIBLE);
+                        adaptadorCreditosProduccionActores=new AdaptadorCreditosProduccionActores(papelesProduccion,InfoActorActivity.this);
+                        rvPapelesProduccion.setAdapter(adaptadorCreditosProduccionActores);
+                        rvPapelesProduccion.setLayoutManager(new GridLayoutManager(InfoActorActivity.this,2));
                     }
                 }
 

@@ -3,7 +3,6 @@ package com.maniac.luis.series.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,33 +14,29 @@ import com.maniac.luis.series.MovieDbInterface.SeriesCreditosActorResult;
 import com.maniac.luis.series.R;
 import com.maniac.luis.series.utilidades.Common;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AdaptadorCreditosActores extends RecyclerView.Adapter<AdaptadorCreditosActores.CreditosViewHolder>{
+public class AdaptadorCreditosProduccionActores extends RecyclerView.Adapter<AdaptadorCreditosProduccionActores.CreditosProduccionViewHolder>{
 
-    List<SeriesCreditosActorResult.CastBean> papeles;
+    List<SeriesCreditosActorResult.CrewBean> papeles;
     Context context;
-    String urlImagenActorDefecto;
 
-
-    public AdaptadorCreditosActores(List<SeriesCreditosActorResult.CastBean> papeles, Context context,String urlImagenActorDefecto){
+    public AdaptadorCreditosProduccionActores(List<SeriesCreditosActorResult.CrewBean> papeles, Context context){
         this.papeles=papeles;
         this.context=context;
-        this.urlImagenActorDefecto=urlImagenActorDefecto;
     }
 
     @Override
-    public CreditosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CreditosProduccionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_recycler_credito,parent,false);
-        AdaptadorCreditosActores.CreditosViewHolder holder = new AdaptadorCreditosActores.CreditosViewHolder(view,context,this);
+        AdaptadorCreditosProduccionActores.CreditosProduccionViewHolder holder = new AdaptadorCreditosProduccionActores.CreditosProduccionViewHolder(view,context,this);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(CreditosViewHolder holder, int position) {
-        SeriesCreditosActorResult.CastBean papel = papeles.get(position);
-        String imagenSeriePapel=papel.getPoster_path();
+    public void onBindViewHolder(CreditosProduccionViewHolder holder, int position) {
+        SeriesCreditosActorResult.CrewBean produccion = papeles.get(position);
+        String imagenSeriePapel=produccion.getPoster_path();
         if(imagenSeriePapel==null || imagenSeriePapel.equals("")){
 
             Glide.with(context)
@@ -57,12 +52,11 @@ public class AdaptadorCreditosActores extends RecyclerView.Adapter<AdaptadorCred
                     .into(holder.imagenSerie);
         }
 
-        String nombreSeriePapel = papel.getName();
+        String nombreSeriePapel = produccion.getName();
         if (nombreSeriePapel.equals("") || nombreSeriePapel==null){
             holder.tituloSerie.setText(R.string.desconocido);
         }else{
-                holder.tituloSerie.setText(nombreSeriePapel);
-
+            holder.tituloSerie.setText(nombreSeriePapel);
         }
         holder.setOnclickListener();
     }
@@ -72,18 +66,18 @@ public class AdaptadorCreditosActores extends RecyclerView.Adapter<AdaptadorCred
         return papeles.size();
     }
 
-    public static class CreditosViewHolder extends RecyclerView.ViewHolder {
+    public static class CreditosProduccionViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imagenSerie;
         TextView tituloSerie;
-        AdaptadorCreditosActores adaptadorCreditosActores;
+        AdaptadorCreditosProduccionActores adaptadorCreditosProduccionActores;
         Context context;
 
-        public CreditosViewHolder(View itemView,Context context,AdaptadorCreditosActores adaptadorCreditosActores) {
+        public CreditosProduccionViewHolder(View itemView,Context context,AdaptadorCreditosProduccionActores adaptadorCreditosProduccionActores) {
             super(itemView);
             imagenSerie=itemView.findViewById(R.id.imagenSerieCredito);
             tituloSerie=itemView.findViewById(R.id.nombreSerieCredito);
-            this.adaptadorCreditosActores=adaptadorCreditosActores;
+            this.adaptadorCreditosProduccionActores=adaptadorCreditosProduccionActores;
             this.context=context;
         }
 
@@ -92,3 +86,4 @@ public class AdaptadorCreditosActores extends RecyclerView.Adapter<AdaptadorCred
         }
     }
 }
+

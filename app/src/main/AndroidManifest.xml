@@ -99,8 +99,10 @@
             android:name=".actividades.InfoSeriesActivity"
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="false" />
-        <activity android:name=".Prueba" />
-        <activity android:name=".actividades.InfoActorActivity"></activity>
+        <activity
+            android:name=".actividades.InfoActorActivity"
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"></activity>
     </application>
 
 </manifest>
