@@ -2,11 +2,15 @@ package com.maniac.luis.series.actividades;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.maniac.luis.series.Adapters.AdaptadorCreditosActores;
 import com.maniac.luis.series.MovieDbInterface.ApiInterfaceCreditosActores;
 import com.maniac.luis.series.MovieDbInterface.ApiInterfaceInfoActores;
 import com.maniac.luis.series.MovieDbInterface.SeriesActoresInfoResult;
@@ -28,10 +32,12 @@ public class InfoActorActivity extends AppCompatActivity {
 
     SeriesActoresResult.CastBean actor;
     ImageView imagenActor;
-    TextView nombreActor,nacimentoActor,biografiaActor,lugarNacimiento;
+    TextView nombreActor,nacimentoActor,biografiaActor,lugarNacimiento,sinCreditos;
     Retrofit retrofit;
     List<SeriesCreditosActorResult.CastBean> papelesActor;
     List<SeriesCreditosActorResult.CrewBean> papelesProduccion;
+    RecyclerView rvPapelesActor,rvPapelesProduccion;
+    AdaptadorCreditosActores adaptadorCreditosActores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,8 @@ public class InfoActorActivity extends AppCompatActivity {
         nacimentoActor=findViewById(R.id.nacimientoActor);
         biografiaActor=findViewById(R.id.biografia);
         lugarNacimiento=findViewById(R.id.lugarNacimiento);
+        rvPapelesActor=findViewById(R.id.recyclerPapelesActor);
+        sinCreditos=findViewById(R.id.sinCreditos);
         actor= (SeriesActoresResult.CastBean) getIntent().getExtras().getSerializable(Common.SERIE_OBJETO);
         Log.i("actor",actor.getId()+"");
         if(actor.getProfile_path()!=null){
@@ -110,6 +118,19 @@ public class InfoActorActivity extends AppCompatActivity {
                 SeriesCreditosActorResult creditos=response.body();
                 papelesActor=creditos.getCast();
                 papelesProduccion=creditos.getCrew();
+                if(creditos==null){
+                    sinCreditos.setVisibility(View.VISIBLE);
+                }else{
+
+                    if(papelesActor.size()==0 || papelesActor==null){
+                        sinCreditos.setVisibility(View.GONE);
+                    }else{
+                        adaptadorCreditosActores=new AdaptadorCreditosActores(papelesActor,InfoActorActivity.this,actor.getProfile_path());
+                        rvPapelesActor.setAdapter(adaptadorCreditosActores);
+                        rvPapelesActor.setLayoutManager(new GridLayoutManager(InfoActorActivity.this,2));
+                    }
+                }
+
 
             }
 
