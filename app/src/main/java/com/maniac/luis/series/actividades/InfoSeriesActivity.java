@@ -332,15 +332,18 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
             @Override
             public void onResponse(Call<SeriesActoresResult> call, Response<SeriesActoresResult> response) {
                 SeriesActoresResult result = response.body();
-                List<SeriesActoresResult.CastBean> listaActores = result.getCast();
+                if(result!=null){
+                    List<SeriesActoresResult.CastBean> listaActores = result.getCast();
 
-                if(result==null || listaActores.size()==0 || listaActores==null){
-                    sinActores.setVisibility(View.VISIBLE);
-                }else{
-                    adaptadorActores=new AdaptadorActores(listaActores,serie.getImagen(),InfoSeriesActivity.this);
-                    recyclerView.setAdapter(adaptadorActores);
-                    recyclerView.setLayoutManager(new GridLayoutManager(InfoSeriesActivity.this,2));
+                    if(result==null || listaActores.size()==0 || listaActores==null){
+                        sinActores.setVisibility(View.VISIBLE);
+                    }else{
+                        adaptadorActores=new AdaptadorActores(listaActores,serie.getImagen(),InfoSeriesActivity.this);
+                        recyclerView.setAdapter(adaptadorActores);
+                        recyclerView.setLayoutManager(new GridLayoutManager(InfoSeriesActivity.this,2));
+                    }
                 }
+
 
 
 
