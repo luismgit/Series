@@ -28,6 +28,9 @@ public class Common {
     final public static String TUTORIAL_CONTACTOS="tutorial_contactos";
     final public static String TUTORIAL_SERIES="tutorial_series";
     final public static String TUTORIAL_FAVORITOS="tutorial_favoritos";
+    final public static String TUTORIAL_INFO_SERIES="tutorial_info_series";
+    final public static String TUTORIAL_ACTOR_REDES_SOCIALES="tutorial_actor_redes";
+    final public static String TUTORIAL_ACTOR_PAPELES="tutorial_actor_papeles";
     final public static String PULSADO_TUTORIAL="pulsado_tutorial";
     final public static String POL_PRIV_IUBENDA="https://www.iubenda.com/privacy-policy/66955812";
     final public static String URL_AVATAR_DEFECTO="https://firebasestorage.googleapis.com/v0/b/series-15075.appspot.com/o/foto_perfil%2FIcono-Recuperado_bordes_negros.png?alt=media&token=8e130021-b3a5-4e94-b0c0-19dafb8f0732";

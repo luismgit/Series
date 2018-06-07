@@ -119,7 +119,6 @@
     <string name="estado">Estado</string>
     <string name="temporadas">Temporadas</string>
     <string name="n_mero_de_episodios">Número de episodios</string>
-    <string name="argumento">Argumento</string>
     <string name="no_internet_comentarios">Los comentarios no serán visibles hasta que tenga conexión a internet.</string>
     <string name="sin_con_internet">Sin conexión a internet</string>
     <string name="no_internet_no_wifi">Necesita activar los datos móviles o WIFI para usar la aplicación.</string>
@@ -145,6 +144,21 @@
     <string name="anade_serie_fav">Añade la serie a favoritos</string>
     <string name="showcase_pulsa">Pulsa sobre una serie para ver más información</string>
     <string name="nombre">nombre</string>
+    <string name="genero">Género/s</string>
+    <string name="argumento">Argumento</string>
+    <string name="reparto">Reparto</string>
+    <string name="edad">Edad</string>
+    <string name="lugar_de_nacimiento">Lugar de nacimiento</string>
+    <string name="biograf_a">Biografía</string>
+    <string name="cr_ditos">Créditos</string>
+    <string name="interpretaci_n">Interpretación</string>
+    <string name="producci_n">Producción</string>
+    <string name="actores">Actores</string>
+    <string name="showcase_info_actor">Pulsa sobre un actor para ver más información sobre él.</string>
+    <string name="title_showcase_redes">Redes Sociales</string>
+    <string name="content_showcase_redes">Pulsa para ver el perfil en redes sociales de los actores.</string>
+    <string name="title_showcase_creditos">Créditos</string>
+    <string name="content_showcase_creditos">Pulsa sobre una serie para ver más información sobre ella.</string>
     <string-array name="spinner_ordena">
         <item>Ascendente</item>
         <item>Descendente</item>

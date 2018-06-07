@@ -56,7 +56,7 @@ public class AdaptadorCreditosActores extends RecyclerView.Adapter<AdaptadorCred
         if(imagenSeriePapel==null || imagenSeriePapel.equals("")){
 
             Glide.with(context)
-                    .load(R.drawable.series_back)
+                    .load(R.drawable.series_back_256_256)
                     .fitCenter()
                     .centerCrop()
                     .into(holder.imagenSerie);

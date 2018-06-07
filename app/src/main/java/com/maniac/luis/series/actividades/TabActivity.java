@@ -735,6 +735,9 @@ SeriesFragment.OnFragmentInteractionListener,FavoritosFragment.OnFragmentInterac
             editor.putBoolean(Common.TUTORIAL_CONTACTOS,true);
             editor.putBoolean(Common.TUTORIAL_SERIES,true);
             editor.putBoolean(Common.TUTORIAL_FAVORITOS,true);
+            editor.putBoolean(Common.TUTORIAL_INFO_SERIES,true);
+            editor.putBoolean(Common.TUTORIAL_ACTOR_REDES_SOCIALES,true);
+            editor.putBoolean(Common.TUTORIAL_ACTOR_PAPELES,true);
             editor.putBoolean(Common.PULSADO_TUTORIAL,false);
             editor.commit();
         }else{

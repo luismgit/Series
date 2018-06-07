@@ -24,7 +24,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kiefer Sutherland"
         android:textSize="@dimen/_20sdp"
         android:gravity="left"
         android:textStyle="bold"
@@ -32,15 +31,45 @@
         android:id="@+id/nombreActor"
         android:layout_marginBottom="@dimen/_10sdp"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:id="@+id/imagenActor"
+                android:layout_marginRight="@dimen/_18sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                />
 
 
-        <ImageView
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_150sdp"
-            android:id="@+id/imagenActor"
-            android:layout_marginRight="@dimen/_6sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/imagenActor"
+                    android:src="@drawable/facebook_55"
+                    android:id="@+id/iconoFacebook"
+                    android:visibility="invisible"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    />
+
+            <ImageView
+                android:id="@+id/iconoInstagram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/instagram_62"
+                android:layout_toRightOf="@id/iconoFacebook"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                />
+
+
+
+
+        </RelativeLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +80,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edad"
+            android:text="@string/edad"
             android:textSize="@dimen/_13sdp"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -62,7 +91,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/nacimientoActor"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:text="62"
             android:textColor="@color/white"
             android:textSize="@dimen/_13sdp"
 
@@ -76,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lugar de nacimiento"
+                android:text="@string/lugar_de_nacimiento"
                 android:textSize="@dimen/_13sdp"
                 android:textColor="@color/white"
                 android:layout_marginBottom="@dimen/_5sdp"
@@ -97,7 +125,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Biografía"
+        android:text="@string/biograf_a"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
         android:textColor="#ffffff"
@@ -118,7 +146,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Créditos"
+        android:text="@string/cr_ditos"
         android:textStyle="bold"
         android:textSize="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_10sdp"
@@ -140,7 +168,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="@dimen/_12sdp"
-    android:text="Interpretación"
+    android:text="@string/interpretaci_n"
     android:id="@+id/comoInterpretacion"
     android:layout_marginBottom="@dimen/_15sdp"
     android:textColor="#ffffff"
@@ -162,7 +190,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12sdp"
-        android:text="Producción"
+        android:text="@string/producci_n"
         android:id="@+id/comoProduccion"
         android:layout_marginBottom="@dimen/_15sdp"
         android:textColor="#ffffff"

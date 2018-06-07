@@ -10,7 +10,6 @@
         android:layout_height="150dp"
         android:id="@+id/imagenSerieCredito"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/degradado_info_series"
         />
     <TextView
         android:layout_width="match_parent"

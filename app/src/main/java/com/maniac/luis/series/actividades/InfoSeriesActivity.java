@@ -1,18 +1,25 @@
 package com.maniac.luis.series.actividades;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -56,6 +63,10 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
     TextView sinActores;
     Dialog miDialogo;
     String urlImagenDirector;
+    SharedPreferences sharedPref;
+    ShowcaseView showcaseView;
+    ScrollView scrollView;
+     boolean entra=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,7 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
         setContentView(R.layout.activity_info_series);
         if(!NetworkStatus.isConnected(InfoSeriesActivity.this)) NetworkStatus.buildDialog(InfoSeriesActivity.this).show();
         FirebaseDatabase.getInstance().goOnline();
+        scrollView=findViewById(R.id.scrollViewSerie);
         tituloSerie=findViewById(R.id.tituloSerie);
         tituloOriginal=findViewById(R.id.tituloOriginal);
         fechaEmision=findViewById(R.id.fechaEmision);
@@ -78,6 +90,8 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
         sinopsis=findViewById(R.id.sinopsis);
         recyclerView=findViewById(R.id.recyclerActores);
         sinActores=findViewById(R.id.sinActores);
+        sharedPref = getSharedPreferences(Common.TUTORIAL_PREF, Context.MODE_PRIVATE);
+
         serie = (Series) getIntent().getExtras().getSerializable(Common.SERIE_OBJETO);
         tituloSerie.setText(serie.getNombre());
         if(serie.getNombreOriginal().equals("") || serie.getNombreOriginal()==null){
@@ -335,13 +349,45 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                 if(result!=null){
                     List<SeriesActoresResult.CastBean> listaActores = result.getCast();
 
-                    if(result==null || listaActores.size()==0 || listaActores==null){
+                    if(listaActores.size()==0 || listaActores==null){
                         sinActores.setVisibility(View.VISIBLE);
                     }else{
                         adaptadorActores=new AdaptadorActores(listaActores,serie.getImagen(),InfoSeriesActivity.this);
                         recyclerView.setAdapter(adaptadorActores);
                         recyclerView.setLayoutManager(new GridLayoutManager(InfoSeriesActivity.this,2));
+                        if(sharedPref.getBoolean(Common.TUTORIAL_INFO_SERIES,true)){
+
+                            scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                                @Override
+                                public void onScrollChanged() {
+                                    Rect rectf = new Rect();
+                                    recyclerView.getLocalVisibleRect(rectf);
+                                    recyclerView.getGlobalVisibleRect(rectf);
+                                    if(rectf.top<1400 && !entra){
+                                        entra=true;
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putBoolean(Common.TUTORIAL_INFO_SERIES,false);
+                                        editor.commit();
+                                        showcaseView = new ShowcaseView.Builder(InfoSeriesActivity.this)
+                                                .setTarget(Target.NONE)
+                                               // .hideOnTouchOutside()
+                                                .setContentTitle(getString(R.string.actores))
+                                                .setStyle(R.style.CustomShowcaseTheme2Actores)
+                                                .setContentText(getString(R.string.showcase_info_actor))
+                                                .setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        showcaseView.hide();
+                                                    }
+                                                })
+                                                .build();
+                                    }
+                                }
+                            });
+                        }
                     }
+                }else{
+                    sinActores.setVisibility(View.VISIBLE);
                 }
 
 
@@ -358,9 +404,8 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
         });
 
 
-
-
         }
+
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {

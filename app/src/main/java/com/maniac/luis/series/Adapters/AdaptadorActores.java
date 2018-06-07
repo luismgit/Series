@@ -49,7 +49,7 @@ public class AdaptadorActores extends RecyclerView.Adapter<AdaptadorActores.Acto
         String imagenReparto=actor.getProfile_path();
         if(imagenReparto==null || imagenReparto.equals("")){
             Glide.with(context)
-                    .load(urlImagenSerie)
+                    .load(Common.BASE_URL_POSTER+urlImagenSerie)
                     .fitCenter()
                     .centerCrop()
                     .into(holder.imagenActor);
