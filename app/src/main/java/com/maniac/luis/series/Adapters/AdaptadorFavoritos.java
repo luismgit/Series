@@ -75,7 +75,7 @@ public class AdaptadorFavoritos extends RecyclerView.Adapter<AdaptadorFavoritos.
         showcaseView=new ShowcaseView.Builder((Activity)mContext)
                 .setTarget(new CustomViewTarget(R.id.iconComentarios, 100, 0, (Activity) mContext))
                 .setContentTitle(mContext.getString(R.string.favoritos_showcase))
-                .setStyle(R.style.CustomShowcaseTheme4)
+                .setStyle(R.style.CustomShowcaseTheme6)
                 .hideOnTouchOutside()
                 .setContentText(mContext.getString(R.string.texto_showcase_fav2))
                 .setOnClickListener(new View.OnClickListener() {

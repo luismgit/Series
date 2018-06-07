@@ -363,7 +363,7 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                                     Rect rectf = new Rect();
                                     recyclerView.getLocalVisibleRect(rectf);
                                     recyclerView.getGlobalVisibleRect(rectf);
-                                    if(rectf.top<1400 && !entra){
+                                    if(rectf.top<1200 && !entra){
                                         entra=true;
                                         SharedPreferences.Editor editor = sharedPref.edit();
                                         editor.putBoolean(Common.TUTORIAL_INFO_SERIES,false);

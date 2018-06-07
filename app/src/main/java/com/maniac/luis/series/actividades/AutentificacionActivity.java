@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -62,6 +63,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -102,6 +105,7 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.splash);
         listaFondos=new ArrayList<>();
         //MÉTODO QUE COMPRUEBA LA VERSIÓN DEK SDK Y SI EL PÉRMISO ESTÁ YA DADO.

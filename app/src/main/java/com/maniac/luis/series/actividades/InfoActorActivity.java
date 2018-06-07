@@ -265,7 +265,7 @@ public class InfoActorActivity extends AppCompatActivity {
                                     Rect rectf = new Rect();
                                     rvPapelesActor.getLocalVisibleRect(rectf);
                                     rvPapelesActor.getGlobalVisibleRect(rectf);
-                                    if(rectf.top<1400 && !entraShowCasePapeles){
+                                    if(rectf.top<1200 && !entraShowCasePapeles){
                                         entraShowCasePapeles=true;
                                         SharedPreferences.Editor editor = sharedPref.edit();
                                         editor.putBoolean(Common.TUTORIAL_ACTOR_PAPELES,false);
@@ -303,7 +303,7 @@ public class InfoActorActivity extends AppCompatActivity {
                                     Rect rectf = new Rect();
                                     rvPapelesProduccion.getLocalVisibleRect(rectf);
                                     rvPapelesProduccion.getGlobalVisibleRect(rectf);
-                                    if(rectf.top<1400 && !entraShowCaseProduccion){
+                                    if(rectf.top<1200 && !entraShowCaseProduccion){
                                         entraShowCaseProduccion=true;
                                         SharedPreferences.Editor editor = sharedPref.edit();
                                         editor.putBoolean(Common.TUTORIAL_ACTOR_PAPELES,false);
