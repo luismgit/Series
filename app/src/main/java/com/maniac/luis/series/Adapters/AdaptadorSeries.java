@@ -464,7 +464,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
             protected void onPostExecute(Void aVoid) {
                 Bitmap bitmap =getBitmapFromView(iconoSerie2);
                 try {
-                    File file = new File(context.getExternalCacheDir(),"logicchip.png");
+                    File file = new File(context.getExternalCacheDir(),textViewNombre.getText().toString()+".png");
                     FileOutputStream fOut = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                     fOut.flush();

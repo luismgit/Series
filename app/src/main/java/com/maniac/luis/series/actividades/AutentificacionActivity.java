@@ -571,4 +571,8 @@ public class AutentificacionActivity extends AppCompatActivity  implements TextV
         });
 
     }
+
+    public void infoNumTlfno(View view) {
+        startActivity(new Intent(AutentificacionActivity.this, InfoNumTlfno.class));
+    }
 }

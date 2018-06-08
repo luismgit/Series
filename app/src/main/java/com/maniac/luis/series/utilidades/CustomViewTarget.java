@@ -25,6 +25,9 @@ public class CustomViewTarget implements Target {
     @Override
     public Point getPoint() {
         int[] location = new int[2];
+        if(mView==null){
+            return new Point(100,100);
+        }
         mView.getLocationInWindow(location);
         int x = location[0] + mView.getWidth() / 2 + offsetX;
         int y = location[1] + mView.getHeight() / 2 + offsetY;

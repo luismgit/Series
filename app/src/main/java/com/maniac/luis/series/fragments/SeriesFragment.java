@@ -288,6 +288,9 @@ public class SeriesFragment extends Fragment{
                                                     public void onClick(View view) {
                                                         showcaseView.hide();
                                                         showcaseView=null;
+                                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                                        editor.putBoolean(Common.TUTORIAL_FAVORITOS, false);
+                                                        editor.commit();
                                                     }
                                                 })
                                                 .build();
@@ -480,6 +483,9 @@ public class SeriesFragment extends Fragment{
                         public void onClick(View view) {
                             showcaseView.hide();
                             showcaseView=null;
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putBoolean(Common.TUTORIAL_FAVORITOS, false);
+                            editor.commit();
                         }
                     })
                     .build();

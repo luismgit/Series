@@ -102,10 +102,15 @@
         <activity
             android:name=".actividades.InfoActorActivity"
             android:screenOrientation="portrait"
-            android:supportsPictureInPicture="false"></activity>
+            android:supportsPictureInPicture="false" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5a8eaed0968cf17eae6ee1479e456bf3156ea4e9" />
+
+        <activity android:name=".actividades.InfoNumTlfno"
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="false"></activity>
     </application>
 
 </manifest>

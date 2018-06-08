@@ -41,11 +41,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
         android:textColor="#050505"
         android:textSize="@dimen/_13sdp"
         android:text="@string/text_msg_autent_num_tel"
         android:textStyle="bold"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Por qué debo dar mi número de teléfono?."
+        android:paddingBottom="10dp"
+        android:paddingHorizontal="20dp"
+        android:textColor="#10036c"
+        android:clickable="true"
+        android:shadowColor="#000000"
+        android:onClick="infoNumTlfno"
         />
 
     <LinearLayout

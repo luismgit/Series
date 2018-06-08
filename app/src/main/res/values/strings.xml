@@ -159,6 +159,16 @@
     <string name="content_showcase_redes">Pulsa para ver el perfil en redes sociales de los actores.</string>
     <string name="title_showcase_creditos">Créditos</string>
     <string name="content_showcase_creditos">Pulsa sobre una serie para ver más información sobre ella.</string>
+    <string name="texto1_por_que_num_tlfno">▪ Series Maníacos necesita el número de teléfono como método de autentificación, ésta es gestionada por Firebase, plataforma de desarrollo de Google.</string>
+    <string name="texto2_por_que_num_tlfno">▪ El número de teléfono que nos proporcionas lo usamos única y exclusivamente para comunicarte con tus contactos en la aplicación a través de tu agenda.</string>
+    <string name="importante_may">IMPORTANTE</string>
+    <string name="texto3_por_que_num_tlfno">▪ No puedes verificar un número que no es tuyo.</string>
+    <string name="texto4_por_que_num_tlfno">▪ El número de teléfono que deseas verificar debe estar habilitado para recibir mensajes SMS.</string>
+    <string name="texto5_por_que_num_tlfno">▪ Necesitas una conexión a Internet mediante datos móviles o Wi-Fi. Si estás fuera de tu área de cobertura o tienes una cobertura débil, es posible que experimentes problemas con la verificación.</string>
+    <string name="texto6_por_que_num_tlfno">▪ Dependiendo de tu operador de telefonía, puede que haya cargos por el mensaje SMS.</string>
+    <string name="texto7_por_que_num_tlfno">▪ Para más información puedes visitar nuestra</string>
+    <string name="texto8_por_que_num_tlfno">Política de privacidad</string>
+    <string name="button_por_que_num_tlfno">Volver</string>
     <string-array name="spinner_ordena">
         <item>Ascendente</item>
         <item>Descendente</item>

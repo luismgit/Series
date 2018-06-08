@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/scrollViewSerie"
+    android:background="#dedbdb"
+    >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.maniac.luis.series.actividades.InfoNumTlfno"
+    android:paddingVertical="@dimen/_30sdp"
+    android:paddingHorizontal="@dimen/_15sdp"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto1_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto2_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_15sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/importante_may"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto3_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto4_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto5_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto6_por_que_num_tlfno"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/texto7_por_que_num_tlfno"
+                android:layout_marginBottom="@dimen/_3sdp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/texto8_por_que_num_tlfno"
+                android:textColor="#10036c"
+                android:clickable="true"
+                android:shadowColor="#000000"
+                android:id="@+id/politica_privacidad"
+                android:onClick="verPolitica"
+                android:layout_marginBottom="@dimen/_75sdp"
+                />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_por_que_num_tlfno"
+        android:background="#ffffff"
+        android:layout_gravity="center"
+        android:onClick="volver"
+
+        />
+
+
+
+
+
+
+</LinearLayout>
+</ScrollView>
