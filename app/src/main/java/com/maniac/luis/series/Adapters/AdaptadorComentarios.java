@@ -196,7 +196,8 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<RecyclerView.View
                             for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                 Usuario usuario = childSnapshot.getValue(Usuario.class);
                                 if(!usuario.getTelefono().equals(ComunicarCurrentUser.getPhoneNumberUser())){
-                                    Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser(),comentario.getSerie(),usuario.getTelefono(),comentario.getComentario());
+                                    Notification not = new Notification(usuario.getToken(), ComunicarAvatarUsuario.getAvatarUsuario(), ComunicarCurrentUser.getPhoneNumberUser()
+                                            ,comentario.getSerie(),usuario.getTelefono(),comentario.getComentario());
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FirebaseReferences.NOTIFICATIONS);
                                     ref.push().setValue(not);
                                 }

@@ -21,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +50,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -82,6 +87,7 @@ public class ContactosFragment extends Fragment {
     ViewPager vp;
     SharedPreferences sharedPref;
     Usuario usuarioMateo;
+    String phoneNumber;
 
     public ContactosFragment() {
         // Required empty public constructor
@@ -122,6 +128,7 @@ public class ContactosFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View vista=inflater.inflate(R.layout.fragment_contactos, container, false);
+        Fabric.with(getActivity(),new Crashlytics());
         vp = getActivity().findViewById(R.id.container);
         rv=vista.findViewById(R.id.recycler);
         if(!NetworkStatus.isConnected(container.getContext())) {
@@ -235,7 +242,7 @@ public class ContactosFragment extends Fragment {
 
         //GUARDAMOS EL TELÉFONO DEL USUARIO
         //FirebaseUser user = ComunicarCurrentUser.getUser();--------------------------------------
-        String phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
+        phoneNumber=ComunicarCurrentUser.getPhoneNumberUser();
         phoneNumber.replaceAll("\\s","");
         if(phoneNumber.substring(0,3).equals("+34")){
             phoneNumber=phoneNumber.substring(3,phoneNumber.length());
@@ -251,33 +258,43 @@ public class ContactosFragment extends Fragment {
                     String claveUsuarioActual = childSnapshot.getKey();
                     ComunicarClaveUsuarioActual.setClave(claveUsuarioActual);
 
-
                 }
+
+                    if(ComunicarClaveUsuarioActual.getClave()==null){
+                        Answers.getInstance().logLogin(new LoginEvent()
+                                .putMethod("ComunicarClaveUsuarioActual.getClave()==null")
+                                .putSuccess(true)
+                                .putCustomAttribute("phone number", phoneNumber));
+                    }
+
 
                 //LLEGAMOS HASTA EL NODO EN LA BB.DD DONDE ESTÁ EL USUARIO ACTUAL Y ACCEDEMOS A SU NODO HIJO 'conectado'
                 final FirebaseDatabase dt = FirebaseDatabase.getInstance();
-                final  DatabaseReference myConnectionsRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.CONECTADO);
-                //final DatabaseReference lastOnlineRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child("ultimaconexion");
+                if(ComunicarClaveUsuarioActual.getClave()!=null){
+                    final  DatabaseReference myConnectionsRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child(FirebaseReferences.CONECTADO);
+                    //final DatabaseReference lastOnlineRef = dt.getReference().child(FirebaseReferences.USUARIOS_REFERENCE).child(ComunicarClaveUsuarioActual.getClave()).child("ultimaconexion");
 
-                //A TRAVÉS DE LA REFERENCIA .info/connected SABEMOS ACCEDEMOS A LA CONEXIÓN DE CADA USUARIO A FIREBASE
-                final DatabaseReference connectedRef = dt.getReference(FirebaseReferences.INFO_CONNECTED);
-                connectedRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean connected = dataSnapshot.getValue(Boolean.class);
-                        //SI SE CONECTA ESTABLECEMOS EL NODO 'conectado' A ONLINE,CUANDO SE DESCONECTE LO PASAMOS A OFFLINE
-                        if(connected){
-                            myConnectionsRef.setValue(FirebaseReferences.ONLINE);
-                            myConnectionsRef.onDisconnect().setValue(getFecha());
+                    //A TRAVÉS DE LA REFERENCIA .info/connected SABEMOS ACCEDEMOS A LA CONEXIÓN DE CADA USUARIO A FIREBASE
+                    final DatabaseReference connectedRef = dt.getReference(FirebaseReferences.INFO_CONNECTED);
+                    connectedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            boolean connected = dataSnapshot.getValue(Boolean.class);
+                            //SI SE CONECTA ESTABLECEMOS EL NODO 'conectado' A ONLINE,CUANDO SE DESCONECTE LO PASAMOS A OFFLINE
+                            if(connected){
+                                myConnectionsRef.setValue(FirebaseReferences.ONLINE);
+                                myConnectionsRef.onDisconnect().setValue(getFecha());
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    }
+                    });
+                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
 
             @Override

@@ -2,9 +2,7 @@ package com.maniac.luis.series.MovieDbInterface;
 
 import java.util.List;
 
-/**
- * Created by Luis on 23/05/2018.
- */
+
 
 public class SeriesDetailsResult {
     /**

@@ -446,6 +446,9 @@ public class registroActivity extends AppCompatActivity  implements TextView.OnE
         Usuario usuario = new Usuario(nick, phoneNumber, correo, enlaceFotoFirebasde.toString(), FirebaseReferences.ONLINE,Common.PRINCIPIANTE,
                 (long) 0, FirebaseInstanceId.getInstance().getToken(),
                 FirebaseReferences.FONDO_DEFECTO_COMENTARIOS);
+
+
+
         //CONSEGUIIMOS UNA REFERENCIA AL NODO ROOT DE LA BB.DD
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         //LE AÑADIMOS UN NODO HIJO A LA REFERENCIA ANTERIOR CON CLAVE GENERADA AUTOMÁTICA (MÉTODO PUSH)

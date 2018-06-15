@@ -235,6 +235,10 @@ public class InfoSeriesActivity extends YouTubeBaseActivity  implements YouTubeP
                             }
                         });
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Common.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
         interfaceDetailsSerie = retrofit.create(ApiInterfaceDetailsSerie.class);
         Call<SeriesDetailsResult> call2 = interfaceDetailsSerie.listOfSeriesDetails(serie.getIdMovieDb(),Common.API_KEY_MOVIE_DB,"en");
         call2.enqueue(new Callback<SeriesDetailsResult>() {

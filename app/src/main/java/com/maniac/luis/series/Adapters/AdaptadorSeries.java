@@ -85,9 +85,7 @@ public class AdaptadorSeries extends RecyclerView.Adapter<AdaptadorSeries.Series
 
          serie = series.get(position);
          String nombreSerie = serie.getNombre();
-        /* if(nombreSerie.length()>=26){
-             nombreSerie=nombreSerie.substring(0,26) + Html.fromHtml("<br />") + nombreSerie.substring(26,nombreSerie.length());
-         }*/
+
         holder.textViewNombre.setText(nombreSerie);
          String imagen = serie.getImagen();
          if(imagen.contains("null")){
